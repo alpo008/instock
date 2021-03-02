@@ -53,6 +53,8 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'login' => 'site/login',
+                'logout' => 'site/logout',
                 '<controller:\w+>/<id:\d+>' => '<controller>/view',
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
                 '<controller:\w+>/<action:\w+>/<id:\d+>/<date>' => '<controller>/<action>',
@@ -69,6 +71,19 @@ $config = [
             'defaultTimeZone' => 'Europe/Moscow',
             'timeZone' => 'Asia/Yekaterinburg',
         ],
+        'i18n' => [
+            'translations' => [
+                '*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@app/messages',
+                    'sourceLanguage' => 'en-US',
+                    'fileMap' => [
+                        'app'       => 'app.php',
+                        'app/error' => 'error.php',
+                    ],
+                ],
+            ],
+        ]
     ],
     'params' => $params,
 ];
