@@ -90,7 +90,7 @@ $currentUrl = Yii::$app->request->url;
                     <li>
                         <?= Html::beginForm(['/logout'], 'post') ?>
                         <?= Html::submitButton(
-                            (Yii::t('app', 'Logout')) . ' (' . Yii::$app->user->identity->username . ')',
+                            (Yii::t('app', 'Logout')) . ' (' . Yii::$app->user->identity->fullName . ')',
                             ['class' => 'btn btn-link logout']
                         ) ?>
                         <?= Html::endForm() ?>

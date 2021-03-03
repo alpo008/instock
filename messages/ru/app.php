@@ -26,7 +26,19 @@ return [
     '(not set)' => '(не задано)',
     'An internal server error occurred.' => 'Возникла внутренняя ошибка сервера.',
     'Are you sure you want to delete this item?' => 'Вы уверены, что хотите удалить этот элемент?',
+    'Auth key' => 'Ключ авторизации',
+    'Created at' => 'Дата создания',
+    'Full name' => 'Полное имя',
+    'ID' => 'ИД',
+    'Incorrect username or password' => 'Неверно указано имя пользователя или пароль',
     'Login' => 'Авторизация',
     'Logout' => 'Выход',
-    'Please fill out the following fields' => 'Пожалуйста, заполните форму'
+    'Name' => 'Имя',
+    'Password' => 'Пароль',
+    'Please fill out the following fields' => 'Пожалуйста, заполните форму',
+    'Role' => 'Роль',
+    'Status' => 'Статус',
+    'Surname' => 'Фамилия',
+    'Updated at' => 'Дата последнего изменения',
+    'User name' => 'Имя пользователя'
 ];

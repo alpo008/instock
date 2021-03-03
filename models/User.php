@@ -23,6 +23,8 @@ use yii\base\NotSupportedException;
  * @property string $created_at
  * @property string $updated_at
  * @property string $password write-only password
+ *
+ * @property string $fullName
  */
 class User extends ActiveRecord implements \yii\web\IdentityInterface
 {
@@ -65,6 +67,25 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
         ];
     }
 
+    public function attributeLabels()
+    {
+        return [
+            'id' => Yii::t('app', 'ID'),
+            'username' => Yii::t('app', 'User name'),
+            'name' => Yii::t('app', 'Name'),
+            'surname' => Yii::t('app', 'Surname'),
+            'auth_key' => Yii::t('app', 'Auth key'),
+            'password_hash' => Yii::t('app', 'Password hash'),
+            'email' => Yii::t('app', 'E-mail'),
+            'role' => Yii::t('app', 'Role'),
+            'status' => Yii::t('app', 'Status'),
+            'created_at' => Yii::t('app', 'Created at'),
+            'updated_at' => Yii::t('app', 'Updated at'),
+            'password' => Yii::t('app', 'Password'),
+            'fullName' => Yii::t('app', 'Full name'),
+        ];
+    }
+
     /**
      * @inheritdoc
      */
@@ -94,6 +115,17 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
     }
 
     /**
+     * Finds user by email
+     *
+     * @param string $username
+     * @return static|null
+     */
+    public static function findByEmail($email)
+    {
+        return static::findOne(['email' => $email, 'status' => self::STATUS_ACTIVE]);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getId()
@@ -103,11 +135,10 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
 
     /**
      * {@inheritdoc}
-     * @throws NotSupportedException
      */
     public function getAuthKey()
     {
-        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+        return $this->auth_key;
     }
 
     /**
@@ -115,7 +146,7 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
      */
     public function validateAuthKey($authKey)
     {
-        throw new NotSupportedException('"validateAuthKey" is not implemented.');
+        return $this->getAuthKey() === $authKey;
     }
 
     /**
@@ -147,5 +178,14 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
     public function generateAuthKey()
     {
         $this->auth_key = Yii::$app->security->generateRandomString();
+    }
+
+    /**
+     * Полное имя
+     * @return string
+     */
+    public function getFullName()
+    {
+        return $this->name . ' ' . $this->surname;
     }
 }
