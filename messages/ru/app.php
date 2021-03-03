@@ -25,10 +25,14 @@ return [
     '{attribute} must not be equal to "{compareValueOrAttribute}".' => 'Значение «{attribute}» не должно быть равно «{compareValueOrAttribute}».',
     '(not set)' => '(не задано)',
     'Access denied' => 'Доступ запрещен',
+    'Active' => 'Активен',
+    'Add user' => 'Добавить пользователя',
     'An internal server error occurred.' => 'Возникла внутренняя ошибка сервера.',
     'Are you sure you want to delete this item?' => 'Вы уверены, что хотите удалить этот элемент?',
     'Auth key' => 'Ключ авторизации',
     'Created at' => 'Дата создания',
+    'Delete' => 'Удалить',
+    'Disabled' => 'Заблокирован',
     'Full name' => 'Полное имя',
     'Inspection stock' => 'Инспекция - склад',
     'ID' => 'ИД',
@@ -42,6 +46,8 @@ return [
     'Role' => 'Роль',
     'Status' => 'Статус',
     'Surname' => 'Фамилия',
+    'Update' => 'Редактировать',
     'Updated at' => 'Дата последнего изменения',
+    'Users' => 'Пользователи',
     'User name' => 'Имя пользователя'
 ];

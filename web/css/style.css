@@ -231,10 +231,6 @@ ul ul a {
     font-size: 1.75rem;
 }
 
-.of-auto {
-    overflow: auto;
-}
-
 .sidebar-collapse {
     position: relative;
     left: -20px;
@@ -265,4 +261,69 @@ h1 {
 
 .breadcrumb li a {
     color: #4159a3;
+}
+
+.btn-add {
+    background-color: #7386d5;
+    color: #ffffff;
+}
+.btn-add:hover {
+    background-color: #a5b6ff;
+}
+
+a.asc:after {
+    content: '\2965';
+}
+
+a.desc:after {
+    content: '\2963';
+}
+
+.grid-view th a {
+    color: #4159a3;
+}
+
+.action-buttons {
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.action-buttons a {
+    margin-right: 7px;
+    height: 40px;
+    width: 40px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+}
+
+.action-buttons .btn-primary {
+    background-color: #4159a3;
+    color: #a5b6ff;
+}
+
+.action-buttons .btn-primary:hover {
+    background-color: #7386d5;
+    color: #ffffff;
+}
+
+.action-buttons .btn-danger {
+    background-color: #8b4747;
+    color: #ffb6a5;
+}
+
+.action-buttons .btn-danger:hover {
+    background-color: #ab6767;
+    color: #ffffff;
+}
+
+.action-buttons i {
+    line-height: unset;
+}
+
+/* Common */
+
+.of-auto {
+    overflow: auto;
 }

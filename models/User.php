@@ -2,6 +2,8 @@
 
 namespace app\models;
 
+use rmrevin\yii\fontawesome\component\Icon;
+use rmrevin\yii\fontawesome\FAS;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
@@ -26,6 +28,9 @@ use yii\base\NotSupportedException;
  * @property string $password write-only password
  *
  * @property string $fullName
+ * @property Icon $statusIcon
+ * @property string $statusText
+ * @property array $statusesList
  */
 class User extends ActiveRecord implements \yii\web\IdentityInterface
 {
@@ -189,5 +194,38 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
     public function getFullName()
     {
         return $this->name . ' ' . $this->surname;
+    }
+
+    /**
+     * Иконка отображающая статус пользователя
+     * @return \rmrevin\yii\fontawesome\component\Icon
+     */
+    public function getStatusIcon()
+    {
+        if (!$this->status) {
+            return FAS::icon('times-circle', ['style' => 'color:#8b4747;']);
+        }
+        return FAS::icon('check-circle', ['style' => 'color:#478b74;', 'title' => $this->statusText]);
+    }
+
+    /**
+     * Список статусов пользователя
+     * @return array
+     */
+    public function getStatusesList()
+    {
+        return [
+            $this::STATUS_DISABLED => Yii::t('app', 'Disabled'),
+            $this::STATUS_ACTIVE => Yii::t('app', 'Active')
+        ];
+    }
+
+    /**
+     * Текстовое обозначение стуса пользователя
+     * @return int|mixed
+     */
+    public function getStatusText()
+    {
+        return !empty($this->statusesList[$this->status]) ? $this->statusesList[$this->status] : $this->status;
     }
 }
