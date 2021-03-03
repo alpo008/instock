@@ -82,14 +82,13 @@ class UserSearch extends User
         $query->andFilterWhere([
             'id' => $this->id,
             'status' => $this->status,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'role' => $this->role,
         ]);
 
         $query->andFilterWhere(['like', 'username', $this->username])
             ->andFilterWhere(['like', 'position', $this->position])
             ->andFilterWhere(['like', 'email', $this->email])
-            ->andFilterWhere(['like', 'role', $this->role]);
+            ->andFilterWhere(['like', 'DATE_FORMAT(updated_at, "%d.%m.%Y")', $this->updated_at]);
         $query->andWhere('name LIKE "%' . $this->fullName . '%" ' .
             'OR surname LIKE "%' . $this->fullName . '%"'
         );

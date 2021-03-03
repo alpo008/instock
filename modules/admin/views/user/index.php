@@ -38,7 +38,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'position',
             'email:email',
             'username',
-            'role',
+            [
+                'attribute' => 'role',
+                'filter' => ['USER' => 'USER', 'ADMIN' => 'ADMIN']
+            ],
             //'status',
             //'created_at',
             [

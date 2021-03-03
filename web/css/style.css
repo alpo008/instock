@@ -279,7 +279,7 @@ a.desc:after {
     content: '\2963';
 }
 
-.grid-view th a {
+.grid-view th a, .grid-view td a {
     color: #4159a3;
 }
 
