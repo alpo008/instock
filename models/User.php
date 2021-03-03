@@ -13,6 +13,9 @@ use yii\base\NotSupportedException;
  *
  * @property integer $id
  * @property string $username
+ * @property string $name
+ * @property string $surname
+ * @property string $auth_key
  * @property string $password_hash
  * @property string $email
  * @property string $role
@@ -25,13 +28,15 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
 {
     const STATUS_DISABLED = 0;
     const STATUS_ACTIVE = 1;
+    const ROLE_USER = 'USER';
+    const ROLE_ADMIN = 'ADMIN';
 
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{%user}}';
+        return '{{%users}}';
     }
 
     /**
@@ -40,7 +45,10 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
     public function behaviors()
     {
         return [
-            TimestampBehavior::className(),
+            [
+                'class' => TimestampBehavior::class,
+                'value' => Yii::$app->formatter->asDatetime(time(), 'php:Y-m-d H:i:s')
+            ],
         ];
     }
 
@@ -52,6 +60,8 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
         return [
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DISABLED]],
+            ['role', 'default', 'value' => self::ROLE_USER],
+            ['role', 'in', 'range' => [self::ROLE_USER, self::ROLE_ADMIN]]
         ];
     }
 

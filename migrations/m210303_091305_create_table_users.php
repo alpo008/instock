@@ -19,10 +19,11 @@ class m210303_091305_create_table_users extends RcMigration
         }
 
         if (!$this->tableExists($this::TABLE_USERS)) {
-            $this->createTable('user', [
+            $this->createTable($this::TABLE_USERS, [
                 'id' => $this->primaryKey(),
                 'username' => $this->string()->notNull()->unique()->comment('Логин'),
                 'password_hash' => $this->string()->notNull()->comment('Пароль'),
+                'auth_key' => $this->string(32)->notNull(),
                 'email' => $this->string()->notNull()->unique()->comment('E-mail'),
                 'role' => "ENUM('USER','ADMIN') NOT NULL  DEFAULT 'USER' COMMENT 'Роль'",
                 'status' => $this->smallInteger()->notNull()->defaultValue(1)->comment('Статус'),
