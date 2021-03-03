@@ -7,6 +7,7 @@ const SideNav = {
         this.$switch = $(document).find('#sidebarCollapse');
         if (typeof this.$sidebar === 'object') {
             this.$switch.on('click',(e) => {
+                e.preventDefault();
                 this.$sidebar.toggleClass('active');
                 this.$switch.toggleClass('navbar-collapsed');
             });
