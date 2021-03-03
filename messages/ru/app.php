@@ -38,6 +38,7 @@ return [
     'Name' => 'Имя',
     'Password' => 'Пароль',
     'Please fill out the following fields' => 'Пожалуйста, заполните форму',
+    'Position' => 'Должность',
     'Role' => 'Роль',
     'Status' => 'Статус',
     'Surname' => 'Фамилия',

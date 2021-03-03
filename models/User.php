@@ -15,6 +15,7 @@ use yii\base\NotSupportedException;
  * @property string $username
  * @property string $name
  * @property string $surname
+ * @property string $position
  * @property string $auth_key
  * @property string $password_hash
  * @property string $email
@@ -74,6 +75,7 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
             'username' => Yii::t('app', 'User name'),
             'name' => Yii::t('app', 'Name'),
             'surname' => Yii::t('app', 'Surname'),
+            'position' => Yii::t('app', 'Position'),
             'auth_key' => Yii::t('app', 'Auth key'),
             'password_hash' => Yii::t('app', 'Password hash'),
             'email' => Yii::t('app', 'E-mail'),
