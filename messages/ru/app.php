@@ -44,10 +44,12 @@ return [
     'Please fill out the following fields' => 'Пожалуйста, заполните форму',
     'Position' => 'Должность',
     'Role' => 'Роль',
+    'Save' => 'Сохранить',
     'Status' => 'Статус',
     'Surname' => 'Фамилия',
     'Update' => 'Редактировать',
     'Updated at' => 'Дата последнего изменения',
+    'Update user: {name}' => 'Редактирование: {name}',
     'Users' => 'Пользователи',
     'User name' => 'Имя пользователя'
 ];

@@ -1,8 +1,8 @@
 <?php
 
-use rmrevin\yii\fontawesome\FAS;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use rmrevin\yii\fontawesome\FAS;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\User */
@@ -14,9 +14,8 @@ $this->params['breadcrumbs'][] = $model->fullName;
 ?>
 <div class="user-view">
 
-    <h1><?= $model->fullName . ' ( ' . $model->position . ' ) '; ?></h1>
-
     <div class="action-buttons">
+        <h1><?= $model->fullName . ' ( ' . $model->position . ' ) '; ?></h1>
         <?= Html::a(FAS::icon('user-edit'),
             ['update', 'id' => $model->id],
             ['class' => 'btn btn-primary', 'title' => Yii::t('app', 'Update')]) ?>

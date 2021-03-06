@@ -27,8 +27,8 @@ class m210303_091305_create_table_users extends RcMigration
                 'email' => $this->string()->notNull()->unique()->comment('E-mail'),
                 'role' => "ENUM('USER','ADMIN') NOT NULL  DEFAULT 'USER' COMMENT 'Роль'",
                 'status' => $this->smallInteger()->notNull()->defaultValue(1)->comment('Статус'),
-                'created_at' => $this->dateTime()->notNull()->comment('Дата добавления'),
-                'updated_at' => $this->dateTime()->notNull()->comment('Дата изменения'),
+                'created_at' => $this->dateTime()->comment('Дата добавления'),
+                'updated_at' => $this->dateTime()->comment('Дата изменения'),
             ], $tableOptions);
         }
     }

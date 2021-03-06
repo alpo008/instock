@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use rmrevin\yii\fontawesome\FAS;
+
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\admin\models\UserSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -12,11 +14,11 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-index">
 
+    <div class="action-buttons">
     <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a(Yii::t('app', 'Add user'), ['create'], ['class' => 'btn btn-add']) ?>
-    </p>
+        <?= Html::a(FAS::icon('user-plus'), ['create'],
+            ['class' => 'btn btn-success', 'title' => Yii::t('app', 'Add user')]) ?>
+    </div>
 
     <?php Pjax::begin(['id' => 'user-index-pjax-container']); ?>
 

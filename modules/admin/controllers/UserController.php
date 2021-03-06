@@ -5,6 +5,7 @@ namespace app\modules\admin\controllers;
 use Yii;
 use app\models\User;
 use app\modules\admin\models\UserSearch;
+use yii\db\StaleObjectException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -65,7 +66,7 @@ class UserController extends Controller
     public function actionCreate()
     {
         $model = new User();
-
+        $model->scenario = $model::SCENARIO_CREATE;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
@@ -85,6 +86,7 @@ class UserController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $model->scenario = $model::SCENARIO_UPDATE;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -100,13 +102,27 @@ class UserController extends Controller
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $deleted = false;
+        try {
+            if ($model = $this->findModel($id)) {
+                $model->status = $model::STATUS_DISABLED;
+                $deleted = $model->save();
+            }
+        } catch (StaleObjectException $e) {
+        } catch (NotFoundHttpException $e) {
+        } catch (\Throwable $e) {
+        }
+        if (!$deleted) {
+            Yii::$app->session->setFlash(
+                'warning',
+                Yii::t('app', 'Impossible to delete this user') . '!'
+            );
+        }
 
-        return $this->redirect(['index']);
+        return $this->redirect(['view', 'id' => $id]);
     }
 
     /**

@@ -2,12 +2,12 @@
 
 namespace app\models;
 
-use rmrevin\yii\fontawesome\component\Icon;
-use rmrevin\yii\fontawesome\FAS;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 use yii\base\NotSupportedException;
+use rmrevin\yii\fontawesome\component\Icon;
+use rmrevin\yii\fontawesome\FAS;
 
 /**
  * Class User
@@ -26,6 +26,7 @@ use yii\base\NotSupportedException;
  * @property string $created_at
  * @property string $updated_at
  * @property string $password write-only password
+ * @property string $newPassword
  *
  * @property string $fullName
  * @property Icon $statusIcon
@@ -36,8 +37,14 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
 {
     const STATUS_DISABLED = 0;
     const STATUS_ACTIVE = 1;
+
     const ROLE_USER = 'USER';
     const ROLE_ADMIN = 'ADMIN';
+
+    const SCENARIO_CREATE = 'create';
+    const SCENARIO_UPDATE = 'update';
+
+    public $newPassword;
 
     /**
      * @inheritdoc
@@ -66,10 +73,21 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
     public function rules()
     {
         return [
+
+            [['username', 'name', 'surname', 'position', 'email', 'role'], 'required', 'on' => [
+                self::SCENARIO_CREATE, self::SCENARIO_UPDATE
+            ]],
+            [['newPassword'], 'required', 'on' => self::SCENARIO_CREATE],
+            [['password_hash', 'auth_key', 'created_at', 'updated_at'], 'safe'],
+            [['username', 'name', 'surname', 'position'], 'string'],
+            [['email', 'username'], 'unique'],
+            [['newPassword'], 'string', 'min' => 6],
+            [['username'], 'string', 'min' => 6],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
+            ['role', 'in', 'range' => [self::ROLE_USER, self::ROLE_ADMIN]],
+
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DISABLED]],
             ['role', 'default', 'value' => self::ROLE_USER],
-            ['role', 'in', 'range' => [self::ROLE_USER, self::ROLE_ADMIN]]
         ];
     }
 
@@ -91,6 +109,18 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
             'password' => Yii::t('app', 'Password'),
             'fullName' => Yii::t('app', 'Full name'),
         ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function beforeSave($insert)
+    {
+        if (!empty($this->newPassword)) {
+            $this->setPassword($this->newPassword);
+            $this->generateAuthKey();
+        }
+        return true;
     }
 
     /**
