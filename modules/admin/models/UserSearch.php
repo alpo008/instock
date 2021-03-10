@@ -66,8 +66,10 @@ class UserSearch extends User
                 'position',
                 'email',
                 'role',
-                'updated_at'
-            ]
+                'status',
+                'updated_at',
+            ],
+            'defaultOrder' => ['status' => SORT_DESC, 'updated_at' => SORT_DESC]
         ]);
 
         $this->load($params);

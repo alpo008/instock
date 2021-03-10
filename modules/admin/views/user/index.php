@@ -39,23 +39,34 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'position',
             'email:email',
-            'username',
+            [
+                'attribute' => 'username',
+                'label' => Yii::t('app', 'login')
+            ],
             [
                 'attribute' => 'role',
-                'filter' => ['USER' => 'USER', 'ADMIN' => 'ADMIN']
+                'filter' => ['USER' => 'USER', 'ADMIN' => 'ADMIN'],
+                //'filterOptions' => ['style' => 'min-width: 120px;']
             ],
-            //'status',
-            //'created_at',
+            [
+                'attribute' => 'status',
+                'format' => 'raw',
+                'value' => function($model) {
+                    /* @var $model \app\models\User */
+                    return $model->statusIcon;
+                },
+                'filter' => $searchModel->statusesList,
+                //'filterOptions' => ['style' => 'min-width: 160px;']
+            ],
             [
                 'attribute' => 'updated_at',
+                'label' => Yii::t('app', 'Changed'),
                 'value' => function($model) {
                     /** @var $model \app\models\User */
                     return Yii::$app->formatter->asDate($model->updated_at);
-                }
-            ],
-
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
+                },
+            ]
+        ]
     ]); ?>
 
     <?php Pjax::end(); ?>

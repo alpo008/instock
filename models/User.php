@@ -41,9 +41,6 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
     const ROLE_USER = 'USER';
     const ROLE_ADMIN = 'ADMIN';
 
-    const SCENARIO_CREATE = 'create';
-    const SCENARIO_UPDATE = 'update';
-
     public $newPassword;
 
     /**
@@ -57,37 +54,22 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
     /**
      * @inheritdoc
      */
-    public function behaviors()
-    {
-        return [
-            [
-                'class' => TimestampBehavior::class,
-                'value' => Yii::$app->formatter->asDatetime(time(), 'php:Y-m-d H:i:s')
-            ],
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function rules()
     {
         return [
 
-            [['username', 'name', 'surname', 'position', 'email', 'role'], 'required', 'on' => [
-                self::SCENARIO_CREATE, self::SCENARIO_UPDATE
-            ]],
-            [['newPassword'], 'required', 'on' => self::SCENARIO_CREATE],
+            [['username', 'name', 'surname', 'position', 'email', 'role'], 'required'],
             [['password_hash', 'auth_key', 'created_at', 'updated_at'], 'safe'],
             [['username', 'name', 'surname', 'position'], 'string'],
+            ['username', 'match', 'pattern' => '/^[a-z]\w*$/i'],
             [['email', 'username'], 'unique'],
             [['newPassword'], 'string', 'min' => 6],
+            [['newPassword'], 'match', 'pattern' => '/(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/i'],
             [['username'], 'string', 'min' => 6],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            ['role', 'in', 'range' => [self::ROLE_USER, self::ROLE_ADMIN]],
-
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DISABLED]],
-            ['role', 'default', 'value' => self::ROLE_USER],
+            ['role', 'in', 'range' => [self::ROLE_USER, self::ROLE_ADMIN]],
+            ['role', 'default', 'value' => self::ROLE_USER]
         ];
     }
 
@@ -106,6 +88,7 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
             'status' => Yii::t('app', 'Status'),
             'created_at' => Yii::t('app', 'Created at'),
             'updated_at' => Yii::t('app', 'Updated at'),
+            'newPassword' => Yii::t('app', 'New password'),
             'password' => Yii::t('app', 'Password'),
             'fullName' => Yii::t('app', 'Full name'),
         ];
@@ -120,6 +103,10 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
             $this->setPassword($this->newPassword);
             $this->generateAuthKey();
         }
+        if ($this->isNewRecord) {
+            $this->created_at = Yii::$app->formatter->asDatetime(time(), 'php:Y-m-d H:i:s');
+        }
+        $this->updated_at = Yii::$app->formatter->asDatetime(time(), 'php:Y-m-d H:i:s');
         return true;
     }
 

@@ -19,18 +19,32 @@ $this->params['breadcrumbs'][] = $model->fullName;
         <?= Html::a(FAS::icon('user-edit'),
             ['update', 'id' => $model->id],
             ['class' => 'btn btn-primary', 'title' => Yii::t('app', 'Update')]) ?>
+        <?php if ($model->status === $model::STATUS_ACTIVE) : ?>
         <?= Html::a(FAS::icon('user-times'), ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
-            'title' => Yii::t('app', 'Delete'),
+            'title' => Yii::t('app', 'Block'),
             'data' => [
-                'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
+                'confirm' => Yii::t('app', 'Are you sure you want to block this user') . ' ?',
                 'method' => 'post',
             ],
         ]) ?>
+        <?php elseif ($model->status === $model::STATUS_DISABLED) : ?>
+            <?= Html::a(FAS::icon('user-check'), ['restore', 'id' => $model->id], [
+                'class' => 'btn btn-success',
+                'title' => Yii::t('app', 'Restore'),
+                'data' => [
+                    'confirm' => Yii::t('app', 'User with role {role} will be restored', [
+                        'role' => $model->role
+                    ]) . '!',
+                    'method' => 'post',
+                ],
+            ]) ?>
+        <?php endif; ?>
     </div>
 
     <?= DetailView::widget([
         'model' => $model,
+        'options' => ['class' => 'table detail-view'],
         'attributes' => [
             'username',
             'email:email',

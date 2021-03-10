@@ -25,6 +25,7 @@ class UserController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                    'restore' => ['POST'],
                 ],
             ],
         ];
@@ -66,7 +67,6 @@ class UserController extends Controller
     public function actionCreate()
     {
         $model = new User();
-        $model->scenario = $model::SCENARIO_CREATE;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
@@ -86,8 +86,6 @@ class UserController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $model->scenario = $model::SCENARIO_UPDATE;
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
@@ -98,7 +96,7 @@ class UserController extends Controller
     }
 
     /**
-     * Deletes an existing User model.
+     * Deletes softly an existing User model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -119,6 +117,34 @@ class UserController extends Controller
             Yii::$app->session->setFlash(
                 'warning',
                 Yii::t('app', 'Impossible to delete this user') . '!'
+            );
+        }
+
+        return $this->redirect(['view', 'id' => $id]);
+    }
+
+    /**
+     * Restores previously blocked User model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionRestore($id)
+    {
+        $restored = false;
+        try {
+            if ($model = $this->findModel($id)) {
+                $model->status = $model::STATUS_ACTIVE;
+                $restored = $model->save();
+            }
+        } catch (StaleObjectException $e) {
+        } catch (NotFoundHttpException $e) {
+        } catch (\Throwable $e) {
+        }
+        if (!$restored) {
+            Yii::$app->session->setFlash(
+                'warning',
+                Yii::t('app', 'Impossible to restore this user') . '!'
             );
         }
 

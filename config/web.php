@@ -73,7 +73,7 @@ $config = [
             'dateFormat' => 'php:d.m.Y',
             'datetimeFormat' => 'php:Y-m-d H:i:s',
             'timeFormat' => 'php:H:i:s',
-            'defaultTimeZone' => 'Europe/Moscow',
+            'defaultTimeZone' => 'Asia/Yekaterinburg',
             'timeZone' => 'Asia/Yekaterinburg',
         ],
         'i18n' => [
