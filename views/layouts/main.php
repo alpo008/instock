@@ -3,6 +3,7 @@
 /* @var $this \yii\web\View */
 /* @var $content string */
 /* @var $currentUrl string */
+/* @var $user \app\models\User */
 
 use app\widgets\Alert;
 use yii\helpers\Html;
@@ -13,6 +14,8 @@ use app\assets\AppAsset;
 AppAsset::register($this);
 
 $currentUrl = Yii::$app->request->url;
+$user = Yii::$app->user->identity;
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -50,6 +53,11 @@ $currentUrl = Yii::$app->request->url;
                         ]) ?>
                     </li>
                 <?php else: ?>
+                    <?php if ($user->role === \app\models\User::ROLE_ADMIN) : ?>
+                        <li class="<?= strpos($currentUrl, Url::to(['/admin/user'])) !== false ? 'active' : '' ?>">
+                            <?= Html::a(Yii::t('app', 'Users'), ['admin/user']) ?>
+                        </li>
+                    <?php endif; ?>
                     <li>
                         <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
                         <ul class="collapse list-unstyled" id="homeSubmenu">
