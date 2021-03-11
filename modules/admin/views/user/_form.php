@@ -18,9 +18,15 @@ use rmrevin\yii\fontawesome\FAS;
         'options' => ['autocomplete' => 'off']
     ]); ?>
 
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'name')->textInput([
+            'maxlength' => true,
+            'placeholder' => Yii::t('app', 'Russian letters only')
+    ]) ?>
 
-    <?= $form->field($model, 'surname')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'surname')->textInput([
+            'maxlength' => true,
+            'placeholder' => Yii::t('app', 'Russian letters only')
+    ]) ?>
 
     <?= $form->field($model, 'position')->textInput(['maxlength' => true]) ?>
 

@@ -62,6 +62,7 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
             [['password_hash', 'auth_key', 'created_at', 'updated_at'], 'safe'],
             [['username', 'name', 'surname', 'position'], 'string'],
             ['username', 'match', 'pattern' => '/^[a-z]\w*$/i'],
+            [['name', 'surname'], 'match', 'pattern' => '/^[абвгдеёжзийклмнопрстуфхцчъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧЪЫЬЭЮЯ]*$/i'],
             [['email', 'username'], 'unique'],
             [['newPassword'], 'string', 'min' => 6],
             [['newPassword'], 'match', 'pattern' => '/(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/i'],

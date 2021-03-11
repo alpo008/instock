@@ -272,15 +272,19 @@ h1 {
 }
 
 a.asc:after {
-    content: '\2965';
+    content: '\2963';
 }
 
 a.desc:after {
-    content: '\2963';
+    content: '\2965';
 }
 
 .grid-view th a, .grid-view td a {
     color: #4159a3;
+}
+
+.grid-view td select {
+    width: fit-content;
 }
 
 .action-buttons {
