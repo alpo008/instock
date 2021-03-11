@@ -271,12 +271,18 @@ h1 {
     background-color: #a5b6ff;
 }
 
-a.asc:after {
-    content: '\2963';
+a.asc:after, a.desc:after {
+    content: '.';
+    width: 1.5rem;
+    margin-left: 0.5rem;
+    background-image: url("../icons/solid/sort-alpha-down.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 1rem;
 }
 
 a.desc:after {
-    content: '\2965';
+    background-image: url("../icons/solid/sort-alpha-down-alt.svg");
 }
 
 .grid-view th a, .grid-view td a {

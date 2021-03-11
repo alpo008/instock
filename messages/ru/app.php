@@ -48,6 +48,7 @@ return [
     'login' => 'Логин',
     'Login' => 'Авторизация',
     'Logout' => 'Выход',
+    'Main' => 'Главная',
     'Name' => 'Имя',
     'New password' => 'Новый пароль',
     'Password' => 'Пароль',
