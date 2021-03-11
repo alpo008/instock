@@ -11,7 +11,9 @@ use Yii;
  */
 
 abstract class RcMigration extends \yii\db\Migration {
+
     const TABLE_USERS = '{{%users}}';
+    const TABLE_MATERIALS = '{{%materials}}';
 
 
     /**
