@@ -80,7 +80,10 @@ class Material extends \yii\db\ActiveRecord
     public function behaviors()
     {
         return [
-            TimestampBehavior::class,
+            [
+                'class' => TimestampBehavior::className(),
+                'value' => Yii::$app->formatter->asDatetime(time()),
+            ],
             BlameableBehavior::class
         ];
     }
