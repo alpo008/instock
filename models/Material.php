@@ -26,7 +26,7 @@ use yii\behaviors\TimestampBehavior;
  * @property array $unitsList
  * @property string $unitName
  */
-class Materials extends \yii\db\ActiveRecord
+class Material extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
