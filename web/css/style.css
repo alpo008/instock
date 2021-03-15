@@ -297,6 +297,7 @@ a.desc:after {
     margin-bottom: 5px;
     display: flex;
     justify-content: flex-end;
+    align-items: center;
 }
 
 .action-buttons h1 {

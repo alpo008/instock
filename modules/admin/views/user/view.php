@@ -11,6 +11,7 @@ $this->title = $model->fullName;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Users'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $model->fullName;
 \yii\web\YiiAsset::register($this);
+
 ?>
 <div class="user-view">
 
@@ -43,6 +44,7 @@ $this->params['breadcrumbs'][] = $model->fullName;
     </div>
 
     <?= DetailView::widget([
+        'id' => 'user-detail-view',
         'model' => $model,
         'options' => ['class' => 'table detail-view'],
         'attributes' => [

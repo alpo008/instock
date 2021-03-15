@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use rmrevin\yii\fontawesome\FAS;
+
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\admin\models\MaterialSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -12,16 +14,19 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="material-index">
 
+    <div class="action-buttons">
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a(Yii::t('app', 'Create Material'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-    <?php Pjax::begin(); ?>
+        <?= Html::a(FAS::icon('layer-plus'), ['create'], [
+            'class' => 'btn btn-success',
+            'title' => Yii::t('app', 'Add material')
+        ]) ?>
+    </div>
+    <?php Pjax::begin(['id' => 'material-index-pjax-container']); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
+        'id' => 'material-index-grid-view',
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [

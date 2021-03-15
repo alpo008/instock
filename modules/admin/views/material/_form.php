@@ -1,22 +1,25 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use yii\bootstrap4\ActiveForm;
+use rmrevin\yii\fontawesome\FAS;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Material */
 /* @var $form yii\widgets\ActiveForm */
+
 ?>
 
 <div class="material-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([
+        'id' => 'material-active-form',
+        'layout' => 'horizontal',
+    ]); ?>
 
     <?= $form->field($model, 'ref')->textInput() ?>
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'qty')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'min_qty')->textInput(['maxlength' => true]) ?>
 
@@ -28,8 +31,13 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'group')->textInput(['maxlength' => true]) ?>
 
-    <div class="form-group">
-        <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
+    <?= $form->field($model, 'photo')->fileInput() ?>
+
+    <div class="form-group action-buttons">
+        <?= Html::submitButton(FAS::icon('save'), [
+            'class' => 'btn btn-success',
+            'title' => Yii::t('app', 'Save')
+        ]) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

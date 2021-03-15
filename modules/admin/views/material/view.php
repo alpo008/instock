@@ -1,5 +1,7 @@
 <?php
 
+use app\models\User;
+use rmrevin\yii\fontawesome\FAS;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -13,35 +15,56 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="material-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <div class="action-buttons">
+        <?php
+            if (!empty($model->photoPath)) {
+                echo Html::img($model->photoPath, ['width' => '200', 'class' => 'img-material']);
+            }
+        ?>
+        <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
+        <?= Html::a(FAS::icon('edit'), ['update', 'id' => $model->id], [
+            'class' => 'btn btn-primary',
+            'title' => Yii::t('app', 'Edit material card')
+        ]) ?>
+        <?= Html::a(FAS::icon('trash-alt'), ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
+            'title' => Yii::t('app', 'Delete material'),
             'data' => [
                 'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
                 'method' => 'post',
             ],
         ]) ?>
-    </p>
+    </div>
+
 
     <?= DetailView::widget([
+        'id' => 'material-detail-view',
         'model' => $model,
+        'options' => ['class' => 'table detail-view'],
         'attributes' => [
-            'id',
             'ref',
-            'name',
             'qty',
             'min_qty',
             'max_qty',
-            'unit',
+            [
+                'attribute' => 'unit',
+                'value' => $model->unitName
+            ],
             'type',
             'group',
-            'created_at',
-            'updated_at',
-            'created_by',
-            'updated_by',
+            [
+                'label' => Yii::t('app', 'Addition'),
+                'value' => $model->created_at . ' , ' .
+                    ($model->creator instanceof User ? $model->creator->fullName :
+                    Yii::t('app', 'Not set'))
+            ],
+            [
+                'label' => Yii::t('app', 'Last edition'),
+                'value' => $model->updated_at . ' , ' .
+                    ($model->editor instanceof User ? $model->editor->fullName :
+                    Yii::t('app', 'Not set'))
+            ]
         ],
     ]) ?>
 

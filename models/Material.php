@@ -5,6 +5,7 @@ namespace app\models;
 use Yii;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "materials".
@@ -22,12 +23,21 @@ use yii\behaviors\TimestampBehavior;
  * @property string|null $updated_at Дата изменения
  * @property int|null $created_by Кто добавил
  * @property int|null $updated_by Кто отредактировал
+ * @property UploadedFile $photo Фото
  *
  * @property array $unitsList
  * @property string $unitName
+ * @property User $creator
+ * @property User $editor
+ * @property string $photoPath
  */
 class Material extends \yii\db\ActiveRecord
 {
+    const PHOTOS_PATH = '@app/web/images/materials/';
+    const PHOTOS_EXTENSIONS = ['jpg', 'png'];
+
+    public $photo;
+
     /**
      * {@inheritdoc}
      */
@@ -49,6 +59,7 @@ class Material extends \yii\db\ActiveRecord
             [['name'], 'string', 'max' => 128],
             [['type', 'group'], 'string', 'max' => 16],
             [['ref'], 'unique'],
+            [['photo'], 'file', 'extensions' => implode(',', self::PHOTOS_EXTENSIONS)]
         ];
     }
 
@@ -71,6 +82,7 @@ class Material extends \yii\db\ActiveRecord
             'updated_at' => Yii::t('app', 'Updated at'),
             'created_by' => Yii::t('app', 'Created by'),
             'updated_by' => Yii::t('app', 'Updated by'),
+            'photo' => Yii::t('app', 'Photo')
         ];
     }
 
@@ -86,6 +98,47 @@ class Material extends \yii\db\ActiveRecord
             ],
             BlameableBehavior::class
         ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function afterSave($insert, $changedAttributes)
+    {
+        if ($this->photo = UploadedFile::getInstance($this, 'photo')) {
+            $this->photo->saveAs($this::PHOTOS_PATH . $this->ref . '.' . $this->photo->extension);
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function afterDelete()
+    {
+        foreach (self::PHOTOS_EXTENSIONS as $extension) {
+            $path = Yii::getAlias(self::PHOTOS_PATH) . $this->ref . '.' . $extension;
+            if(is_file($path)) {
+                unlink($path);
+            }
+        }
+    }
+
+    /**
+     * Администратор, добавивший данный материал
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreator ()
+    {
+        return $this->hasOne(User::class, ['id' => 'created_by']);
+    }
+
+    /**
+     * Администратор, редактировавший данный материал последним
+     * @return \yii\db\ActiveQuery
+     */
+    public function getEditor ()
+    {
+        return $this->hasOne(User::class, ['id' => 'updated_by']);
     }
 
     /**
@@ -112,5 +165,20 @@ class Material extends \yii\db\ActiveRecord
         return !empty($this->unitsList[$this->unit]) ?
             $this->unitsList[$this->unit] :
             $this->unitsList[0];
+    }
+
+    /**
+     * Путь для отображения фото
+     * @return string
+     */
+    public function getPhotoPath ()
+    {
+        foreach (self::PHOTOS_EXTENSIONS as $extension) {
+            $path = Yii::getAlias(self::PHOTOS_PATH) . $this->ref . '.' . $extension;
+            if(is_file($path)) {
+                return '@web/images/materials/' . $this->ref . '.' . $extension;
+            }
+        }
+        return  '';
     }
 }
