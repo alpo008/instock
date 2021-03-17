@@ -58,6 +58,7 @@ return [
     'Logout' => 'Выход',
     'Main' => 'Главная',
     'Materials' => 'Материалы',
+    'Material card edition: {name}' => 'Редактирование карты материала: {name}',
     'Material name' => 'Описание материала',
     'Meters' => 'м',
     'Name' => 'Имя',

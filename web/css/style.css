@@ -3,6 +3,10 @@ body {
     height: 100%;
 }
 
+.table th, .table td {
+    padding: 0.25rem;
+}
+
 .wrap, .wrapper {
     height: 100vh;
     margin: 0 auto -60px;
@@ -359,6 +363,30 @@ a.desc:after {
     color: #ab6767;
     font-style: italic;
     font-size: 0.8em;
+}
+
+/* Material form */
+
+.material-form > .material-photo {
+    display: flex;
+    justify-content: flex-end;
+    padding: 5px;
+}
+
+.material-form > .material-photo > img {
+    width: 100px;
+    border: 3px solid #a5b6ff;
+    border-radius: 10px;
+    cursor: pointer;
+    padding: 2px;
+/*    transition: 1s;*/
+}
+
+.material-form > .material-photo > img:hover {
+    fill: #6d7fcc;
+    border-width: 3px;
+/*    border-color: #6d7fcc;*/
+    box-shadow: inset 100px 100px 0 rgba(165, 182, 255, 0.2);
 }
 
 /* Common */

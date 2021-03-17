@@ -34,7 +34,7 @@ use yii\web\UploadedFile;
 class Material extends \yii\db\ActiveRecord
 {
     const PHOTOS_PATH = '@app/web/images/materials/';
-    const PHOTOS_EXTENSIONS = ['jpg', 'png'];
+    const PHOTOS_EXTENSIONS = ['jpg', 'png', 'jpeg'];
 
     public $photo;
 
@@ -54,12 +54,14 @@ class Material extends \yii\db\ActiveRecord
         return [
             [['ref', 'name'], 'required'],
             [['ref', 'unit', 'created_by', 'updated_by'], 'integer'],
-            [['qty', 'min_qty', 'max_qty'], 'number'],
+            [['qty', 'min_qty', 'max_qty'], 'number', 'min' => 0],
+            ['max_qty', 'compare', 'compareAttribute' => 'min_qty', 'operator' => '>=', 'type' => 'number'],
+            ['min_qty', 'compare', 'compareAttribute' => 'max_qty', 'operator' => '<=', 'type' => 'number'],
             [['created_at', 'updated_at'], 'safe'],
             [['name'], 'string', 'max' => 128],
             [['type', 'group'], 'string', 'max' => 16],
             [['ref'], 'unique'],
-            [['photo'], 'file', 'extensions' => implode(',', self::PHOTOS_EXTENSIONS)]
+            [['photo'], 'file', 'extensions' => implode(',', self::PHOTOS_EXTENSIONS), 'maxSize' => 1024*1024]
         ];
     }
 
@@ -106,6 +108,7 @@ class Material extends \yii\db\ActiveRecord
     public function afterSave($insert, $changedAttributes)
     {
         if ($this->photo = UploadedFile::getInstance($this, 'photo')) {
+            $this->deletePhoto();
             $this->photo->saveAs($this::PHOTOS_PATH . $this->ref . '.' . $this->photo->extension);
         }
     }
@@ -115,12 +118,7 @@ class Material extends \yii\db\ActiveRecord
      */
     public function afterDelete()
     {
-        foreach (self::PHOTOS_EXTENSIONS as $extension) {
-            $path = Yii::getAlias(self::PHOTOS_PATH) . $this->ref . '.' . $extension;
-            if(is_file($path)) {
-                unlink($path);
-            }
-        }
+        $this->deletePhoto();
     }
 
     /**
@@ -180,5 +178,15 @@ class Material extends \yii\db\ActiveRecord
             }
         }
         return  '';
+    }
+
+    private function deletePhoto ()
+    {
+        foreach (self::PHOTOS_EXTENSIONS as $extension) {
+            $path = Yii::getAlias(self::PHOTOS_PATH) . $this->ref . '.' . $extension;
+            if(is_file($path)) {
+                unlink($path);
+            }
+        }
     }
 }

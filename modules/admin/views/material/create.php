@@ -8,10 +8,13 @@ use yii\helpers\Html;
 $this->title = Yii::t('app', 'Create Material');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Materials'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="material-create">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <div class="action-buttons">
+        <h1><?= Html::encode($this->title) ?></h1>
+    </div>
 
     <?= $this->render('_form', [
         'model' => $model,

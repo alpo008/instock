@@ -16,14 +16,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="action-buttons">
     <h1><?= Html::encode($this->title) ?></h1>
-
         <?= Html::a(FAS::icon('layer-plus'), ['create'], [
             'class' => 'btn btn-success',
             'title' => Yii::t('app', 'Add material')
         ]) ?>
     </div>
+
     <?php Pjax::begin(['id' => 'material-index-pjax-container']); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
         'id' => 'material-index-grid-view',
@@ -31,13 +30,17 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'ref',
+            [
+                'attribute' => 'ref',
+                'format' => 'raw',
+                'value' => function($model) {
+                    return Html::a($model->ref, ['view', 'id' => $model->id]);
+                }
+            ],
             'name',
             'qty',
             'min_qty',
-            //'max_qty',
+            'max_qty',
             //'unit',
             //'type',
             //'group',

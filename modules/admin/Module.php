@@ -23,6 +23,8 @@ class Module extends \yii\base\Module
     {
         parent::init();
 
+        Yii::setAlias('@admin', $this->basePath);
+
         if (!$this->checkAccessRights()) {
             throw new ForbiddenHttpException(Yii::t('app', 'Access denied'));
         }
