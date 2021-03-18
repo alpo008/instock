@@ -319,6 +319,10 @@ a.desc:after {
     border-radius: 50%;
 }
 
+.action-buttons img {
+    margin-right: 10px;
+}
+
 .action-buttons .btn-primary {
     background-color: #4159a3;
     color: #a5b6ff;
@@ -387,6 +391,56 @@ a.desc:after {
     border-width: 3px;
 /*    border-color: #6d7fcc;*/
     box-shadow: inset 100px 100px 0 rgba(165, 182, 255, 0.2);
+}
+
+.material-index .grid-view th {
+    white-space: break-spaces;
+    vertical-align: top;
+}
+
+/* Cell-editable */
+
+.cell-editable {
+    display: flex;
+}
+
+.cell-editable a > i {
+    color: #7386d5;
+}
+
+.cell-editable a:hover > i {
+    color: #4159a3;
+}
+
+.cell-editable > form,
+.cell-editable > .cell-editable__icon_save,
+.cell-editable > .cell-editable__icon_cancel {
+    display: none;
+}
+
+.cell-editable > .cell-editable-value {
+    margin-right: auto;
+}
+
+.cell-editable.active > .cell-editable-value,
+.cell-editable.active > .cell-editable__icon_edit {
+    display: none;
+}
+
+.cell-editable.active > form,
+.cell-editable.active > .cell-editable__icon_save,
+.cell-editable.active > .cell-editable__icon_cancel {
+    display: block;
+}
+
+.cell-editable-value {
+    padding-right: 3px;
+}
+
+.cell-editable__icon_edit,
+.cell-editable__icon_save,
+.cell-editable__icon_cancel {
+    padding: 2px;
 }
 
 /* Common */

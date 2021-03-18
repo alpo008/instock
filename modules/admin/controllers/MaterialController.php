@@ -8,6 +8,7 @@ use app\modules\admin\models\MaterialSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * MaterialController implements the CRUD actions for Material model.
@@ -93,6 +94,27 @@ class MaterialController extends Controller
         return $this->render('update', [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * @param integer $id
+     * @return array
+     */
+    public function actionQuickUpdate($id)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $error = false;
+        $data = Yii::$app->request->post('Material');
+        try {
+            $model = $this->findModel($id);
+            if (!$model->load(Yii::$app->request->post()) || !$model->save()) {
+                $error = true;
+            }
+        } catch (NotFoundHttpException $e) {
+            $error = true;
+        }
+
+        return compact('error', 'data');
     }
 
     /**

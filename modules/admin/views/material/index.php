@@ -1,7 +1,8 @@
 <?php
 
-use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\Pjax;
 use rmrevin\yii\fontawesome\FAS;
 
@@ -34,14 +35,44 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'ref',
                 'format' => 'raw',
                 'value' => function($model) {
+                    /* @var $model \app\models\Material */
                     return Html::a($model->ref, ['view', 'id' => $model->id]);
                 }
             ],
             'name',
+            [
+                'attribute' => 'name',
+                'format' => 'raw',
+                'value' => function (\app\models\Material $model) {
+                    $value = $model->name;
+                    return $this->render('@app/views/_components/_cell_editable', [
+                        'value' => $value,
+                        'url' => Url::to(['/admin/material/quick-update/', 'id' =>  $model->id]),
+                        'input' => Html::textarea('Material[name]', $value),
+                        'formId' => 'name-update-form-' . $model->id,
+                        'containerId' => 'cell-editable-' . $model->id,
+                        'successCallback' => null,
+                        'errorCallback' => 'showCommonAlert',
+                    ]);
+                },
+                'contentOptions' => function(\app\models\Material $model) {
+                    return [
+                        'id' => 'cell-editable-' . $model->id,
+                        'class' => 'cell-editable'
+                    ];
+                }
+            ],
             'qty',
             'min_qty',
             'max_qty',
-            //'unit',
+            [
+                'attribute' => 'unit',
+                'value' => function($model) {
+                    /* @var $model \app\models\Material */
+                    return $model->unitName;
+                },
+                'filter' => $searchModel->unitsList
+            ],
             //'type',
             //'group',
             //'created_at',
