@@ -26,6 +26,18 @@ echo Html::beginForm($url, 'POST', [
 ]);
 echo $input . ' ';
 echo Html::endForm();
-echo Html::a(FAS::icon('edit'), '#', ['class' => 'cell-editable__icon_edit']);
-echo Html::a(FAS::icon('save'), '#', ['class' => 'cell-editable__icon_save']);
-echo Html::a(FAS::icon('times'), '#', ['class' => 'cell-editable__icon_cancel']);
+echo Html::a(FAS::icon('edit'), '#', [
+    'class' => 'cell-editable__icon_edit',
+    'title' => Yii::t('app', 'Edit')
+]);
+echo Html::a(FAS::icon('save'), '#', [
+    'class' => 'cell-editable__icon_save',
+    'title' => Yii::t('app', 'Save')
+]);
+echo Html::a(FAS::icon('times'), '#', [
+    'class' => 'cell-editable__icon_cancel',
+    'title' => Yii::t('app', 'Cancel')
+]);
+echo Html::beginTag('div', ['class' => 'cell-editable__error-messages']);
+echo Html::endTag('div');
+

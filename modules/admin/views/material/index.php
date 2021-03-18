@@ -39,7 +39,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Html::a($model->ref, ['view', 'id' => $model->id]);
                 }
             ],
-            'name',
             [
                 'attribute' => 'name',
                 'format' => 'raw',

@@ -383,13 +383,11 @@ a.desc:after {
     border-radius: 10px;
     cursor: pointer;
     padding: 2px;
-/*    transition: 1s;*/
 }
 
 .material-form > .material-photo > img:hover {
     fill: #6d7fcc;
     border-width: 3px;
-/*    border-color: #6d7fcc;*/
     box-shadow: inset 100px 100px 0 rgba(165, 182, 255, 0.2);
 }
 
@@ -441,6 +439,22 @@ a.desc:after {
 .cell-editable__icon_save,
 .cell-editable__icon_cancel {
     padding: 2px;
+}
+
+.cell-editable .cell-editable__error-messages {
+    display: none;
+    position: absolute;
+    z-index: 1;
+    background: #ffb6a5;
+    color: #8b4747;
+    height: auto;
+}
+
+.cell-editable .cell-editable__error-messages.active {
+    display: block;
+    border: 1px solid #8b4747;
+    padding: 8px;
+    border-radius: 5px;
 }
 
 /* Common */

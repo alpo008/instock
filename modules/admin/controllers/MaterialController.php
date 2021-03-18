@@ -103,18 +103,23 @@ class MaterialController extends Controller
     public function actionQuickUpdate($id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $error = false;
-        $data = Yii::$app->request->post('Material');
+        $errors = [];
+        $data = [];
         try {
             $model = $this->findModel($id);
-            if (!$model->load(Yii::$app->request->post()) || !$model->save()) {
-                $error = true;
+            if ($model->load(Yii::$app->request->post())) {
+                $data = $model->dirtyAttributes;
+                if (!$model->save()) {
+                    $errors = $model->firstErrors;
+                }
+            } else {
+                $errors = ['generic' => Yii::t('app', 'Bad parameter')];
             }
         } catch (NotFoundHttpException $e) {
-            $error = true;
+            $errors = ['generic' => Yii::t('app', 'Material not fount')];
         }
 
-        return compact('error', 'data');
+        return compact('errors', 'data');
     }
 
     /**
