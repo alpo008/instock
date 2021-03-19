@@ -29,15 +29,21 @@ $this->params['breadcrumbs'][] = $this->title;
         'id' => 'material-index-grid-view',
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'tableOptions' => ['class' => 'table table-bordered'],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             [
                 'attribute' => 'ref',
                 'format' => 'raw',
-                'value' => function($model) {
-                    /* @var $model \app\models\Material */
-                    return Html::a($model->ref, ['view', 'id' => $model->id]);
-                }
+                'value' => function (\app\models\Material $model) {
+                    $value = $model->ref;
+                    return $this->render('@app/views/_components/_cell_editable', [
+                        'value' => $value,
+                        'url' => Url::to(['/admin/material/quick-update/', 'id' =>  $model->id]),
+                        'input' => Html::textInput('Material[ref]', $value, ['class' => 'cell-editable__input']),
+                    ]);
+                },
+                'contentOptions' =>  ['class' => 'cell-editable'],
             ],
             [
                 'attribute' => 'name',
@@ -47,23 +53,47 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $this->render('@app/views/_components/_cell_editable', [
                         'value' => $value,
                         'url' => Url::to(['/admin/material/quick-update/', 'id' =>  $model->id]),
-                        'input' => Html::textarea('Material[name]', $value),
-                        'formId' => 'name-update-form-' . $model->id,
-                        'containerId' => 'cell-editable-' . $model->id,
-                        'successCallback' => null,
-                        'errorCallback' => 'showCommonAlert',
+                        'input' => Html::textInput('Material[name]', $value, ['class' => 'cell-editable__input']),
                     ]);
                 },
-                'contentOptions' => function(\app\models\Material $model) {
-                    return [
-                        'id' => 'cell-editable-' . $model->id,
-                        'class' => 'cell-editable'
-                    ];
-                }
+                'contentOptions' => ['class' => 'cell-editable'],
             ],
             'qty',
-            'min_qty',
-            'max_qty',
+            [
+                'attribute' => 'min_qty',
+                'format' => 'raw',
+                'value' => function (\app\models\Material $model) {
+                    $value = $model->min_qty;
+                    return $this->render('@app/views/_components/_cell_editable', [
+                        'value' => $value,
+                        'url' => Url::to(['/admin/material/quick-update/', 'id' =>  $model->id]),
+                        'input' => Html::textInput('Material[min_qty]', $value, [
+                            'class' => 'cell-editable__input',
+                            'type' => 'number',
+                            'min' => 0,
+                            'max' => $model->max_qty ? $model->max_qty : 1
+                        ]),
+                    ]);
+                },
+                'contentOptions' => ['class' => 'cell-editable'],
+            ],
+            [
+                'attribute' => 'max_qty',
+                'format' => 'raw',
+                'value' => function (\app\models\Material $model) {
+                    $value = $model->max_qty;
+                    return $this->render('@app/views/_components/_cell_editable', [
+                        'value' => $value,
+                        'url' => Url::to(['/admin/material/quick-update/', 'id' =>  $model->id]),
+                        'input' => Html::textInput('Material[max_qty]', $value, [
+                            'class' => 'cell-editable__input',
+                            'type' => 'number',
+                            'min' => $model->min_qty ? $model->min_qty : 0
+                        ]),
+                    ]);
+                },
+                'contentOptions' => ['class' => 'cell-editable'],
+            ],
             [
                 'attribute' => 'unit',
                 'value' => function($model) {
@@ -79,7 +109,45 @@ $this->params['breadcrumbs'][] = $this->title;
             //'created_by',
             //'updated_by',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'buttons' => [
+                    'view' => function ($url, $model, $key) {
+                        /** @var $model \app\models\Material */
+                        return Html::a(
+                            FAS::icon('eye'),
+                            ['material/view', 'id' => $model->id],
+                            [
+                                'title' => Yii::t('app', 'View')
+                            ]
+                        );
+                    },
+                    'update' => function ($url, $model, $key) {
+                        /** @var $model \app\models\Material */
+                        return Html::a(
+                            FAS::icon('edit'),
+                            ['material/update', 'id' => $model->id],
+                            [
+                                'title' => Yii::t('app', 'Edit')
+                            ]
+                        );
+                    },
+                    'delete' => function ($url, $model, $key) {
+                        /** @var $model \app\models\Material */
+                        return Html::a(
+                            FAS::icon('trash-alt'),
+                            ['material/delete', 'id' => $model->id],
+                            [
+                                'data' => [
+                                    'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
+                                    'method' => 'post',
+                                ],
+                                'title' => Yii::t('app', 'Delete material')
+                            ]
+                        );
+                    }
+                ]
+            ]
         ],
     ]); ?>
 

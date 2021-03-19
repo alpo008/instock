@@ -290,6 +290,10 @@ a.desc:after {
 }
 
 .grid-view th a, .grid-view td a {
+    color: #7386d5;
+}
+
+.grid-view th a:hover, .grid-view td a:hover {
     color: #4159a3;
 }
 
@@ -398,8 +402,8 @@ a.desc:after {
 
 /* Cell-editable */
 
-.cell-editable {
-    display: flex;
+.cell-editable a {
+    float: right;
 }
 
 .cell-editable a > i {

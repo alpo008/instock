@@ -25,8 +25,9 @@ class MaterialController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                    'quick-update' => ['POST'],
                 ],
-            ],
+           ],
         ];
     }
 
@@ -104,22 +105,24 @@ class MaterialController extends Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $errors = [];
-        $data = [];
+        $newValue = '';
         try {
             $model = $this->findModel($id);
             if ($model->load(Yii::$app->request->post())) {
-                $data = $model->dirtyAttributes;
+                if (!empty($model->dirtyAttributes)) {
+                    $newValue = ($model->dirtyAttributes[array_key_first($model->dirtyAttributes)]);
+                }
                 if (!$model->save()) {
+                    $newValue = '';
                     $errors = $model->firstErrors;
                 }
             } else {
-                $errors = ['generic' => Yii::t('app', 'Bad parameter')];
+                $errors = ['generic' => Yii::t('app', 'Bad parameters')];
             }
         } catch (NotFoundHttpException $e) {
-            $errors = ['generic' => Yii::t('app', 'Material not fount')];
+            $errors = ['generic' => Yii::t('app', 'Material not found')];
         }
-
-        return compact('errors', 'data');
+        return compact('errors', 'newValue');
     }
 
     /**

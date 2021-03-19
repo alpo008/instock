@@ -50,6 +50,7 @@ const CellEditable = {
     $errorMessagesContainer: null,
     $form: null,
     $input: null,
+    oldValue: null,
 
     init () {
         this.$editLink = $(document).find('.cell-editable__icon_edit');
@@ -62,8 +63,10 @@ const CellEditable = {
                 this.$cancelLink = $(e.currentTarget).siblings('.cell-editable__icon_cancel');
                 this.$saveLink = $(e.currentTarget).siblings('.cell-editable__icon_save');
                 this.$form = $(e.currentTarget).siblings('form');
+                this.$input = this.$form.find('.cell-editable__input');
                 this.$valueContainer = $(e.currentTarget).siblings('.cell-editable-value');
                 this.$errorMessagesContainer = $(e.currentTarget).siblings('.cell-editable__error-messages');
+                this.oldValue = this.$valueContainer.text();
 
                 if (this.$cancelLink !== null) {
                     this.$cancelLink.off('click').on('click', (e) => {
@@ -73,58 +76,43 @@ const CellEditable = {
                     });
                 }
 
-                if (this.$saveLink !== null) {
+                if (this.$saveLink !== null && this.$form !== null) {
                     this.$saveLink.off('click').on('click', (e) => {
                         e.preventDefault();
+                        this.$form.trigger('submit');
+                    });
+                }
+
+                if (this.$form !== null && typeof this.$form[0] === 'object') {
+                    this.$form.off('submit').on('submit', (e) => {
+                        e.preventDefault();
                         this.errorMessages = '';
-                        if (this.$form !== null && typeof this.$form[0] === 'object') {
-                            let url = this.$form.attr('action');
-                            let formData = new FormData(this.$form[0]);
-                            fetch(url, {
-                                'method' : 'POST',
-                                'body' : formData
-                            })
-                                .then(result => result.json())
-                                .then(res => {
-                                    if (typeof res.errors !== "undefined" && typeof res.data !== "undefined") {
-                                        if (this.$valueContainer !== null && typeof  res.data === 'object') {
-                                            let inputValue = this.$valueContainer.text();
-                                            if($.isEmptyObject(res.errors)) {
-                                                $.each(res.data, (k, v) => {if (!!v) {
-                                                    this.$input = this.$form.find('[name*=' + k + ']');
-                                                        this.$valueContainer.text(v);
-                                                        inputValue = v;
-                                                        let inputType = this.$input.prop('type');
-                                                        switch (inputType) {
-                                                            case 'textarea' :
-                                                                this.$input.text(v);
-                                                            break;
-                                                            default:
-                                                                this.$input.val(v);
-                                                            break;
-                                                        }
-                                                    }
-                                                });
-                                            } else {
-                                                $.each(res.errors, (k, v) => {
-                                                    this.$input = this.$form.find('[name*=' + k + ']');
-                                                    this.errorMessages += v + '<br>';
-                                                });
-                                                this.$errorMessagesContainer.html(this.errorMessages);
-                                                this.errorMessages = '';
-                                                this.$errorMessagesContainer.addClass('active');
-                                            }
+                        let url = this.$form.attr('action');
+                        let formData = new FormData(this.$form[0]);
+                        fetch(url, {
+                            'method' : 'POST',
+                            'body' : formData
+                        })
+                            .then(result => result.json())
+                            .then(res => {
+                                if (typeof res.errors !== "undefined" && typeof res.newValue !== "undefined") {
+                                    if (!!res.newValue.length && !res.errors.length) {
+                                        this.$valueContainer.text(res.newValue);
+                                    } else {
+                                        if (typeof res.errors === 'object' && !$.isEmptyObject(res.errors)) {
+                                            this.updateInput(this.oldValue);
+                                            this.showErrors(res.errors);
                                         }
                                     }
-                                })
-                                .catch(e => console.error(e))
-                        }
+                                }
+                            })
+                            .catch(e => console.error(e));
                         this.clearActive();
                     });
                 }
             });
         }
-        $(document).off('click').on('click', (e) => {
+        $(document).on('click', (e) => {
             if ($(e.target).closest('.cell-editable.active').length === 0) {
                 this.clearActive();
             }
@@ -140,6 +128,32 @@ const CellEditable = {
             });
         }
         this.$activeCell = null;
+    },
+
+    updateInput (val) {
+        if (this.$input !== null) {
+            let inputType = this.$input.prop('type');
+            switch (inputType) {
+                case 'textarea' :
+                    this.$input.text(val);
+                break;
+                default:
+                    this.$input.val(val);
+                break;
+            }
+        }
+    },
+
+    showErrors (errors) {
+        if (this.$errorMessagesContainer !== null && typeof errors === 'object') {
+            $.each(errors, (k, v) => {
+                this.errorMessages += v + '<br>';
+            });
+            this.$errorMessagesContainer.html(this.errorMessages);
+            this.errorMessages = '';
+            this.$errorMessagesContainer.addClass('active');
+        }
+
     }
 }
 
