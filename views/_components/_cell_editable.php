@@ -2,10 +2,6 @@
 
 /** @var $value string | mixed */
 /** @var $url string */
-/** @var $formId string */
-/** @var $containerId string */
-/** @var $successCallback string */
-/** @var $errorCallback string */
 /** @var $input string */
 
 use yii\helpers\Html;

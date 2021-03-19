@@ -40,7 +40,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $this->render('@app/views/_components/_cell_editable', [
                         'value' => $value,
                         'url' => Url::to(['/admin/material/quick-update/', 'id' =>  $model->id]),
-                        'input' => Html::textInput('Material[ref]', $value, ['class' => 'cell-editable__input']),
+                        'input' => Html::textInput('Material[ref]', $value, [
+                            'class' => 'cell-editable__input',
+                            'autocomplete' => 'off'
+                        ]),
                     ]);
                 },
                 'contentOptions' =>  ['class' => 'cell-editable'],
@@ -53,7 +56,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $this->render('@app/views/_components/_cell_editable', [
                         'value' => $value,
                         'url' => Url::to(['/admin/material/quick-update/', 'id' =>  $model->id]),
-                        'input' => Html::textInput('Material[name]', $value, ['class' => 'cell-editable__input']),
+                        'input' => Html::textInput('Material[name]', $value, [
+                            'class' => 'cell-editable__input',
+                            'autocomplete' => 'off'
+                        ]),
                     ]);
                 },
                 'contentOptions' => ['class' => 'cell-editable'],

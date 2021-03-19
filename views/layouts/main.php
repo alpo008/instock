@@ -57,21 +57,25 @@ $user = Yii::$app->user->identity;
                         <li class="<?= strpos($currentUrl, Url::to(['/admin/user'])) !== false ? 'active' : '' ?>">
                             <?= Html::a(Yii::t('app', 'Users'), ['/admin/user']) ?>
                         </li>
+                        <li class="<?= strpos($currentUrl, Url::to(['/admin/material'])) !== false ? 'active' : '' ?>">
+                            <a href="#materialSubmenu" data-toggle="collapse"
+                               aria-expanded="<?= strpos($currentUrl, Url::to(['/admin/material'])) !== false ? 'true' : 'false' ?>"
+                               class="dropdown-toggle">
+                                <?= Yii::t('app', 'Materials') ?>
+                            </a>
+                            <ul class="collapse list-unstyled <?= strpos($currentUrl, Url::to(['/admin/material'])) !== false ? 'show' : '' ?>" id="materialSubmenu">
+                                <li class="<?= strpos($currentUrl, Url::to(['/admin/material'])) !== false ? 'active' : '' ?>">
+                                    <?= Html::a(Yii::t('app', 'Table'), ['/admin/material']) ?>
+                                </li>
+                                <li class="<?= strpos($currentUrl, Url::to(['/admin/material/import'])) !== false ? 'active' : '' ?>">
+                                    <?= Html::a(Yii::t('app', 'Import'), ['material/import']) ?>
+                                </li>
+                                <li class="<?= strpos($currentUrl, Url::to(['/admin/material/export'])) !== false ? 'active' : '' ?>">
+                                    <?= Html::a(Yii::t('app', 'Export'), ['material/export']) ?>
+                                </li>
+                            </ul>
+                        </li>
                     <?php endif; ?>
-                    <li>
-                        <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
-                        <ul class="collapse list-unstyled" id="homeSubmenu">
-                            <li>
-                                <a href="#">Home 1</a>
-                            </li>
-                            <li>
-                                <a href="#">Home 2</a>
-                            </li>
-                            <li>
-                                <a href="#">Home 3</a>
-                            </li>
-                        </ul>
-                    </li>
                     <li>
                         <a href="#">About</a>
                     </li>
