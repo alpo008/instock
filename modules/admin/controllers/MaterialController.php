@@ -2,6 +2,8 @@
 
 namespace app\modules\admin\controllers;
 
+use app\modules\admin\models\MaterialExport;
+use PHPExcel_IOFactory;
 use Yii;
 use app\models\Material;
 use app\modules\admin\models\MaterialSearch;
@@ -137,6 +139,22 @@ class MaterialController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    /**
+     * @throws \PHPExcel_Exception
+     * @throws \PHPExcel_Reader_Exception
+     * @throws \PHPExcel_Writer_Exception
+     */
+    public function actionExport()
+    {
+        $exportModel = new MaterialExport();
+        $phpExcel = $exportModel->makeExcel();
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="results.xlsx"');
+        header('Cache-Control: max-age=0');
+        $objWriter = PHPExcel_IOFactory::createWriter($phpExcel, 'Excel2007');
+        $objWriter->save('php://output');
     }
 
     /**

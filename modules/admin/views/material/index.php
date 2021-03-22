@@ -21,6 +21,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'class' => 'btn btn-success',
             'title' => Yii::t('app', 'Add material')
         ]) ?>
+
+        <?= Html::a(FAS::icon('file-export'), ['export'], [
+            'class' => 'btn btn-primary',
+            'title' => Yii::t('app', 'Export table to Excel')
+        ]) ?>
     </div>
 
     <?php Pjax::begin(['id' => 'material-index-pjax-container']); ?>
