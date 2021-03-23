@@ -23,8 +23,9 @@ Thumbs.db
 /temp
 /tmp
 
-#user images dir
+#user files dirs
 /web/images
+/web/downloads
 
 # composer vendor dir
 /vendor

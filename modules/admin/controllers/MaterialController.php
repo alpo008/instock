@@ -154,11 +154,11 @@ class MaterialController extends Controller
     {
         $exportModel = new MaterialExport();
         $phpExcel = $exportModel->makeExcel();
-        header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="materials.xlsx"');
-        header('Cache-Control: max-age=0');
+        $path = Yii::getAlias('@app/web/downloads/') . 'materials.xlsx';
         $objWriter = PHPExcel_IOFactory::createWriter($phpExcel, 'Excel2007');
-        $objWriter->save('php://output');
+        $objWriter->save($path);
+        Yii::$app->response->sendFile($path);
+        unlink($path);
     }
 
     /**

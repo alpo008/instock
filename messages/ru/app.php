@@ -57,6 +57,7 @@ return [
     'Inspection stock' => 'Инспекция - склад',
     'ID' => 'ИД',
     'Import' => 'Импорт',
+    'Imported rows' => 'Импортировано строк',
     'Import materials from file' => 'Импорт материалов из файла',
     'Import structure' => 'Структура импорта',
     'Impossible to delete this user' => 'Невозможно заблокировать пользователя',
