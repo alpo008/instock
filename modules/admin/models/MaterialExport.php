@@ -3,15 +3,12 @@
 
 namespace app\modules\admin\models;
 
-
+use Yii;
 use app\models\Material;
 use app\models\User;
 use PHPExcel;
 use PHPExcel_Cell_DataType;
-use PHPExcel_IOFactory;
-use PHPExcel_Shared_Date;
 use PHPExcel_Style_NumberFormat;
-use Yii;
 
 class MaterialExport extends Material
 {
@@ -100,7 +97,8 @@ class MaterialExport extends Material
                         ->getNumberFormat()->setFormatCode($params['format']);
                 }
                 $phpExcel->getActiveSheet()->setCellValueExplicitByColumnAndRow(
-                    $column, $row, $value, $type);
+                    $column, $row, $value, $type
+                );
                 $column++;
             }
             $row++;

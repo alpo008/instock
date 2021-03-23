@@ -16,7 +16,8 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="material-index">
 
     <div class="action-buttons">
-    <h1><?= Html::encode($this->title) ?></h1>
+        <h1><?= Html::encode($this->title) ?></h1>
+
         <?= Html::a(FAS::icon('layer-plus'), ['create'], [
             'class' => 'btn btn-success',
             'title' => Yii::t('app', 'Add material')
@@ -26,6 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'class' => 'btn btn-primary',
             'title' => Yii::t('app', 'Export table to Excel')
         ]) ?>
+
     </div>
 
     <?php Pjax::begin(['id' => 'material-index-pjax-container']); ?>

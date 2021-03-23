@@ -461,6 +461,14 @@ a.desc:after {
     border-radius: 5px;
 }
 
+/*.material-import .form-group {
+    display: flex;
+    justify-content: space-between;
+}
+.material-import .form-control {
+    width: auto;
+}*/
+
 /* Common */
 
 .of-auto {

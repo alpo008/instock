@@ -180,6 +180,9 @@ class Material extends \yii\db\ActiveRecord
         return  '';
     }
 
+    /**
+     * Удаление фото материала
+     */
     private function deletePhoto ()
     {
         foreach (self::PHOTOS_EXTENSIONS as $extension) {

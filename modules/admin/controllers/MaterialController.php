@@ -3,6 +3,7 @@
 namespace app\modules\admin\controllers;
 
 use app\modules\admin\models\MaterialExport;
+use app\modules\admin\models\MaterialImport;
 use PHPExcel_IOFactory;
 use Yii;
 use app\models\Material;
@@ -11,6 +12,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\Response;
+use yii\web\UploadedFile;
 
 /**
  * MaterialController implements the CRUD actions for Material model.
@@ -142,6 +144,8 @@ class MaterialController extends Controller
     }
 
     /**
+     * Exports materials table to Excel
+     *
      * @throws \PHPExcel_Exception
      * @throws \PHPExcel_Reader_Exception
      * @throws \PHPExcel_Writer_Exception
@@ -151,10 +155,32 @@ class MaterialController extends Controller
         $exportModel = new MaterialExport();
         $phpExcel = $exportModel->makeExcel();
         header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="results.xlsx"');
+        header('Content-Disposition: attachment;filename="materials.xlsx"');
         header('Cache-Control: max-age=0');
         $objWriter = PHPExcel_IOFactory::createWriter($phpExcel, 'Excel2007');
         $objWriter->save('php://output');
+    }
+
+    /**
+     * @return string|Response
+     * @throws \PHPExcel_Exception
+     */
+    public function actionImport()
+    {
+        $model = new MaterialImport();
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->file = UploadedFile::getInstance($model, 'file');
+            $processedRows = $model->import();
+            Yii::$app->session->setFlash('info',
+                Yii::t('app', 'Imported rows') . ' : ' . $processedRows
+            );
+            return $this->redirect(['index']);
+        }
+
+        return $this->render('import', [
+            'model' => $model,
+        ]);
     }
 
     /**

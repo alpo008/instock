@@ -9,6 +9,11 @@ $config = [
     'basePath' => dirname(__DIR__),
     'homeUrl' => '/instock',
     'bootstrap' => ['log', 'app\modules\admin\Bootstrap'],
+    'container' => [
+        'definitions' => [
+            \yii\widgets\LinkPager::class => \yii\bootstrap4\LinkPager::class,
+        ],
+    ],
     'modules' => [
         'admin' => [
             'class' => 'app\modules\admin\Module',
