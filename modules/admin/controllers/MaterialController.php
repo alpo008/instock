@@ -42,7 +42,9 @@ class MaterialController extends Controller
     public function actionIndex()
     {
         $searchModel = new MaterialSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $queryParams = Yii::$app->request->queryParams;
+        Yii::$app->cache->set('MaterialQueryParams', $queryParams);
+        $dataProvider = $searchModel->search($queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -153,7 +155,11 @@ class MaterialController extends Controller
     public function actionExport()
     {
         $exportModel = new MaterialExport();
-        $phpExcel = $exportModel->makeExcel();
+        $searchModel = new MaterialSearch();
+        $queryParams = Yii::$app->cache->get('MaterialQueryParams');
+        $dataProvider = $searchModel->search($queryParams);
+        $dataProvider->setPagination(false);
+        $phpExcel = $exportModel->makeExcel($dataProvider);
         $path = Yii::getAlias('@app/web/downloads/') . 'materials.xlsx';
         $objWriter = PHPExcel_IOFactory::createWriter($phpExcel, 'Excel2007');
         $objWriter->save($path);

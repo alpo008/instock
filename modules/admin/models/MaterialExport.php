@@ -3,74 +3,34 @@
 
 namespace app\modules\admin\models;
 
-use Yii;
 use app\models\Material;
-use app\models\User;
 use PHPExcel;
 use PHPExcel_Cell_DataType;
-use PHPExcel_Style_NumberFormat;
+use yii\data\ActiveDataProvider;
+use app\custom\FileStorage;
 
 class MaterialExport extends Material
 {
+    const COLUMNS_TEMPLATE_STORAGE = 'material_export_template';
+
+    /**
+     * @return array|null
+     */
     public function columns()
     {
-        return [
-            'ref' => [
-                'type' => PHPExcel_Cell_DataType::TYPE_NUMERIC,
-                'format' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER
-            ],
-            'name' => [
-                'type' => PHPExcel_Cell_DataType::TYPE_STRING
-            ],
-            'qty' => [
-                'type' => PHPExcel_Cell_DataType::TYPE_NUMERIC,
-                'format' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER_00
-            ],
-            'min_qty' => [
-                'type' => PHPExcel_Cell_DataType::TYPE_NUMERIC,
-                'format' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER_00
-            ],
-            'max_qty' => [
-                'type' => PHPExcel_Cell_DataType::TYPE_NUMERIC,
-                'format' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER_00
-            ],
-            'unit' => [
-                'type' => PHPExcel_Cell_DataType::TYPE_STRING,
-                'getter' => 'getUnitName'
-            ],
-            'type' => [
-                'type' => PHPExcel_Cell_DataType::TYPE_STRING,
-            ],
-            'group' => [
-                'type' => PHPExcel_Cell_DataType::TYPE_STRING,
-            ],
-            'created_at' => [
-                'type' => PHPExcel_Cell_DataType::TYPE_NUMERIC,
-                'getter' => 'getExcelTimestamp',
-                'format' => 'DD.MM.YYYY HH:MM:SS'
-            ],
-            'created_by' => [
-                'getter' => 'getCreatorName'
-            ],
-            'updated_at' => [
-                'type' => PHPExcel_Cell_DataType::TYPE_NUMERIC,
-                'getter' => 'getExcelTimestamp',
-                'format' => 'DD.MM.YYYY HH:MM:SS'
-            ],
-            'updated_by' => [
-                'getter' => 'getEditorName'
-            ]
-        ];
+        $fileStorage = new FileStorage();
+        return $fileStorage->getContent(self::COLUMNS_TEMPLATE_STORAGE);
     }
 
     /**
+     * @param ActiveDataProvider $dataProvider
      * @return PHPExcel
      * @throws \PHPExcel_Exception
      */
-    public function makeExcel ()
+    public function makeExcel ($dataProvider)
     {
         $attributes = $this->columns();
-        $materials = $this::find()->all();
+        $materials = $dataProvider->models;
         $phpExcel = new PHPExcel();
         $phpExcel->setActiveSheetIndex(0);
         $column = 0;
@@ -105,31 +65,5 @@ class MaterialExport extends Material
             $column = 0;
         }
         return $phpExcel;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEditorName()
-    {
-        return $this->editor instanceof User ? $this->editor->fullName : 'not set';
-    }
-
-    /**
-     * @return string
-     */
-    public function getCreatorName()
-    {
-        return $this->creator instanceof User ? $this->creator->fullName : 'not set';
-    }
-
-    /**
-     * @param string $attr
-     * @return float|int
-     */
-    public function getExcelTimestamp($attr)
-    {
-        $timestamp = (int) Yii::$app->formatter->asTimestamp($this->{$attr});
-        return 25569 + (($timestamp + Yii::$app->params['timeZoneShift']) / 86400);
     }
 }

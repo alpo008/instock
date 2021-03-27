@@ -26,6 +26,7 @@ Thumbs.db
 #user files dirs
 /web/images
 /web/downloads
+/storage
 
 # composer vendor dir
 /vendor

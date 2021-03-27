@@ -180,6 +180,33 @@ class Material extends \yii\db\ActiveRecord
         return  '';
     }
 
+
+    /**
+     * @return string
+     */
+    public function getEditorName()
+    {
+        return $this->editor instanceof User ? $this->editor->fullName : 'not set';
+    }
+
+    /**
+     * @return string
+     */
+    public function getCreatorName()
+    {
+        return $this->creator instanceof User ? $this->creator->fullName : 'not set';
+    }
+
+    /**
+     * @param string $attr
+     * @return float|int
+     */
+    public function getExcelTimestamp($attr)
+    {
+        $timestamp = (int) Yii::$app->formatter->asTimestamp($this->{$attr});
+        return 25569 + (($timestamp + Yii::$app->params['timeZoneShift']) / 86400);
+    }
+
     /**
      * Удаление фото материала
      */
