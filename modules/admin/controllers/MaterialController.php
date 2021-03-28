@@ -30,8 +30,9 @@ class MaterialController extends Controller
                 'actions' => [
                     'delete' => ['POST'],
                     'quick-update' => ['POST'],
-                ],
-           ],
+                    'import' => ['POST']
+                ]
+           ]
         ];
     }
 
@@ -42,14 +43,14 @@ class MaterialController extends Controller
     public function actionIndex()
     {
         $searchModel = new MaterialSearch();
+        $importModel = new MaterialImport();
         $queryParams = Yii::$app->request->queryParams;
         Yii::$app->cache->set('MaterialQueryParams', $queryParams);
         $dataProvider = $searchModel->search($queryParams);
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+        return $this->render('index', compact(
+            'searchModel', 'dataProvider', 'importModel'
+        ));
     }
 
     /**
@@ -168,25 +169,35 @@ class MaterialController extends Controller
     }
 
     /**
-     * @return string|Response
+     * @return array
      * @throws \PHPExcel_Exception
      */
     public function actionImport()
     {
+        Yii::$app->response->format = Response::FORMAT_JSON;
         $model = new MaterialImport();
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $model->file = UploadedFile::getInstance($model, 'file');
-            $processedRows = $model->import();
-            Yii::$app->session->setFlash('info',
-                Yii::t('app', 'Imported rows') . ' : ' . $processedRows
-            );
-            return $this->redirect(['index']);
+        if ($post = Yii::$app->request->post()) {
+            if (!isset ($post['startRow']) && !isset ($post['endRow'])) {
+                if ($model->load($post)) {
+                    $model->file = UploadedFile::getInstance($model, 'file');
+                    if ($model->file instanceof UploadedFile) {
+                        return $model->import();
+                    } else {
+                        return ['added' => 0,
+                            'processed' => 0,
+                            'error' => Yii::t('app', Yii::t('app', 'Upload the file'))
+                        ];
+                    }
+                }
+            } else {
+                return $model->import((int) $post['startRow'], (int)$post['endRow']);
+            }
         }
-
-        return $this->render('import', [
-            'model' => $model,
-        ]);
+        return ['added' => 0,
+            'processed' => 0,
+            'error' => Yii::t('app', Yii::t('app', 'Bad request'))
+        ];
     }
 
     /**

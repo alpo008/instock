@@ -16,11 +16,9 @@ use yii\web\UploadedFile;
  *
  * @property array $columns
  * @property integer $skipFirstRow
- * @property integer $duplicatedKeyAction;
  *
  * @property array $defaultColumns
  * @property array $attributesList
- * @property array $duplicatedKeyActionsList
  */
 
 class MaterialImport extends Material
@@ -28,13 +26,11 @@ class MaterialImport extends Material
     const SKIP_ROW = 1;
     const DO_NOT_SKIP_ROW = 0;
 
-    const SKIP_DUPLICATED = 1;
-    const REPLACE_DUPLICATED = 2;
-    const MERGE_DUPLICATED = 3;
+    const PHP_EXCEL_CACHE_KEY = 'phpExcelMaterials';
+    const PHP_EXCEL_CACHE_DURATION = 1800;
 
     public $file;
     public $skipFirstRow = self::SKIP_ROW;
-    public $duplicatedKeyAction = self::MERGE_DUPLICATED;
     public $columns;
 
     public function __construct($config = [])
@@ -57,7 +53,7 @@ class MaterialImport extends Material
                 'wrongMimeType'=> \Yii::t('app','Only excel files are allowed') . '!',
                 'checkExtensionByMimeType' => false,
                 'skipOnEmpty' => true],
-            [['skipFirstRow', 'duplicatedKeyAction'], 'integer', 'min' => 0],
+            [['skipFirstRow'], 'boolean']
         ];
     }
 
@@ -94,7 +90,6 @@ class MaterialImport extends Material
     {
         return [
             'skipFirstRow' => Yii::t('app', 'Ignore first row'),
-            'duplicatedKeyAction' => Yii::t('app', 'Duplicated ref action'),
             'file' => Yii::t('app', 'File')
         ];
     }
@@ -107,49 +102,42 @@ class MaterialImport extends Material
         return [
             'A' => [
                 'attribute' => 'ref',
-                'required' => true,
                 'default' => false,
                 'type' => 'text'
             ],
             'B' => [
                 'attribute' => 'name',
-                'required' => true,
                 'default' => Yii::t('app', 'Not set'),
                 'type' => 'text'
             ],
             'C' => [
                 'attribute' => 'qty',
-                'required' => false,
                 'default' => 0,
                 'type' => 'number'
             ],
             'D' => [
                 'attribute' => 'min_qty',
-                'required' => false,
                 'default' => 0,
                 'type' => 'number'
             ],
             'E' => [
                 'attribute' => 'max_qty',
-                'required' => false,
                 'default' => 1,
                 'type' => 'number'
             ],
             'F' => [
                 'attribute' => 'unit',
-                'required' => true,
+                'getter' => 'getUnitCode',
                 'default' => 0,
                 'type' => 'number',
             ],
             'G' => [
                 'attribute' => 'type',
-                'required' => true,
                 'default' => Yii::t('app', 'Not set'),
                 'type' => 'text'
             ],
             'H' => [
                 'attribute' => 'group',
-                'required' => true,
                 'default' => Yii::t('app', 'No group'),
                 'type' => 'text'
             ]
@@ -157,80 +145,84 @@ class MaterialImport extends Material
     }
 
     /**
-     * @return int количество импортированных записей
+     * @param int $startRow
+     * @param int $endRow
+     * @return array количество импортированных записей
      * @throws \PHPExcel_Exception
      */
-    public function import()
+    public function import($startRow = 1, $endRow = 50)
     {
-        $result = 0;
+        $added = 0;
+        $processed = 0;
+        $error = false;
         if (!$this->validateColumns()) {
-            return $result;
+            $error = Yii::t('app', 'Bad columns configuration');
+            return compact('processed','added', 'error');
         }
         if ($this->file instanceof UploadedFile) {
             try{
                 $fileType = \PHPExcel_IOFactory::identify($this->file->tempName);
                 $objReader = \PHPExcel_IOFactory::createReader($fileType);
                 $phpExcel = $objReader->load($this->file->tempName);
+                Yii::$app->cache->set(self::PHP_EXCEL_CACHE_KEY,
+                    $phpExcel,
+                    self::PHP_EXCEL_CACHE_DURATION
+                );
             } catch (\Exception $e) {
+                $error = $e->getMessage();
             }
+        } else {
+            $phpExcel = Yii::$app->cache->get(self::PHP_EXCEL_CACHE_KEY);
+        }
+
+        if ($phpExcel instanceof \PHPExcel) {
             $sheet = $phpExcel->getSheet(0);
             $highestRow = $sheet->getHighestRow();
-            $startRow = (int) $this->skipFirstRow === $this::SKIP_ROW ? 2 : 1;
+            if ($startRow === 1) {
+                $startRow = (int)$this->skipFirstRow === $this::SKIP_ROW ? 2 : 1;
+            }
             if ($highestRow >= $startRow) {
-                for($row = $startRow; $row <= $highestRow; $row++) {
+                $endRow = $endRow > $highestRow ? $highestRow : $endRow;
+                for ($row = $startRow; $row <= $endRow; $row++) {
+                    $processed = $row;
                     $materialAttributes = [];
                     foreach ($this->columns as $index => $column) {
                         $cell = $sheet->getCell($index . $row);
                         $value = $cell->getValue();
-                        if (is_null($value) && $column['default'] === 'false') {
-                            continue;
+                        if (is_null($value) && $column['default'] === false) {
+                            continue 2;
                         }
                         $value = is_null($value) ? $column['default'] : $value;
+                        $value = !empty($column['getter']) ? $this->{$column['getter']}($value) : $value;
                         $materialAttributes[$column['attribute']] = $value;
                     }
+
                     if ($material = $this::findOne(['ref' => $materialAttributes['ref']])) {
-                        switch ((int) $this->duplicatedKeyAction) {
-                            case $this::MERGE_DUPLICATED :
-                                $material->qty += $materialAttributes['qty'];
-                            break;
-                            case $this::REPLACE_DUPLICATED :
-                                $material->qty = $materialAttributes['qty'];
-                            break;
-                        }
-                        if ($material->save()) {
-                            $result++;
-                        }
+                        unset ($materialAttributes['qty']);
                     } else {
-                        $material = new Material($materialAttributes);
-                        if ($material->save()) {
-                            $result++;
-                        }
+                        $material = new Material();
+                        $materialAttributes['qty'] = 0;
+                    }
+                    $material->setAttributes($materialAttributes, false);
+                    if ($material->save()) {
+                        $added++;
                     }
                 }
             }
         }
-        return $result;
+        $total = isset($highestRow) ? $highestRow : 0;
+        return compact('total', 'processed', 'added', 'error');
     }
 
-/*    public function getAttributesList()
-    {
-        $list = $this->attributeLabels();
-        $attributes = array_column($this->columns, 'attribute');
-        $res = array_filter($list, function ($key) use ($attributes) {
-            return in_array($key, $attributes);
-        }, ARRAY_FILTER_USE_KEY);
-        return $res;
-    }*/
-
     /**
-     * @return array
+     * @param string $unit
+     * @return int
      */
-    public function getDuplicatedKeyActionsList()
+    public function getUnitCode ($unit)
     {
-        return [
-            $this::SKIP_DUPLICATED => Yii::t('app', 'Save database value'),
-            $this::REPLACE_DUPLICATED => Yii::t('app', 'Save file value'),
-            $this::MERGE_DUPLICATED => Yii::t('app', 'Sum database and file values')
-        ];
+        $unitCodes = array_map('mb_strtolower', $this->unitsList);
+        $unitCodes = array_flip($unitCodes);
+        $unit = mb_strtolower(trim($unit, ' .'));
+        return !empty($unitCodes[$unit]) ? $unitCodes[$unit] : 0;
     }
 }

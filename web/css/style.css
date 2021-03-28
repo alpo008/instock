@@ -314,7 +314,7 @@ a.desc:after {
     color: #4159a3;
 }
 
-.action-buttons a {
+.action-buttons a, .action-buttons button {
     margin-right: 7px;
     height: 40px;
     width: 40px;
@@ -371,6 +371,10 @@ a.desc:after {
     color: #ab6767;
     font-style: italic;
     font-size: 0.8em;
+}
+
+.progress-bar {
+    background-color: #478b74;
 }
 
 /* Material form */

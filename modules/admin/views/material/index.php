@@ -9,6 +9,7 @@ use rmrevin\yii\fontawesome\FAS;
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\admin\models\MaterialSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $importModel \app\modules\admin\models\MaterialImport */
 
 $this->title = Yii::t('app', 'Materials');
 $this->params['breadcrumbs'][] = $this->title;
@@ -26,6 +27,16 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a(FAS::icon('file-export'), ['export'], [
             'class' => 'btn btn-primary',
             'title' => Yii::t('app', 'Export table to Excel')
+        ]) ?>
+
+        <?= Html::button(FAS::icon('file-import'), [
+        'type' => 'button',
+        'class' => 'btn btn-success',
+        'title' => Yii::t('app', 'Import materials from file'),
+        'data' => [
+            'toggle' => 'modal',
+            'target' => '#materialImportModal'
+        ]
         ]) ?>
 
     </div>
@@ -165,5 +176,6 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 
     <?php Pjax::end(); ?>
-
 </div>
+
+<?= $this->render('_import_form', ['model' => $importModel]) ?>
