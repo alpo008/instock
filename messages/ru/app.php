@@ -76,6 +76,7 @@ return [
     'Latin letters and digits' => 'Буквы латинского алфавита и цифры',
     'Latin letters, digits, special symbols' => 'Буквы латинского алфавита, цифры, спецсимволы',
     'login' => 'Логин',
+    'List of materials' => 'Перечень материалов',
     'Login' => 'Авторизация',
     'Logout' => 'Выход',
     'Main' => 'Главная',
@@ -123,5 +124,6 @@ return [
     'Upload the file' => 'Необходимо загрузить файл',
     'Users' => 'Пользователи',
     'User with role {role} will be restored' => 'Пользователь будет восстановлен с ролью {role}',
-    'User name' => 'Имя пользователя'
+    'User name' => 'Имя пользователя',
+    'View' => 'Просмотр'
 ];

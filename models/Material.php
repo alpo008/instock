@@ -25,6 +25,8 @@ use yii\web\UploadedFile;
  * @property int|null $updated_by Кто отредактировал
  * @property UploadedFile $photo Фото
  *
+ * @property MaterialStock[] $materialsStocks
+ * @property Stock[] $stocks
  * @property array $unitsList
  * @property string $unitName
  * @property User $creator
@@ -111,6 +113,32 @@ class Material extends \yii\db\ActiveRecord
             $this->deletePhoto();
             $this->photo->saveAs($this::PHOTOS_PATH . $this->ref . '.' . $this->photo->extension);
         }
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMaterialsStocks()
+    {
+        return $this->hasMany(MaterialStock::class, ['material_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getStocks()
+    {
+        return $this->hasMany(Stock::class, ['id' => 'stock_id'])
+            ->via('materialsStocks');
+    }
+
+    public function getQuantity($stockId = null)
+    {
+        $query = $this->getMaterialsStocks()->select('SUM(qty)');
+        if (!is_null($stockId)) {
+            $query->where(['stock_id' => $stockId]);
+        }
+        return $query->scalar();
     }
 
     /**

@@ -35,11 +35,35 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 
     <?= DetailView::widget([
+        'id' => 'stock-detail-view',
         'model' => $model,
         'attributes' => [
             'alias',
             'description:ntext',
         ],
     ]) ?>
+
+    <?php if (!empty($model->materials) && is_array($model->materials)) : ?>
+        <div class="table-caption">
+            <?= Yii::t('app', 'List of materials') ?>
+        </div>
+        <table class="table relations-list">
+            <?php foreach ($model->materials as $material): ?>
+                <tr>
+                    <td>
+                        <?= \yii\bootstrap4\Html::a($material->ref, ['material/view', 'id' => $material->id], [
+                            'title' => Yii::t('app', 'View') . ' ' . $material->name
+                        ]) ?>
+                    </td>
+                    <td>
+                        <?= $material->name ?>
+                    </td>
+                    <td>
+                        <?= $material->getQuantity($model->id) ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    <?php endif; ?>
 
 </div>

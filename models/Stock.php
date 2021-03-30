@@ -10,6 +10,9 @@ use Yii;
  * @property int $id ИД
  * @property string $alias Обозначение
  * @property string|null $description Описание
+ *
+ * @property MaterialStock[] $materialsStocks
+ * @property Material[] $materials
  */
 class Stock extends \yii\db\ActiveRecord
 {
@@ -44,5 +47,22 @@ class Stock extends \yii\db\ActiveRecord
             'alias' => Yii::t('app', 'Alias'),
             'description' => Yii::t('app', 'Description'),
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMaterialsStocks()
+    {
+        return $this->hasMany(MaterialStock::class, ['stock_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMaterials()
+    {
+        return $this->hasMany(Material::class, ['id' => 'material_id'])
+            ->via('materialsStocks');
     }
 }

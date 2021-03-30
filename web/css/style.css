@@ -289,11 +289,11 @@ a.desc:after {
     background-image: url("../icons/solid/sort-alpha-down-alt.svg");
 }
 
-.grid-view th a, .grid-view td a {
+.grid-view th a, .grid-view td a, .relations-list td > a {
     color: #7386d5;
 }
 
-.grid-view th a:hover, .grid-view td a:hover {
+.grid-view th a:hover, .grid-view td a:hover, .relations-list td > a:hover {
     color: #4159a3;
 }
 
@@ -481,5 +481,13 @@ a.desc:after {
 .before-icon {
     position: absolute;
     left: 0;
+    font-weight: bold;
+}
+
+.table-caption {
+    margin-top: 3rem;
+    font-style: italic;
+    color: #4159a3;
+    font-size: 1.2rem;
     font-weight: bold;
 }
