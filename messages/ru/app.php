@@ -43,6 +43,7 @@ return [
     'Created by' => 'Кто добавил',
     'Delete' => 'Удалить',
     'Delete material' => 'Удалить материал',
+    'Details' => 'Подробно',
     'Disabled' => 'Блокирован',
     'Duplicated ref action' => 'Действие при совпадении SAP кода',
     'Edit' => 'Изменить',

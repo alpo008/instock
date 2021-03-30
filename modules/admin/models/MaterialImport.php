@@ -5,6 +5,7 @@ namespace app\modules\admin\models;
 
 
 use Yii;
+use app\custom\FileStorage;
 use app\models\Material;
 use yii\web\UploadedFile;
 
@@ -26,6 +27,8 @@ class MaterialImport extends Material
     const SKIP_ROW = 1;
     const DO_NOT_SKIP_ROW = 0;
 
+    const COLUMNS_TEMPLATE_STORAGE = 'material_import_template';
+
     const PHP_EXCEL_CACHE_KEY = 'phpExcelMaterials';
     const PHP_EXCEL_CACHE_DURATION = 1800;
 
@@ -36,7 +39,11 @@ class MaterialImport extends Material
     public function __construct($config = [])
     {
         parent::__construct($config);
-        $this->columns = $this->defaultColumns;
+        $fileStorage = new FileStorage();
+        $this->columns = $fileStorage->getContent(self::COLUMNS_TEMPLATE_STORAGE);
+        if (!$this->validateColumns()) {
+            $this->columns = $this->defaultColumns;
+        }
     }
 
     /**
@@ -91,56 +98,6 @@ class MaterialImport extends Material
         return [
             'skipFirstRow' => Yii::t('app', 'Ignore first row'),
             'file' => Yii::t('app', 'File')
-        ];
-    }
-
-    /**
-     * @return array[]
-     */
-    public function getDefaultColumns()
-    {
-        return [
-            'A' => [
-                'attribute' => 'ref',
-                'default' => false,
-                'type' => 'text'
-            ],
-            'B' => [
-                'attribute' => 'name',
-                'default' => Yii::t('app', 'Not set'),
-                'type' => 'text'
-            ],
-            'C' => [
-                'attribute' => 'qty',
-                'default' => 0,
-                'type' => 'number'
-            ],
-            'D' => [
-                'attribute' => 'min_qty',
-                'default' => 0,
-                'type' => 'number'
-            ],
-            'E' => [
-                'attribute' => 'max_qty',
-                'default' => 1,
-                'type' => 'number'
-            ],
-            'F' => [
-                'attribute' => 'unit',
-                'getter' => 'getUnitCode',
-                'default' => 0,
-                'type' => 'number',
-            ],
-            'G' => [
-                'attribute' => 'type',
-                'default' => Yii::t('app', 'Not set'),
-                'type' => 'text'
-            ],
-            'H' => [
-                'attribute' => 'group',
-                'default' => Yii::t('app', 'No group'),
-                'type' => 'text'
-            ]
         ];
     }
 
@@ -227,5 +184,55 @@ class MaterialImport extends Material
         $unitCodes = array_flip($unitCodes);
         $unit = mb_strtolower(trim($unit, ' .'));
         return !empty($unitCodes[$unit]) ? $unitCodes[$unit] : 0;
+    }
+
+    /**
+     * @return array[]
+     */
+    protected function getDefaultColumns()
+    {
+        return [
+            'A' => [
+                'attribute' => 'ref',
+                'default' => false,
+                'type' => 'text'
+            ],
+            'B' => [
+                'attribute' => 'name',
+                'default' => Yii::t('app', 'Not set'),
+                'type' => 'text'
+            ],
+            'C' => [
+                'attribute' => 'qty',
+                'default' => 0,
+                'type' => 'number'
+            ],
+            'D' => [
+                'attribute' => 'min_qty',
+                'default' => 0,
+                'type' => 'number'
+            ],
+            'E' => [
+                'attribute' => 'max_qty',
+                'default' => 1,
+                'type' => 'number'
+            ],
+            'F' => [
+                'attribute' => 'unit',
+                'getter' => 'getUnitCode',
+                'default' => 0,
+                'type' => 'number',
+            ],
+            'G' => [
+                'attribute' => 'type',
+                'default' => Yii::t('app', 'Not set'),
+                'type' => 'text'
+            ],
+            'H' => [
+                'attribute' => 'group',
+                'default' => Yii::t('app', 'No group'),
+                'type' => 'text'
+            ]
+        ];
     }
 }

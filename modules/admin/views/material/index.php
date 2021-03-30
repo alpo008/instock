@@ -142,7 +142,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             FAS::icon('eye'),
                             ['material/view', 'id' => $model->id],
                             [
-                                'title' => Yii::t('app', 'View')
+                                'title' => Yii::t('app', 'Details')
                             ]
                         );
                     },
