@@ -3,21 +3,17 @@
 namespace app\modules\admin\controllers;
 
 use Yii;
-use app\models\Material;
-use app\modules\admin\models\MaterialSearch;
+use app\models\Stock;
+use app\modules\admin\models\StockSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\Response;
-use yii\web\UploadedFile;
-use app\modules\admin\models\MaterialExport;
-use app\modules\admin\models\MaterialImport;
-use PHPExcel_IOFactory;
 
 /**
- * MaterialController implements the CRUD actions for Material model.
+ * StockController implements the CRUD actions for Stock model.
  */
-class MaterialController extends Controller
+class StockController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -29,32 +25,28 @@ class MaterialController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
-                    'quick-update' => ['POST'],
-                    'import' => ['POST']
-                ]
-           ]
+                ],
+            ],
         ];
     }
 
     /**
-     * Lists all Material models.
+     * Lists all Stock models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new MaterialSearch();
-        $importModel = new MaterialImport();
-        $queryParams = Yii::$app->request->queryParams;
-        Yii::$app->cache->set('MaterialQueryParams', $queryParams);
-        $dataProvider = $searchModel->search($queryParams);
+        $searchModel = new StockSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('index', compact(
-            'searchModel', 'dataProvider', 'importModel'
-        ));
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     /**
-     * Displays a single Material model.
+     * Displays a single Stock model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -67,13 +59,13 @@ class MaterialController extends Controller
     }
 
     /**
-     * Creates a new Material model.
+     * Creates a new Stock model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Material();
+        $model = new Stock();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -85,7 +77,7 @@ class MaterialController extends Controller
     }
 
     /**
-     * Updates an existing Material model.
+     * Updates an existing Stock model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -127,13 +119,13 @@ class MaterialController extends Controller
                 $errors = ['generic' => Yii::t('app', 'Bad parameters')];
             }
         } catch (NotFoundHttpException $e) {
-            $errors = ['generic' => Yii::t('app', 'Material not found')];
+            $errors = ['generic' => Yii::t('app', 'Stock place not found')];
         }
         return compact('errors', 'newValue');
     }
 
     /**
-     * Deletes an existing Material model.
+     * Deletes an existing Stock model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -147,69 +139,15 @@ class MaterialController extends Controller
     }
 
     /**
-     * Exports materials table to Excel
-     *
-     * @throws \PHPExcel_Exception
-     * @throws \PHPExcel_Reader_Exception
-     * @throws \PHPExcel_Writer_Exception
-     */
-    public function actionExport()
-    {
-        $exportModel = new MaterialExport();
-        $searchModel = new MaterialSearch();
-        $queryParams = Yii::$app->cache->get('MaterialQueryParams');
-        $dataProvider = $searchModel->search($queryParams);
-        $dataProvider->setPagination(false);
-        $phpExcel = $exportModel->makeExcel($dataProvider);
-        $path = Yii::getAlias('@app/web/downloads/') . 'materials.xlsx';
-        $objWriter = PHPExcel_IOFactory::createWriter($phpExcel, 'Excel2007');
-        $objWriter->save($path);
-        Yii::$app->response->sendFile($path);
-        unlink($path);
-    }
-
-    /**
-     * @return array
-     * @throws \PHPExcel_Exception
-     */
-    public function actionImport()
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        $model = new MaterialImport();
-
-        if ($post = Yii::$app->request->post()) {
-            if (!isset ($post['startRow']) && !isset ($post['endRow'])) {
-                if ($model->load($post)) {
-                    $model->file = UploadedFile::getInstance($model, 'file');
-                    if ($model->file instanceof UploadedFile) {
-                        return $model->import();
-                    } else {
-                        return ['added' => 0,
-                            'processed' => 0,
-                            'error' => Yii::t('app', Yii::t('app', 'Upload the file'))
-                        ];
-                    }
-                }
-            } else {
-                return $model->import((int) $post['startRow'], (int)$post['endRow']);
-            }
-        }
-        return ['added' => 0,
-            'processed' => 0,
-            'error' => Yii::t('app', Yii::t('app', 'Bad request'))
-        ];
-    }
-
-    /**
-     * Finds the Material model based on its primary key value.
+     * Finds the Stock model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Material the loaded model
+     * @return Stock the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Material::findOne($id)) !== null) {
+        if (($model = Stock::findOne($id)) !== null) {
             return $model;
         }
 

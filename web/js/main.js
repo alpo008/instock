@@ -168,8 +168,13 @@ const MaterialImport = {
     init () {
         this.form = document.querySelector('.modal-import-form');
         this.progress = document.querySelector('.progress');
-        this.progressBar = this.progress.querySelector('.progress-bar');
-        let csrfInput = this.form.querySelector('[name="_csrf"]');
+        if (this.progress !== null) {
+            this.progressBar = this.progress.querySelector('.progress-bar');
+        }
+        let csrfInput = null;
+        if (this.form !== null) {
+            csrfInput = this.form.querySelector('[name="_csrf"]');
+        }
         if (csrfInput !== null) {
             this.csrf = csrfInput.value;
         }
@@ -194,6 +199,9 @@ const MaterialImport = {
                     let formData = new FormData(this.form);
                     this.request(formData);
                 });
+                $(this.modal).on('hidden.bs.modal', () => {
+                    document.location.reload();
+                })
             }
         }
     },

@@ -472,16 +472,14 @@ a.desc:after {
     background-color: transparent;
 }
 
-/*.material-import .form-group {
-    display: flex;
-    justify-content: space-between;
-}
-.material-import .form-control {
-    width: auto;
-}*/
-
 /* Common */
 
 .of-auto {
     overflow: auto;
+}
+
+.before-icon {
+    position: absolute;
+    left: 0;
+    font-weight: bold;
 }
