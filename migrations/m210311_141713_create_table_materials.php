@@ -14,6 +14,8 @@ class m210311_141713_create_table_materials extends RcMigration
     {
         if ($this->db->driverName === 'mysql') {
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
+        } else {
+            $tableOptions = '';
         }
 
         if (!$this->tableExists($this::TABLE_MATERIALS)) {

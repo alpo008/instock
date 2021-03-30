@@ -58,23 +58,12 @@ $user = Yii::$app->user->identity;
                             <?= Html::a(Yii::t('app', 'Users'), ['/admin/user']) ?>
                         </li>
                         <li class="<?= strpos($currentUrl, Url::to(['/admin/material'])) !== false ? 'active' : '' ?>">
-                            <a href="#materialSubmenu" data-toggle="collapse"
-                               aria-expanded="<?= strpos($currentUrl, Url::to(['/admin/material'])) !== false ? 'true' : 'false' ?>"
-                               class="dropdown-toggle">
-                                <?= Yii::t('app', 'Materials') ?>
-                            </a>
-                            <ul class="collapse list-unstyled <?= strpos($currentUrl, Url::to(['/admin/material'])) !== false ? 'show' : '' ?>" id="materialSubmenu">
-                                <li class="<?= strpos($currentUrl, Url::to(['/admin/material'])) !== false ? 'active' : '' ?>">
-                                    <?= Html::a(Yii::t('app', 'Table'), ['/admin/material']) ?>
-                                </li>
-                                <li class="<?= strpos($currentUrl, Url::to(['/admin/material/import'])) !== false ? 'active' : '' ?>">
-                                    <?= Html::a(Yii::t('app', 'Import'), ['material/import']) ?>
-                                </li>
-                                <li class="<?= strpos($currentUrl, Url::to(['/admin/material/export'])) !== false ? 'active' : '' ?>">
-                                    <?= Html::a(Yii::t('app', 'Export'), ['material/export']) ?>
-                                </li>
-                            </ul>
+                            <?= Html::a(Yii::t('app', 'Materials'), ['/admin/material']) ?>
                         </li>
+                        <li class="<?= strpos($currentUrl, Url::to(['/admin/stock'])) !== false ? 'active' : '' ?>">
+                            <?= Html::a(Yii::t('app', 'Stock places'), ['/admin/stock']) ?>
+                        </li>
+
                     <?php endif; ?>
                     <li>
                         <a href="#">About</a>
