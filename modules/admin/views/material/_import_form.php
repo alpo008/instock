@@ -7,13 +7,12 @@ use yii\bootstrap4\Html;
 /* @var $this yii\web\View */
 /* @var $model \app\modules\admin\models\MaterialImport */
 
-$this->registerJs(
+/*$this->registerJs(
     file_get_contents(Yii::getAlias('@admin/views/material/') . 'import.js'),
     $this::POS_END
-);
+);*/
 
 ?>
-
 
 <!-- Modal -->
 <div class="modal fade" id="materialImportModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="materialImportModalLabel" aria-hidden="true">
@@ -29,12 +28,24 @@ $this->registerJs(
             </div>
             <div class="modal-body">
                 <div class="material-import">
+                    <p class="info-block">
+                        <a class="" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                            <?= FAS::icon('info-circle') ?>
+                        </a>
+                    </p>
+                    <div class="collapse" id="collapseExample">
+                        <div class="card card-body">
+                            <?= Yii::t('messages', 'materials_import_info') ?>
+                        </div>
+                    </div>
+                    <div class="alert alert-success" role="alert" style="display: none"></div>
+                    <div class="alert alert-danger" role="alert" style="display: none"></div>
                     <?php $form = ActiveForm::begin([
                         'id' => 'material-import-form',
                         'layout' => 'horizontal',
                         'action' => ['import'],
                         'options' => [
-                            'class' => 'modal-form',
+                            'class' => 'modal-import-form',
                         ],
                         'fieldConfig' => [
                             'template' => "{label}\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
@@ -45,8 +56,6 @@ $this->registerJs(
                             ]
                         ]
                     ]); ?>
-
-                    <hr>
 
                     <?= $form->field($model, 'skipFirstRow', )->checkbox() ?>
 
@@ -77,6 +86,12 @@ $this->registerJs(
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="modal-footer" style="display: none">
+                <?= Html::button(FAS::icon('check-circle'), [
+                    'class' => 'btn btn-success',
+                    'onclick' => 'document.location.reload();'
+                ]) ?>
             </div>
         </div>
     </div>

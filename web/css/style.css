@@ -465,6 +465,13 @@ a.desc:after {
     border-radius: 5px;
 }
 
+/* Material-import */
+.info-block a {
+    color: grey;
+    left: 95%;
+    background-color: transparent;
+}
+
 /*.material-import .form-group {
     display: flex;
     justify-content: space-between;

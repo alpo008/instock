@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <?= Html::button(FAS::icon('file-import'), [
         'type' => 'button',
-        'class' => 'btn btn-success',
+        'class' => 'btn btn-danger',
         'title' => Yii::t('app', 'Import materials from file'),
         'data' => [
             'toggle' => 'modal',

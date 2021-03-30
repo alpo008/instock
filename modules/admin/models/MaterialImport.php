@@ -152,12 +152,12 @@ class MaterialImport extends Material
      */
     public function import($startRow = 1, $endRow = 50)
     {
-        $added = 0;
+        $touched = 0;
         $processed = 0;
         $error = false;
         if (!$this->validateColumns()) {
             $error = Yii::t('app', 'Bad columns configuration');
-            return compact('processed','added', 'error');
+            return compact('processed','touched', 'error');
         }
         if ($this->file instanceof UploadedFile) {
             try{
@@ -205,13 +205,16 @@ class MaterialImport extends Material
                     }
                     $material->setAttributes($materialAttributes, false);
                     if ($material->save()) {
-                        $added++;
+                        $touched++;
+                        if ($row === 2 && (int)$this->skipFirstRow === $this::SKIP_ROW) {
+                            $touched++;
+                        }
                     }
                 }
             }
         }
         $total = isset($highestRow) ? $highestRow : 0;
-        return compact('total', 'processed', 'added', 'error');
+        return compact('total', 'processed', 'touched', 'error');
     }
 
     /**
