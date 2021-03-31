@@ -27,6 +27,7 @@ use yii\web\UploadedFile;
  *
  * @property MaterialStock[] $materialsStocks
  * @property Stock[] $stocks
+ * @property float $quantity
  * @property array $unitsList
  * @property string $unitName
  * @property User $creator
@@ -77,6 +78,7 @@ class Material extends \yii\db\ActiveRecord
             'ref' => Yii::t('app', 'Ref'),
             'name' => Yii::t('app', 'Material name'),
             'qty' => Yii::t('app', 'Qty'),
+            'quantity' => Yii::t('app', 'Qty'),
             'min_qty' => Yii::t('app', 'Min qty'),
             'max_qty' => Yii::t('app', 'Max qty'),
             'unit' => Yii::t('app', 'Unit'),
@@ -132,13 +134,17 @@ class Material extends \yii\db\ActiveRecord
             ->via('materialsStocks');
     }
 
-    public function getQuantity($stockId = null)
+    /**
+     * @param integer $stockId
+     * @return int|float
+     */
+    public function getQuantity($stockId = 0)
     {
         $query = $this->getMaterialsStocks()->select('SUM(qty)');
-        if (!is_null($stockId)) {
+        if ($stockId !== 0) {
             $query->where(['stock_id' => $stockId]);
         }
-        return $query->scalar();
+        return !is_null($query->scalar()) ? $query->scalar() : 0;
     }
 
     /**

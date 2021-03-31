@@ -6,6 +6,7 @@ use rmrevin\yii\fontawesome\FAS;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Stock */
+/* @var $materials \app\models\Material[] | null */
 
 $this->title = $model->alias;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Stock places'), 'url' => ['index']];
@@ -23,15 +24,16 @@ $this->params['breadcrumbs'][] = $this->title;
             'class' => 'btn btn-primary',
             'title' => Yii::t('app', 'Edit stock place')
         ]) ?>
-        <?php //TODO CHECK Material on place ?>
-        <?= Html::a(FAS::icon('trash-alt'), ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'title' => Yii::t('app', 'Delete stock place'),
-            'data' => [
-                'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
-                'method' => 'post',
-            ],
-        ]) ?>
+        <?php if (empty($model->materialsStocks)) : ?>
+            <?= Html::a(FAS::icon('trash-alt'), ['delete', 'id' => $model->id], [
+                'class' => 'btn btn-danger',
+                'title' => Yii::t('app', 'Delete stock place'),
+                'data' => [
+                    'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
+                    'method' => 'post',
+                ],
+            ]) ?>
+        <?php endif; ?>
     </div>
 
     <?= DetailView::widget([
@@ -43,12 +45,12 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
 
-    <?php if (!empty($model->materials) && is_array($model->materials)) : ?>
+    <?php if (!empty($materials) && is_array($materials)) : ?>
         <div class="table-caption">
             <?= Yii::t('app', 'List of materials') ?>
         </div>
         <table class="table relations-list">
-            <?php foreach ($model->materials as $material): ?>
+            <?php foreach ($materials as $material): ?>
                 <tr>
                     <td>
                         <?= \yii\bootstrap4\Html::a($material->ref, ['material/view', 'id' => $material->id], [

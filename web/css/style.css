@@ -289,8 +289,12 @@ a.desc:after {
     background-image: url("../icons/solid/sort-alpha-down-alt.svg");
 }
 
-.grid-view th a, .grid-view td a, .relations-list td > a {
+.grid-view th a, .grid-view td a {
     color: #7386d5;
+}
+
+.relations-list td > a {
+    color: #4159a3;
 }
 
 .grid-view th a:hover, .grid-view td a:hover, .relations-list td > a:hover {
@@ -470,6 +474,10 @@ a.desc:after {
     color: grey;
     left: 95%;
     background-color: transparent;
+}
+
+.material-index tr.low-quantity {
+    background-color: #ffb6a5;
 }
 
 /* Common */

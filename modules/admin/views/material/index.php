@@ -82,7 +82,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'contentOptions' => ['class' => 'cell-editable'],
             ],
-            'qty',
+            [
+                'attribute' => 'quantity',
+                'filter' => $searchModel->quantityFilter
+            ],
             [
                 'attribute' => 'min_qty',
                 'format' => 'raw',
@@ -158,6 +161,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                     'delete' => function ($url, $model, $key) {
                         /** @var $model \app\models\Material */
+                        if (!empty($model->materialsStocks)) {
+                            return false;
+                        }
                         return Html::a(
                             FAS::icon('trash-alt'),
                             ['material/delete', 'id' => $model->id],
@@ -173,6 +179,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]
             ]
         ],
+        'rowOptions' => function ($model, $index, $widget, $grid){
+            /** @var $model \app\models\Material */
+            return $model->quantity < $model->min_qty ? ['class' => 'low-quantity'] : [];
+        }
     ]); ?>
 
     <?php Pjax::end(); ?>

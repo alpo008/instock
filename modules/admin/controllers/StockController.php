@@ -25,6 +25,7 @@ class StockController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                    'quick-update' => ['POST'],
                 ],
             ],
         ];
@@ -49,13 +50,16 @@ class StockController extends Controller
      * Displays a single Stock model.
      * @param integer $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        try {
+            $model = $this->findModel($id);
+            $materials = $model->materials;
+        } catch (NotFoundHttpException $e) {
+            $materials = null;
+        }
+        return $this->render('view', compact('model', 'materials'));
     }
 
     /**

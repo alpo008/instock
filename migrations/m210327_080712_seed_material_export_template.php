@@ -46,7 +46,7 @@ class m210327_080712_seed_material_export_template extends Migration
             'name' => [
                 'type' => PHPExcel_Cell_DataType::TYPE_STRING
             ],
-            'qty' => [
+            'quantity' => [
                 'type' => PHPExcel_Cell_DataType::TYPE_NUMERIC,
                 'format' => PHPExcel_Style_NumberFormat::FORMAT_NUMBER_00
             ],

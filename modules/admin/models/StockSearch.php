@@ -40,7 +40,7 @@ class StockSearch extends Stock
      */
     public function search($params)
     {
-        $query = Stock::find();
+        $query = Stock::find()->joinWith('materials');
 
         // add conditions that should always apply here
 

@@ -27,14 +27,16 @@ $this->params['breadcrumbs'][] = $this->title;
             'class' => 'btn btn-primary',
             'title' => Yii::t('app', 'Edit material card')
         ]) ?>
-        <?= Html::a(FAS::icon('trash-alt'), ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'title' => Yii::t('app', 'Delete material'),
-            'data' => [
-                'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
-                'method' => 'post',
-            ],
-        ]) ?>
+        <?php if (empty($model->materialsStocks)) : ?>
+            <?= Html::a(FAS::icon('trash-alt'), ['delete', 'id' => $model->id], [
+                'class' => 'btn btn-danger',
+                'title' => Yii::t('app', 'Delete material'),
+                'data' => [
+                    'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
+                    'method' => 'post',
+                ],
+            ]) ?>
+        <?php endif; ?>
     </div>
 
 

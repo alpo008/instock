@@ -89,9 +89,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]
                         );
                     },
-                    //TODO CHECK Material on place
                     'delete' => function ($url, $model, $key) {
                         /** @var $model \app\models\Stock */
+                        if (!empty($model->materialsStocks)) {
+                            return false;
+                        }
                         return Html::a(
                             FAS::icon('trash-alt'),
                             ['stock/delete', 'id' => $model->id],
@@ -106,7 +108,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                 ]
             ]
-        ],
+        ]
     ]); ?>
 
     <?php Pjax::end(); ?>
