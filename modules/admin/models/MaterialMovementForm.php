@@ -3,10 +3,10 @@
 
 namespace app\modules\admin\models;
 
+use Yii;
 use app\models\Material;
 use app\models\MaterialStock;
 use app\models\Stock;
-use Yii;
 use yii\db\StaleObjectException;
 
 /**
@@ -162,15 +162,14 @@ class MaterialMovementForm extends \yii\base\Model
     public function getDestinationsList ()
     {
         $destinations = Stock::find()
-            ->select('DISTINCT(stocks.alias), materials_stocks.stock_id')
-            ->rightJoin('materials_stocks', 'stocks.id = materials_stocks.stock_id')
+            ->select('DISTINCT(stocks.alias), id')
             ->where(['<>', 'stocks.id', $this->stockId])
             ->orderBy('stocks.alias')
             ->asArray()
             ->all();
 
         if (!empty($destinations && is_array($destinations))) {
-            return array_column($destinations, 'alias', 'stock_id');
+            return array_column($destinations, 'alias', 'id');
         }
         return [];
     }
