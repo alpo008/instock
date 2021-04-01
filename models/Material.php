@@ -13,7 +13,6 @@ use yii\web\UploadedFile;
  * @property int $id ИД
  * @property int $ref Номер САП
  * @property string $name Наименование
- * @property float|null $qty Текущее кол-во
  * @property float|null $min_qty Крит. низкое кол-во
  * @property float|null $max_qty Макс. кол-во
  * @property int $unit Ед. измерения
@@ -27,7 +26,7 @@ use yii\web\UploadedFile;
  *
  * @property MaterialStock[] $materialsStocks
  * @property Stock[] $stocks
- * @property float $quantity
+ * @property float $quantity Текущее кол-во
  * @property array $unitsList
  * @property string $unitName
  * @property User $creator
@@ -57,7 +56,7 @@ class Material extends \yii\db\ActiveRecord
         return [
             [['ref', 'name'], 'required'],
             [['ref', 'unit', 'created_by', 'updated_by'], 'integer'],
-            [['qty', 'min_qty', 'max_qty'], 'number', 'min' => 0],
+            [['min_qty', 'max_qty'], 'number', 'min' => 0],
             ['max_qty', 'compare', 'compareAttribute' => 'min_qty', 'operator' => '>=', 'type' => 'number'],
             ['min_qty', 'compare', 'compareAttribute' => 'max_qty', 'operator' => '<=', 'type' => 'number'],
             [['created_at', 'updated_at'], 'safe'],
@@ -77,7 +76,6 @@ class Material extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'ref' => Yii::t('app', 'Ref'),
             'name' => Yii::t('app', 'Material name'),
-            'qty' => Yii::t('app', 'Qty'),
             'quantity' => Yii::t('app', 'Qty'),
             'min_qty' => Yii::t('app', 'Min qty'),
             'max_qty' => Yii::t('app', 'Max qty'),

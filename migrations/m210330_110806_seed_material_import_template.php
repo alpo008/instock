@@ -50,32 +50,27 @@ class m210330_110806_seed_material_import_template extends Migration
                 'type' => 'text'
             ],
             'C' => [
-                'attribute' => 'qty',
-                'default' => 0,
-                'type' => 'number'
-            ],
-            'D' => [
                 'attribute' => 'min_qty',
                 'default' => 0,
                 'type' => 'number'
             ],
-            'E' => [
+            'D' => [
                 'attribute' => 'max_qty',
                 'default' => 1,
                 'type' => 'number'
             ],
-            'F' => [
+            'E' => [
                 'attribute' => 'unit',
                 'getter' => 'getUnitCode',
                 'default' => 0,
                 'type' => 'number',
             ],
-            'G' => [
+            'F' => [
                 'attribute' => 'type',
                 'default' => Yii::t('app', 'Not set'),
                 'type' => 'text'
             ],
-            'H' => [
+            'G' => [
                 'attribute' => 'group',
                 'default' => Yii::t('app', 'No group'),
                 'type' => 'text'

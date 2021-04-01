@@ -296,3 +296,7 @@ $(document).ready(() => {
     CellEditable.init();
     MaterialImport.init();
 });
+
+$(document).on('pjax:complete', (e) => {
+    CellEditable.init();
+})

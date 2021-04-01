@@ -28,7 +28,7 @@ class MaterialSearch extends Material
         return [
             [['id', 'ref', 'unit', 'created_by', 'updated_by'], 'integer'],
             [['name', 'type', 'group', 'created_at', 'updated_at', 'quantity'], 'safe'],
-            [['qty', 'min_qty', 'max_qty'], 'number'],
+            [['min_qty', 'max_qty'], 'number']
         ];
     }
 
@@ -84,7 +84,6 @@ class MaterialSearch extends Material
         $query->andFilterWhere([
             //'id' => $this->id,
             //'ref' => $this->ref,
-            //'qty' => $this->qty,
             'min_qty' => $this->min_qty,
             'max_qty' => $this->max_qty,
             'unit' => $this->unit,
@@ -101,17 +100,15 @@ class MaterialSearch extends Material
 
         switch ($this->quantity) {
             case self::LESS_THAN_MIN_QTY:
-                $query->having('SUM({{%materials_stocks}}.qty) < {{%materials}}.min_qty');
+                $query->having('COALESCE(SUM({{%materials_stocks}}.qty), 0) < {{%materials}}.min_qty');
             break;
             case self::GREATER_THAN_MAX_QTY:
                 $query->having('SUM({{%materials_stocks}}.qty) > {{%materials}}.max_qty');
             break;
             case self::QTY_IN_RANGE:
-                $query->having('SUM({{%materials_stocks}}.qty) BETWEEN {{%materials}}.min_qty AND {{%materials}}.max_qty');
+                $query->having('COALESCE(SUM({{%materials_stocks}}.qty), 0) BETWEEN {{%materials}}.min_qty AND {{%materials}}.max_qty');
             break;
         }
-
-        //$query->having(['=', 'FLOOR(SUM({{%materials_stocks}}.qty))', $this->quantity]);
 
         return $dataProvider;
     }

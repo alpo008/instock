@@ -151,14 +151,12 @@ class MaterialImport extends Material
                         }
                         $value = is_null($value) ? $column['default'] : $value;
                         $value = !empty($column['getter']) ? $this->{$column['getter']}($value) : $value;
-                        $materialAttributes[$column['attribute']] = $value;
+                        if (!is_null($value)) {
+                            $materialAttributes[$column['attribute']] = $value;
+                        }
                     }
-
-                    if ($material = $this::findOne(['ref' => $materialAttributes['ref']])) {
-                        unset ($materialAttributes['qty']);
-                    } else {
+                    if (!$material = $this::findOne(['ref' => $materialAttributes['ref']])) {
                         $material = new Material();
-                        $materialAttributes['qty'] = 0;
                     }
                     $material->setAttributes($materialAttributes, false);
                     if ($material->save()) {
@@ -203,32 +201,27 @@ class MaterialImport extends Material
                 'type' => 'text'
             ],
             'C' => [
-                'attribute' => 'qty',
-                'default' => 0,
-                'type' => 'number'
-            ],
-            'D' => [
                 'attribute' => 'min_qty',
                 'default' => 0,
                 'type' => 'number'
             ],
-            'E' => [
+            'D' => [
                 'attribute' => 'max_qty',
                 'default' => 1,
                 'type' => 'number'
             ],
-            'F' => [
+            'E' => [
                 'attribute' => 'unit',
                 'getter' => 'getUnitCode',
                 'default' => 0,
                 'type' => 'number',
             ],
-            'G' => [
+            'F' => [
                 'attribute' => 'type',
                 'default' => Yii::t('app', 'Not set'),
                 'type' => 'text'
             ],
-            'H' => [
+            'G' => [
                 'attribute' => 'group',
                 'default' => Yii::t('app', 'No group'),
                 'type' => 'text'
