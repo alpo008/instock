@@ -2,6 +2,7 @@
 
 namespace app\modules\admin\controllers;
 
+use app\modules\admin\models\MaterialMovementForm;
 use Yii;
 use app\models\Material;
 use app\modules\admin\models\MaterialSearch;
@@ -130,6 +131,27 @@ class MaterialController extends Controller
             $errors = ['generic' => Yii::t('app', 'Material not found')];
         }
         return compact('errors', 'newValue');
+    }
+
+    /**
+     * @param int $material_id
+     * @param int $stock_id
+     * @return string
+     */
+    public function actionMove ($material_id, $stock_id)
+    {
+        $model = new MaterialMovementForm([
+            'materialId' => $material_id,
+            'stockId' => $stock_id,
+        ]);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->render('view', [
+                'model' => $model->material,
+            ]);
+        }
+
+        return $this->render('material_movement_form', compact('model'));
     }
 
     /**

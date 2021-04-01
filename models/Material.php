@@ -32,6 +32,7 @@ use yii\web\UploadedFile;
  * @property User $creator
  * @property User $editor
  * @property string $photoPath
+ * @property array $stockAliases
  */
 class Material extends \yii\db\ActiveRecord
 {
@@ -86,7 +87,8 @@ class Material extends \yii\db\ActiveRecord
             'updated_at' => Yii::t('app', 'Updated at'),
             'created_by' => Yii::t('app', 'Created by'),
             'updated_by' => Yii::t('app', 'Updated by'),
-            'photo' => Yii::t('app', 'Photo')
+            'photo' => Yii::t('app', 'Photo'),
+            'stockAliases' => Yii::t('app', 'Stock places')
         ];
     }
 
@@ -237,6 +239,18 @@ class Material extends \yii\db\ActiveRecord
     {
         $timestamp = (int) Yii::$app->formatter->asTimestamp($this->{$attr});
         return 25569 + (($timestamp + Yii::$app->params['timeZoneShift']) / 86400);
+    }
+
+    /**
+     * @return array
+     */
+    public function getStockAliases ()
+    {
+        $aliases = [];
+        if (!empty($this->stocks) && is_array($this->stocks)) {
+            $aliases = array_column($this->stocks, 'alias', 'id');
+        }
+        return $aliases;
     }
 
     /**

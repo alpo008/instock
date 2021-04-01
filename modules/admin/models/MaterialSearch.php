@@ -2,6 +2,7 @@
 
 namespace app\modules\admin\models;
 
+use app\models\Stock;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Material;
@@ -11,6 +12,8 @@ use app\models\Material;
  *
  * @property float $quantity
  * @property array $quantityFilter
+ * @property string $stockAliases
+ * @property array $stockAliasesFilter
  */
 class MaterialSearch extends Material
 {
@@ -20,6 +23,7 @@ class MaterialSearch extends Material
     const GREATER_THAN_MAX_QTY = '3';
 
     public $quantity;
+    public $stockAliases;
     /**
      * {@inheritdoc}
      */
@@ -28,7 +32,8 @@ class MaterialSearch extends Material
         return [
             [['id', 'ref', 'unit', 'created_by', 'updated_by'], 'integer'],
             [['name', 'type', 'group', 'created_at', 'updated_at', 'quantity'], 'safe'],
-            [['min_qty', 'max_qty'], 'number']
+            [['min_qty', 'max_qty'], 'number'],
+            [['stockAliases'], 'string']
         ];
     }
 
@@ -50,7 +55,8 @@ class MaterialSearch extends Material
      */
     public function search($params)
     {
-        $query = Material::find()->joinWith(['materialsStocks'])->groupBy(['materials.ref']);
+        $query = Material::find()->joinWith(['materialsStocks'])->groupBy(['materials.ref'])
+        ->joinWith('stocks');
 
         // add conditions that should always apply here
 
@@ -68,6 +74,10 @@ class MaterialSearch extends Material
                 'quantity' => [
                     'asc' => ['SUM({{%materials_stocks}}.qty)' => SORT_ASC],
                     'desc' => ['SUM({{%materials_stocks}}.qty)' => SORT_DESC],
+                ],
+                'stockAliases' => [
+                    'asc' => ['SUM({{%stocks}}.alias)' => SORT_DESC],
+                    'desc' => ['SUM({{%stocks}}.alias)' => SORT_ASC],
                 ]
             ]
         ]);
@@ -98,6 +108,8 @@ class MaterialSearch extends Material
             ->andFilterWhere(['like', 'type', $this->type])
             ->andFilterWhere(['like', 'group', $this->group]);
 
+        $query->andFilterWhere(['like', '{{%stocks}}.alias', $this->stockAliases]);
+
         switch ($this->quantity) {
             case self::LESS_THAN_MIN_QTY:
                 $query->having('COALESCE(SUM({{%materials_stocks}}.qty), 0) < {{%materials}}.min_qty');
@@ -123,5 +135,18 @@ class MaterialSearch extends Material
             self::LESS_THAN_MIN_QTY => \Yii::t('app', 'Less than min quantity'),
             self::GREATER_THAN_MAX_QTY => \Yii::t('app', 'Greater than max quantity')
         ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getStockAliasesFilter ()
+    {
+        $aliasesFilter = [];
+        $stocks = Stock::find()->all();
+        if (!empty($stocks) && is_array($stocks)) {
+            $aliasesFilter = array_column($stocks, 'alias', 'alias');
+        }
+        return $aliasesFilter;
     }
 }

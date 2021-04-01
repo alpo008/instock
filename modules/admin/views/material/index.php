@@ -129,6 +129,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'filter' => $searchModel->unitsList
             ],
+            [
+                'attribute' => 'stockAliases',
+                'format' => 'raw',
+                'value' => function($model) {
+                    /* @var $model \app\models\Material */
+                    $result = '';
+                    foreach ($model->stockAliases as $id => $alias) {
+                        $result .= Html::a($alias, ['/admin/stock', 'id' => $id]) . ' ';
+                    }
+                    return $result;
+                },
+                'filter' => $searchModel->stockAliasesFilter
+            ],
             //'type',
             //'group',
             //'created_at',
@@ -175,8 +188,26 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'title' => Yii::t('app', 'Delete material')
                             ]
                         );
+                    },
+                    'move' => function ($url, $model, $key) {
+                        /** @var $model \app\models\Material */
+                        if (empty($model->stocks)) {
+                            return false;
+                        }
+                        $stockId = 0;
+                        if (is_array($model->stocks) && count($model->stocks) === 1) {
+                            $stockId = $model->stocks[0]->id;
+                        }
+                        return Html::a(
+                            FAS::icon('person-carry'),
+                            ['material/move', 'material_id' => $model->id, 'stock_id' => $stockId],
+                            [
+                                'title' => Yii::t('app', 'Move material')
+                            ]
+                        );
                     }
-                ]
+                ],
+                'template' => '{view} {update} {delete} {move}'
             ]
         ],
         'rowOptions' => function ($model, $index, $widget, $grid){
