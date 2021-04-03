@@ -62,9 +62,13 @@ class MaterialController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        try {
+            $model = $this->findModel($id);
+            $stocks = $model->stocks;
+        } catch (NotFoundHttpException $e) {
+            $stocks = null;
+        }
+        return $this->render('view', compact('model', 'stocks'));
     }
 
     /**
@@ -146,11 +150,12 @@ class MaterialController extends Controller
         ]);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->render('view', [
-                'model' => $model->material,
-            ]);
-        }
 
+            $referrer = Yii::$app->cache->get('actonMoveBackUrl');
+
+            return $this->redirect(!empty($referrer) ? $referrer : Yii::$app->homeUrl . '/admin');
+        }
+        Yii::$app->cache->set('actonMoveBackUrl', Yii::$app->request->referrer);
         return $this->render('material_movement_form', compact('model'));
     }
 

@@ -7,6 +7,7 @@ use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Material */
+/* @var $stocks \app\models\Stock[] | null */
 
 $this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Materials'), 'url' => ['index']];
@@ -69,5 +70,37 @@ $this->params['breadcrumbs'][] = $this->title;
             ]
         ],
     ]) ?>
+
+    <?php if (!empty($stocks) && is_array($stocks)) : ?>
+        <div class="table-caption">
+            <?= Yii::t('app', 'Stock places') ?>
+        </div>
+        <table class="table relations-list">
+            <?php foreach ($stocks as $stock): ?>
+                <tr>
+                    <td>
+                        <?= \yii\bootstrap4\Html::a($stock->alias, ['stock/view', 'id' => $stock->id], [
+                            'title' => Yii::t('app', 'View') . ' ' . $stock->alias
+                        ]) ?>
+                    </td>
+                    <td>
+                        <?= $stock->alias ?>
+                    </td>
+                    <td>
+                        <?= $model->getQuantity($stock->id) ?>
+                    </td>
+                    <td>
+                        <?= Html::a(
+                            FAS::icon('person-carry'),
+                                ['material/move', 'material_id' => $model->id, 'stock_id' => $stock->id],
+                                [
+                                    'title' => Yii::t('app', 'Move material')
+                                ]
+                        ); ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    <?php endif; ?>
 
 </div>

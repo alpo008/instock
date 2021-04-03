@@ -63,6 +63,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     <td>
                         <?= $material->getQuantity($model->id) ?>
                     </td>
+                    <td>
+                        <?= Html::a(
+                            FAS::icon('person-carry'),
+                            ['material/move', 'material_id' => $material->id, 'stock_id' => $model->id],
+                            [
+                                'title' => Yii::t('app', 'Move material')
+                            ]
+                        ); ?>
+                    </td>
                 </tr>
             <?php endforeach; ?>
         </table>

@@ -136,9 +136,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     /* @var $model \app\models\Material */
                     $result = '';
                     foreach ($model->stockAliases as $id => $alias) {
-                        $result .= Html::a($alias, ['/admin/stock', 'id' => $id]) . ' ';
+                        $result .= Html::a($alias, ['/admin/stock', 'id' => $id] , [
+                            'title' => $model->getQuantity($id) . ' ' . $model->unitName
+                        ]) . ', ';
                     }
-                    return $result;
+                    return rtrim($result, ', ');
                 },
                 'filter' => $searchModel->stockAliasesFilter
             ],

@@ -88,6 +88,9 @@ class MaterialMovementForm extends \yii\base\Model
         ];
     }
 
+    /**
+     * @return bool
+     */
     public function save ()
     {
         if (!$this->validate()) {
