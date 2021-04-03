@@ -63,31 +63,28 @@ $user = Yii::$app->user->identity;
                         <li class="<?= strpos($currentUrl, Url::to(['/admin/stock'])) !== false ? 'active' : '' ?>">
                             <?= Html::a(Yii::t('app', 'Stock places'), ['/admin/stock']) ?>
                         </li>
-
-                    <?php endif; ?>
                     <li>
-                        <a href="#">About</a>
-                    </li>
-                    <li>
-                        <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pages</a>
-                        <ul class="collapse list-unstyled" id="pageSubmenu">
-                            <li>
-                                <a href="#">Page 1</a>
+                        <a href="#operationsSubmenu" data-toggle="collapse" aria-expanded="<?= strpos($currentUrl, Url::to(['/admin/stock-operation'])) !== false ? 'true' : 'false'?>" class="dropdown-toggle">
+                            <?= Yii::t('app', 'Operations') ?>
+                        </a>
+                        <ul class="collapse list-unstyled <?= strpos($currentUrl, Url::to(['/admin/stock-operation'])) !== false ? 'show' : '' ?>"
+                            id="operationsSubmenu"
+                        >
+                            <li class="<?= strpos($currentUrl, Url::to(['/admin/stock-operation'])) !== false ? 'active' : '' ?>">
+                                <?= Html::a(Yii::t('app', 'History'), ['/admin/stock-operation']) ?>
                             </li>
-                            <li>
-                                <a href="#">Page 2</a>
+                            <li class="<?= strpos($currentUrl, Url::to(['/admin/stock-operation/create-debit'])) !== false ? 'active' : '' ?>">
+                                <?= Html::a(Yii::t('app', 'Debit'), ['/admin/stock-operation/create-debit']) ?>
                             </li>
-                            <li>
-                                <a href="#">Page 3</a>
+                            <li class="<?= strpos($currentUrl, Url::to(['/admin/stock-operation/create-credit'])) !== false ? 'active' : '' ?>">
+                                <?= Html::a(Yii::t('app', 'Credit'), ['/admin/stock-operation/create-credit']) ?>
+                            </li>
+                            <li class="<?= strpos($currentUrl, Url::to(['/admin/stock-operation/create-correction'])) !== false ? 'active' : '' ?>">
+                                <?= Html::a(Yii::t('app', 'Correction'), ['/admin/stock-operation/create-correction']) ?>
                             </li>
                         </ul>
                     </li>
-                    <li>
-                        <a href="#">Portfolio</a>
-                    </li>
-                    <li>
-                        <a href="#">Contact</a>
-                    </li>
+                    <?php endif; ?>
                     <li>
                         <?= Html::beginForm(['/logout'], 'post') ?>
                         <?= Html::submitButton(

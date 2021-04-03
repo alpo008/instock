@@ -488,7 +488,7 @@ a.desc:after {
 
 .before-icon {
     position: absolute;
-    left: 0;
+    left: 1px;
     font-weight: bold;
 }
 
