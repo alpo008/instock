@@ -117,7 +117,7 @@ class MaterialImport extends Material
             return compact('processed','touched', 'error');
         }
         if ($this->file instanceof UploadedFile) {
-            try{
+            try {
                 $fileType = \PHPExcel_IOFactory::identify($this->file->tempName);
                 $objReader = \PHPExcel_IOFactory::createReader($fileType);
                 $phpExcel = $objReader->load($this->file->tempName);
@@ -132,7 +132,7 @@ class MaterialImport extends Material
             $phpExcel = Yii::$app->cache->get(self::PHP_EXCEL_CACHE_KEY);
         }
 
-        if ($phpExcel instanceof \PHPExcel) {
+        if (!empty($phpExcel) && $phpExcel instanceof \PHPExcel) {
             $sheet = $phpExcel->getSheet(0);
             $highestRow = $sheet->getHighestRow();
             if ($startRow === 1) {

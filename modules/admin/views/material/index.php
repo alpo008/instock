@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     </div>
 
-    <?php Pjax::begin(['id' => 'material-index-pjax-container']); ?>
+    <?php Pjax::begin(['id' => 'material-index-pjax-container', 'enablePushState' => true]); ?>
 
     <?= GridView::widget([
         'id' => 'material-index-grid-view',

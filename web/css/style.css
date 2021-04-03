@@ -499,3 +499,8 @@ a.desc:after {
     font-size: 1.2rem;
     font-weight: bold;
 }
+
+select[readonly]
+{
+    pointer-events: none;
+}

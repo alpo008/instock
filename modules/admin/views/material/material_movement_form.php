@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Material movement');
 
     <?= $form->field($model, 'stockId')->dropDownList($model->material->stockAliases, [
             'value' => $model->stockId,
-            'readonly' => count($model->material->stocks) === 1
+            'readonly' => count($model->material->stocks) === 1 || $model->stockId > 0
         ]
     ) ?>
 

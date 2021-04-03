@@ -180,7 +180,7 @@ class Material extends \yii\db\ActiveRecord
     public function getUnitsList ()
     {
         return [
-            0 => Yii::t('app', ' ... '),
+            0 => Yii::t('app', '?'),
             1 => Yii::t('app', 'Pcs'),
             2 => Yii::t('app', 'Meters'),
             3 => Yii::t('app', 'Pairs'),

@@ -187,6 +187,8 @@ const MaterialImport = {
                     e.preventDefault();
                     e.stopImmediatePropagation();
                     this.toggleElement(this.form, 'none');
+                    let alertDanger = document.querySelector('.alert-danger');
+                    this.toggleElement(alertDanger, 'none');
                     this.toggleElement(this.progress, 'flex');
                     let buttonClose = this.modal.querySelector('button.close');
                     if (buttonClose !== null) {
@@ -286,6 +288,7 @@ const MaterialImport = {
             this.toggleElement(alertDanger, 'block');
         }
         let buttonClose = this.modal.querySelector('button.close');
+        this.toggleElement(this.form, 'block');
         this.toggleElement(buttonClose, 'flex');
     }
 }

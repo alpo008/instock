@@ -16,6 +16,7 @@ abstract class RcMigration extends \yii\db\Migration {
     const TABLE_MATERIALS = '{{%materials}}';
     const TABLE_STOCKS = '{{%stocks}}';
     const TABLE_MATERIALS_STOCKS = '{{%materials_stocks}}';
+    const TABLE_STOCK_OPERATIONS = '{{%stock_operations}}';
 
 
     /**
