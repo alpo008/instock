@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use yii\bootstrap4\ActiveForm;
 use rmrevin\yii\fontawesome\FAS;
+use yii\jui\AutoComplete;
+use yii\web\JsExpression;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\StockOperation */
@@ -12,7 +14,7 @@ use rmrevin\yii\fontawesome\FAS;
 <div class="stock-operation-form">
 
     <?php $form = ActiveForm::begin([
-        'id' => 'stock-operation-active-form',
+        'id' => 'stock-operations-active-form',
         'layout' => 'horizontal',
         'fieldConfig' => [
             'template' => "{label}\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
@@ -26,7 +28,40 @@ use rmrevin\yii\fontawesome\FAS;
         ],
     ]); ?>
 
-    <?= $form->field($model, 'material_id')->textInput() ?>
+    <div class="form-group row">
+        <label class="col-sm-4" for="material-autocomplete-widget">
+            <?= Yii::t('app', 'Material') ?>
+        </label>
+        <div class="col-sm-8">
+            <?= AutoComplete::widget(
+                [
+                    'id' => 'material-autocomplete-widget',
+                        'clientOptions' => [
+                        'source' => $model::getMaterialsData(),
+                        'minLength'=>'3',
+                        'autoFill'=>true,
+                        'select' => new JsExpression( '(event, ui) => {
+                            let input = document.querySelector(\'[name="StockOperation[material_id]"]\');
+                            if (!isNaN(ui.item.id) && input !== null) {
+                                input.value = ui.item.id;
+                                event.target.classList.remove("is-invalid");
+                                event.target.classList.add("is-valid");
+                            } else {
+                                event.target.classList.remove("is-invalid");
+                                event.target.classList.add("is-invalid");
+                            }
+                         }'
+                    )
+                ]
+            ])
+
+            ?>
+        </div>
+    </div>
+
+    <?= $form->field($model, 'material_id', [
+            //'options' => ['style' => 'display:none;']
+        ])->textInput() ?>
 
     <?= $form->field($model, 'stock_id')->textInput() ?>
 

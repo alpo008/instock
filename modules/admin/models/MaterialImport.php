@@ -36,6 +36,10 @@ class MaterialImport extends Material
     public $skipFirstRow = self::SKIP_ROW;
     public $columns;
 
+    /**
+     * MaterialImport constructor.
+     * {@inheritDoc}
+     */
     public function __construct($config = [])
     {
         parent::__construct($config);
@@ -151,7 +155,6 @@ class MaterialImport extends Material
                         if (is_null($value) && $column['default'] === false) {
                             continue 2;
                         }
-                        //$value = is_null($value) ? $column['default'] : $value;
                         $value = !empty($column['getter']) ? $this->{$column['getter']}($value) : $value;
                         $materialAttributes[$column['attribute']] = $value;
                     }

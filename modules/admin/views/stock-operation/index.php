@@ -38,9 +38,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
     </div>
 
-    <?php Pjax::begin(); ?>
+    <?php Pjax::begin(['id' => 'stock-operations-index-pjax-container']); ?>
 
     <?= GridView::widget([
+        'id' => 'stock-operations-index-grid-view',
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [

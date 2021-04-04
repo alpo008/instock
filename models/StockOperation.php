@@ -143,4 +143,15 @@ class StockOperation extends \yii\db\ActiveRecord
             self::CORRECTION_OPERATION => Yii::t('app', 'Correction'),
         ];
     }
+
+    /**
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function getMaterialsData ()
+    {
+        return Material::find()
+            ->select(['CONCAT(ref, " ; ", name) as value', 'CONCAT(ref, " ; ", name) as  label','id as id'])
+            ->asArray()
+            ->all();
+    }
 }

@@ -389,6 +389,32 @@ a.desc:after {
     background-color: #478b74;
 }
 
+/* JQuery UI components */
+
+.ui-autocomplete-input {
+    width: 100%;
+    height: calc(1.5em + 0.75rem + 2px);
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    outline: none;
+}
+
+.ui-autocomplete-input:focus {
+    border-color: #80bdff;
+}
+
+.ui-autocomplete-input:focus {
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+
+.ui-autocomplete-input.is-valid {
+    border-color: #28a745;
+}
+
+.ui-autocomplete-input.is-invalid {
+    border-color: #dc3545;
+}
+
 /* Material form */
 
 .material-form > .material-photo {

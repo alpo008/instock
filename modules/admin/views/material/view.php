@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'options' => ['class' => 'table detail-view'],
         'attributes' => [
             'ref',
-            'qty',
+            'quantity',
             'min_qty',
             'max_qty',
             [
