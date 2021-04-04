@@ -126,7 +126,8 @@ class MaterialImport extends Material
                     self::PHP_EXCEL_CACHE_DURATION
                 );
             } catch (\Exception $e) {
-                $error = $e->getMessage();
+                $error = Yii::t('app', 'Excel reading error');
+                //$error = $e->getMessage();
             }
         } else {
             $phpExcel = Yii::$app->cache->get(self::PHP_EXCEL_CACHE_KEY);
@@ -140,6 +141,7 @@ class MaterialImport extends Material
             }
             if ($highestRow >= $startRow) {
                 $endRow = $endRow > $highestRow ? $highestRow : $endRow;
+                $defaultAttributes = array_column($this->columns, 'default', 'attribute');
                 for ($row = $startRow; $row <= $endRow; $row++) {
                     $processed = $row;
                     $materialAttributes = [];
@@ -149,16 +151,25 @@ class MaterialImport extends Material
                         if (is_null($value) && $column['default'] === false) {
                             continue 2;
                         }
-                        $value = is_null($value) ? $column['default'] : $value;
+                        //$value = is_null($value) ? $column['default'] : $value;
                         $value = !empty($column['getter']) ? $this->{$column['getter']}($value) : $value;
-                        if (!is_null($value)) {
-                            $materialAttributes[$column['attribute']] = $value;
-                        }
+                        $materialAttributes[$column['attribute']] = $value;
                     }
                     if (!$material = $this::findOne(['ref' => $materialAttributes['ref']])) {
                         $material = new Material();
                     }
-                    $material->setAttributes($materialAttributes, false);
+                    foreach ($materialAttributes as $attribute => $value) {
+                        if ($material->isNewRecord) {
+                            $material->{$attribute} = is_null($value) ? $defaultAttributes[$attribute] : $value;
+                        } else {
+                            if (is_null($value) && empty($material->{$attribute})) {
+                                $material->{$attribute} = $defaultAttributes[$attribute] !== false ? $defaultAttributes[$attribute] : $value;
+                            } elseif (!is_null($value) && empty($material->{$attribute})) {
+                                $material->{$attribute} = $value;
+                            }
+                        }
+                    }
+                    //$material->setAttributes($materialAttributes, false);
                     if ($material->save()) {
                         $touched++;
                         if ($row === 2 && (int)$this->skipFirstRow === $this::SKIP_ROW) {

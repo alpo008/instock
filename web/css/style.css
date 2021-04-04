@@ -285,6 +285,14 @@ a.asc:after, a.desc:after {
     background-size: 1rem;
 }
 
+.dropdown-toggle::after {
+    transition: 0.25s;
+}
+
+.dropdown-toggle[aria-expanded="true"]::after {
+    transform: rotate(180deg) translateY(50%);
+}
+
 a.desc:after {
     background-image: url("../icons/solid/sort-alpha-down-alt.svg");
 }

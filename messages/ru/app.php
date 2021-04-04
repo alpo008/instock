@@ -65,6 +65,7 @@ return [
     'Edit stock place' => 'Редактировать складское место',
     'Excel file columns' => 'Столбцы в файле Excel',
     'Export' => 'Экспорт',
+    'Excel reading error' => 'Ошибка чтения файла Excel',
     'Export table to Excel' => 'Экспортировать таблицу в Excel',
     'File' => 'Файл',
     'Fill only if you want to change old one' => 'Заполняется только в случае изменения старого пароля',
