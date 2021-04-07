@@ -9,6 +9,20 @@ use yii\web\JsExpression;
 /* @var $this yii\web\View */
 /* @var $model app\models\StockOperation */
 /* @var $form yii\bootstrap4\ActiveForm */
+/* @var $fromToLabel string */
+
+switch ($model->operation_type) {
+    case $model::CREDIT_OPERATION:
+        $fromToLabel = Yii::t('app', 'Material destination');
+        break;
+    case $model::DEBIT_OPERATION:
+        $fromToLabel = Yii::t('app', 'Material source');
+        break;
+    case $model::CORRECTION_OPERATION:
+        $fromToLabel = Yii::t('app', 'Correction reason');
+        break;
+}
+
 ?>
 
 <div class="stock-operation-form">
@@ -28,39 +42,45 @@ use yii\web\JsExpression;
         ],
     ]); ?>
 
-    <div class="form-group row">
-        <label class="col-sm-4" for="material-autocomplete-widget">
-            <?= Yii::t('app', 'Material') ?>
-        </label>
-        <div class="col-sm-8">
-            <?= AutoComplete::widget(
-                [
-                    'id' => 'material-autocomplete-widget',
-                        'clientOptions' => [
-                        'source' => $model::getMaterialsData(),
-                        'minLength'=>'3',
-                        'autoFill'=>true,
-                        'select' => new JsExpression( '(event, ui) => {
-                            let input = document.querySelector(\'[name="StockOperation[material_id]"]\');
-                            if (!isNaN(ui.item.id) && input !== null) {
-                                input.value = ui.item.id;
-                                event.target.classList.remove("is-invalid");
-                                event.target.classList.add("is-valid");
-                            } else {
-                                event.target.classList.remove("is-invalid");
-                                event.target.classList.add("is-invalid");
-                            }
-                         }'
-                    )
-                ]
-            ])
+    <?php if (empty($model->material)) : ?>
+        <div class="form-group row">
+            <label class="col-sm-4" for="material-autocomplete-widget">
+                <?= Yii::t('app', 'Material') ?>
+            </label>
+            <div class="col-sm-8">
+                <?= AutoComplete::widget(
+                    [
+                        'id' => 'material-autocomplete-widget',
+                            'clientOptions' => [
+                            'source' => $model::getMaterialsData(),
+                            'minLength'=>'3',
+                            'autoFill'=>true,
+                            'select' => new JsExpression( '(event, ui) => {
+                                let input = document.querySelector(\'[name="StockOperation[material_id]"]\');
+                                if (!isNaN(ui.item.id) && input !== null) {
+                                    input.value = ui.item.id;
+                                    event.target.classList.remove("is-invalid");
+                                    event.target.classList.add("is-valid");
+                                } else {
+                                    event.target.classList.remove("is-invalid");
+                                    event.target.classList.add("is-invalid");
+                                }
+                             }'
+                        )
+                    ],
+                    'options' => [
+                        'placeholder' => Yii::t('app', 'Start to type ref or name')
+                    ]
+                ],
 
-            ?>
+                )
+                ?>
+            </div>
         </div>
-    </div>
+    <?php endif; ?>
 
     <?= $form->field($model, 'material_id', [
-            //'options' => ['style' => 'display:none;']
+            'options' => ['style' => 'display:none;']
         ])->textInput() ?>
 
     <?= $form->field($model, 'stock_id')->textInput() ?>
@@ -71,11 +91,9 @@ use yii\web\JsExpression;
 
     <?= $form->field($model, 'qty')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'from_to')->textInput([
-            'maxlength' => true,
-            'value' => $model->operation_type === $model::CORRECTION_OPERATION ?
-                Yii::t('app', 'Correction') : ''
-    ]) ?>
+    <?= $form->field($model, 'from_to')->textInput(['maxlength' => true])
+        ->label($fromToLabel)
+    ?>
 
     <?= $form->field($model, 'comments')->textarea(['rows' => 6]) ?>
 

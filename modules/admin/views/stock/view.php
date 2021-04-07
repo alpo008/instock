@@ -24,6 +24,14 @@ $this->params['breadcrumbs'][] = $this->title;
             'class' => 'btn btn-primary',
             'title' => Yii::t('app', 'Edit stock place')
         ]) ?>
+        <?= Html::a('<span class="before-icon">+</span>' . FAS::icon('file-invoice'), [
+            'stock-operation/create-debit',
+            'stock_id' => $model->id
+        ], [
+            'class' => 'btn btn-success',
+            'style' => 'position:relative;',
+            'title' => Yii::t('app', 'Create debit operation')
+        ]) ?>
         <?php if (empty($model->materialsStocks)) : ?>
             <?= Html::a(FAS::icon('trash-alt'), ['delete', 'id' => $model->id], [
                 'class' => 'btn btn-danger',
@@ -63,7 +71,33 @@ $this->params['breadcrumbs'][] = $this->title;
                     <td>
                         <?= $material->getQuantity($model->id) ?>
                     </td>
-                    <td>
+                    <td class="operations-links">
+                        <?= Html::a('<span class="before-icon">+</span>' . FAS::icon('file-invoice'), [
+                            'stock-operation/create-debit',
+                            'material_id' => $material->id,
+                            'stock_id' => $model->id
+                        ], [
+                            'style' => 'position:relative;',
+                            'title' => Yii::t('app', 'Create debit operation')
+                        ]) ?>
+                        <?php if ($model->materialsStocks) : ?>
+                            <?= Html::a('<span class="before-icon">-</span>' . FAS::icon('file-invoice'), [
+                                'stock-operation/create-credit',
+                                'material_id' => $material->id,
+                                'stock_id' => $model->id
+                            ], [
+                                'style' => 'position:relative;',
+                                'title' => Yii::t('app', 'Create credit operation')
+                            ]) ?>
+                            <?= Html::a(FAS::icon('ballot-check'), [
+                                'stock-operation/create-correction',
+                                'material_id' => $material->id,
+                                'stock_id' => $model->id
+                            ], [
+                                'style' => 'position:relative;',
+                                'title' => Yii::t('app', 'Create correction operation')
+                            ]) ?>
+                        <?php endif; ?>
                         <?= Html::a(
                             FAS::icon('person-carry'),
                             ['material/move', 'material_id' => $material->id, 'stock_id' => $model->id],
@@ -76,5 +110,4 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php endforeach; ?>
         </table>
     <?php endif; ?>
-
 </div>

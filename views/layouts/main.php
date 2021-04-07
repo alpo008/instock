@@ -63,24 +63,21 @@ $user = Yii::$app->user->identity;
                         <li class="<?= strpos($currentUrl, Url::to(['/admin/stock'])) !== false ? 'active' : '' ?>">
                             <?= Html::a(Yii::t('app', 'Stock places'), ['/admin/stock']) ?>
                         </li>
+                        <li class="<?= strpos($currentUrl, Url::to(['/admin/stock-operation'])) !== false ? 'active' : '' ?>">
+                            <?= Html::a(Yii::t('app', 'Operations'), ['/admin/stock-operation']) ?>
+                        </li>
                     <li>
-                        <a href="#operationsSubmenu" data-toggle="collapse" aria-expanded="<?= strpos($currentUrl, Url::to(['/admin/stock-operation'])) !== false ? 'true' : 'false'?>" class="dropdown-toggle">
-                            <?= Yii::t('app', 'Operations') ?>
+                        <a href="#settingsSubmenu" data-toggle="collapse" aria-expanded="<?= strpos($currentUrl, Url::to(['/admin/settings'])) !== false ? 'true' : 'false'?>" class="dropdown-toggle">
+                            <?= Yii::t('app', 'Settings') ?>
                         </a>
-                        <ul class="collapse list-unstyled <?= strpos($currentUrl, Url::to(['/admin/stock-operation'])) !== false ? 'show' : '' ?>"
-                            id="operationsSubmenu"
+                        <ul class="collapse list-unstyled <?= strpos($currentUrl, Url::to(['/admin/settings'])) !== false ? 'show' : '' ?>"
+                            id="settingsSubmenu"
                         >
-                            <li class="<?= strpos($currentUrl, Url::to(['/admin/stock-operation'])) !== false ? 'active' : '' ?>">
-                                <?= Html::a(Yii::t('app', 'History'), ['/admin/stock-operation']) ?>
+                            <li class="<?= strpos($currentUrl, Url::to(['/admin/settings/import'])) !== false ? 'active' : '' ?>">
+                                <?= Html::a(Yii::t('app', 'Import format'), ['/admin/settings/import']) ?>
                             </li>
-                            <li class="<?= strpos($currentUrl, Url::to(['/admin/stock-operation/create-debit'])) !== false ? 'active' : '' ?>">
-                                <?= Html::a(Yii::t('app', 'Debit'), ['/admin/stock-operation/create-debit']) ?>
-                            </li>
-                            <li class="<?= strpos($currentUrl, Url::to(['/admin/stock-operation/create-credit'])) !== false ? 'active' : '' ?>">
-                                <?= Html::a(Yii::t('app', 'Credit'), ['/admin/stock-operation/create-credit']) ?>
-                            </li>
-                            <li class="<?= strpos($currentUrl, Url::to(['/admin/stock-operation/create-correction'])) !== false ? 'active' : '' ?>">
-                                <?= Html::a(Yii::t('app', 'Correction'), ['/admin/stock-operation/create-correction']) ?>
+                            <li class="<?= strpos($currentUrl, Url::to(['/admin/settings/export'])) !== false ? 'active' : '' ?>">
+                                <?= Html::a(Yii::t('app', 'Export format'), ['/admin/settings/export']) ?>
                             </li>
                         </ul>
                     </li>

@@ -60,13 +60,13 @@ class StockOperationController extends Controller
     /**
      * Creates a new Debit StockOperation model.
      * If creation is successful, the browser will be redirected to the 'view' page.
-     * @param string $materialId
-     * @param string $stockId
+     * @param string $material_id
+     * @param string $stock_id
      * @return mixed
      */
-    public function actionCreateDebit($materialId = '0', $stockId = '0')
+    public function actionCreateDebit($material_id = '0', $stock_id = '0')
     {
-        $model = new StockOperation();
+        $model = new StockOperation(compact('material_id', 'stock_id'));
         $model->operation_type = $model::DEBIT_OPERATION;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -74,18 +74,18 @@ class StockOperationController extends Controller
         }
 
         return $this->render('create', compact(
-            'model', 'materialId', 'stockId')
+            'model', 'material_id', 'stock_id')
         );
     }
 
     /**
      * Creates a new Credit StockOperation model.
      * If creation is successful, the browser will be redirected to the 'view' page.
-     * @param string $materialId
-     * @param string $stockId
+     * @param string $material_id
+     * @param string $stock_id
      * @return mixed
      */
-    public function actionCreateCredit($materialId = '0', $stockId = '0')
+    public function actionCreateCredit($material_id = '0', $stock_id = '0')
     {
         $model = new StockOperation();
         $model->operation_type = $model::CREDIT_OPERATION;
@@ -95,18 +95,18 @@ class StockOperationController extends Controller
         }
 
         return $this->render('create', compact(
-                'model', 'materialId', 'stockId')
+                'model', 'material_id', 'stock_id')
         );
     }
 
     /**
      * Creates a new Correction StockOperation model.
      * If creation is successful, the browser will be redirected to the 'view' page.
-     * @param string $materialId
-     * @param string $stockId
+     * @param string $material_id
+     * @param string $stock_id
      * @return mixed
      */
-    public function actionCreateCorrection($materialId = '0', $stockId = '0')
+    public function actionCreateCorrection($material_id = '0', $stock_id = '0')
     {
         $model = new StockOperation();
         $model->operation_type = $model::CORRECTION_OPERATION;
@@ -116,7 +116,7 @@ class StockOperationController extends Controller
         }
 
         return $this->render('create', compact(
-                'model', 'materialId', 'stockId')
+                'model', 'material_id', 'stock_id')
         );
     }
 

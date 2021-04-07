@@ -26,8 +26,14 @@ $this->params['breadcrumbs'][] = $this->title;
         <h1><?= Html::encode($this->title) ?></h1>
     </div>
 
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
+    <?php if ($model->material instanceof \app\models\Material) : ?>
+        <div class="material-name">
+            <h2>
+                <?= $model->materialRef . ' ; ' . $model->materialName ?>
+            </h2>
+        </div>
+    <?php endif; ?>
+
+    <?= $this->render('_form', compact('model')) ?>
 
 </div>

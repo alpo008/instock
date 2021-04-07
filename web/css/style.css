@@ -326,6 +326,13 @@ a.desc:after {
     color: #4159a3;
 }
 
+.material-name h2 {
+    margin-right: auto;
+    font-style: italic;
+    color: #4159a3;
+    font-size: 1.7rem;
+}
+
 .action-buttons a, .action-buttons button {
     margin-right: 7px;
     height: 40px;
@@ -512,6 +519,23 @@ a.desc:after {
 
 .material-index tr.low-quantity {
     background-color: #ffb6a5;
+}
+
+/* Operations links */
+
+.operations-links {
+    display: flex;
+    justify-content: space-around;
+}
+
+.operations-links a {
+    margin: 0 3px;
+    float: right;
+    width: 26px;
+}
+
+.operations-links a > .before-icon {
+    left: -10px;
 }
 
 /* Common */
