@@ -207,9 +207,42 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'title' => Yii::t('app', 'Move material')
                             ]
                         );
+                    },
+                    'debit' => function ($url, $model, $key) {
+                        /** @var $model \app\models\Material */
+                        $stockId = '0';
+                        if (is_array($model->stocks) && count($model->stocks) === 1) {
+                            $stockId = $model->stocks[0]->id;
+                        }
+                        return Html::a('<span class="before-icon">+</span>' . FAS::icon('file-invoice'), [
+                            'stock-operation/create-debit',
+                            'material_id' => $model->id,
+                            'stock_id' => $stockId
+                        ], [
+                            'style' => 'position:relative;',
+                            'title' => Yii::t('app', 'Create debit operation')
+                        ]);
+                    },
+                    'credit' => function ($url, $model, $key) {
+                        /** @var $model \app\models\Material */
+                        if (empty($model->stocks)) {
+                            return false;
+                        }
+                        $stockId = '0';
+                        if (is_array($model->stocks) && count($model->stocks) === 1) {
+                            $stockId = $model->stocks[0]->id;
+                        }
+                        return Html::a('<span class="before-icon">-</span>' . FAS::icon('file-invoice'), [
+                            'stock-operation/create-credit',
+                            'material_id' => $model->id,
+                            'stock_id' => $stockId
+                        ], [
+                            'style' => 'position:relative;',
+                            'title' => Yii::t('app', 'Create credit operation')
+                        ]);
                     }
                 ],
-                'template' => '{view} {update} {delete} {move}'
+                'template' => '{view} {update} {debit} {credit} {move} {delete}'
             ]
         ],
         'rowOptions' => function ($model, $index, $widget, $grid){

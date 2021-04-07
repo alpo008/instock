@@ -396,6 +396,19 @@ a.desc:after {
     background-color: #478b74;
 }
 
+#material-index-grid-view tr > td:last-child{
+    min-width: 80px;
+}
+
+#material-index-grid-view tr > td:last-child > a {
+    margin-left: 12px;
+    display: inline-block;
+}
+
+#material-index-grid-view tr > td:last-child > a > .before-icon {
+    left: -10px;
+}
+
 /* JQuery UI components */
 
 .ui-autocomplete-input {

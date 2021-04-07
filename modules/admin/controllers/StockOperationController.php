@@ -87,7 +87,7 @@ class StockOperationController extends Controller
      */
     public function actionCreateCredit($material_id = '0', $stock_id = '0')
     {
-        $model = new StockOperation();
+        $model = new StockOperation(compact('material_id', 'stock_id'));
         $model->operation_type = $model::CREDIT_OPERATION;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -108,7 +108,7 @@ class StockOperationController extends Controller
      */
     public function actionCreateCorrection($material_id = '0', $stock_id = '0')
     {
-        $model = new StockOperation();
+        $model = new StockOperation(compact('material_id', 'stock_id'));
         $model->operation_type = $model::CORRECTION_OPERATION;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
