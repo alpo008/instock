@@ -293,11 +293,47 @@ const MaterialImport = {
     }
 }
 
+const CreditOperation = {
+    availableQuantityContainer: document.getElementById('stock-qty'),
+    stockAliasContainer: document.getElementById('stock-alias'),
+    stockQuantitiesContainer: document.getElementById('stock-quantities'),
+    stockSelect: document.getElementById('stockoperation-stock_id'),
+    quantities: {},
+
+    init () {
+        if(this.availableQuantityContainer !== null &&
+            this.stockAliasContainer !== null &&
+            this.stockSelect !== null &&
+            this.stockQuantitiesContainer !== null
+        )
+        {
+            let quantities = this.stockQuantitiesContainer.dataset.quantities;
+            if (typeof quantities === 'string' && quantities.length) {
+                this.quantities = JSON.parse(quantities);
+                console.log(this.quantities)
+                console.log(this.quantities[2])
+                console.log(this.quantities[5])
+            }
+            if (typeof this.quantities === 'object' && !$.isEmptyObject(this.quantities)) {
+                this.stockSelect.addEventListener('change', (e) => {
+                    let stockAlias = e.target.options[e.target.selectedIndex].innerHTML;
+                    let stockId = e.target.value;
+                    if(!isNaN(stockId) && typeof this.quantities[stockId] !== 'undefined') {
+                        this.stockAliasContainer.innerText = stockAlias;
+                        this.availableQuantityContainer.innerText = this.quantities[stockId];
+                    }
+                });
+            }
+        }
+    }
+}
+
 $(document).ready(() => {
     SideNav.init();
     FileInput.init();
     CellEditable.init();
     MaterialImport.init();
+    CreditOperation.init();
 });
 
 $(document).on('pjax:complete', (e) => {

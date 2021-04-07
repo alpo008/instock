@@ -14,13 +14,20 @@ use yii\web\JsExpression;
 switch ($model->operation_type) {
     case $model::CREDIT_OPERATION:
         $fromToLabel = Yii::t('app', 'Material destination');
+        $stocksList = $model->material->stockAliases;
         break;
     case $model::DEBIT_OPERATION:
         $fromToLabel = Yii::t('app', 'Material source');
+        $stocksList = \app\models\Stock::getStocksList();
         break;
     case $model::CORRECTION_OPERATION:
         $fromToLabel = Yii::t('app', 'Correction reason');
+        $stocksList = \app\models\Stock::getStocksList();
         break;
+    default:
+        $fromToLabel = Yii::t('app', 'Stock operation');
+        $stocksList = \app\models\Stock::getStocksList();
+    break;
 }
 
 ?>
@@ -42,7 +49,7 @@ switch ($model->operation_type) {
         ],
     ]); ?>
 
-    <?php if (empty($model->material)) : ?>
+    <?php if (false) : ?>
         <div class="form-group row">
             <label class="col-sm-4" for="material-autocomplete-widget">
                 <?= Yii::t('app', 'Material') ?>
@@ -52,7 +59,7 @@ switch ($model->operation_type) {
                     [
                         'id' => 'material-autocomplete-widget',
                             'clientOptions' => [
-                            'source' => $model::getMaterialsData(),
+                            'source' => $model->materialsAutocompleteData,
                             'minLength'=>'3',
                             'autoFill'=>true,
                             'select' => new JsExpression( '(event, ui) => {
@@ -83,11 +90,9 @@ switch ($model->operation_type) {
             'options' => ['style' => 'display:none;']
         ])->textInput() ?>
 
-    <?= $form->field($model, 'stock_id')->textInput() ?>
-
-    <?= $form->field($model, 'operation_type', [
-            'options' => ['style' => 'display:none;']
-    ])->dropDownList($model::getOperationTypes()) ?>
+    <?= $form->field($model, 'stock_id')->dropdownList($stocksList , [
+        'readonly' => count($stocksList) === 1
+    ]) ?>
 
     <?= $form->field($model, 'qty')->textInput(['maxlength' => true]) ?>
 

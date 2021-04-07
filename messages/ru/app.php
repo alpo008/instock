@@ -35,6 +35,7 @@ return [
     'Are you sure you want to delete this item?' => 'Вы уверены, что хотите удалить этот элемент?',
     'Applying to column \'ref\'' => 'Применяется к столбцу \'Текущее количество\'',
     'Auth key' => 'Ключ авторизации',
+    'Available at' => 'В наличии на месте',
     'Bad columns configuration' => 'Неверные параметры таблицы',
     'Bad parameters' => 'Неверные параметры',
     'Bad request' => 'Неверный запрос',

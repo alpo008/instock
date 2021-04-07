@@ -65,4 +65,17 @@ class Stock extends \yii\db\ActiveRecord
         return $this->hasMany(Material::class, ['id' => 'material_id'])
             ->via('materialsStocks');
     }
+
+    /**
+     * List of all stocks ['id' => 'alias']
+     * @return array
+     */
+    public static function getStocksList ()
+    {
+        $stocksList = [];
+        if ($allStocks = self::find()->select(['id', 'alias'])->asArray()->all()) {
+            $stocksList = array_column($allStocks, 'alias', 'id');
+        }
+        return $stocksList;
+    }
 }

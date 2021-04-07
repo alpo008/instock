@@ -229,7 +229,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             return false;
                         }
                         $stockId = '0';
-                        if (is_array($model->stocks) && count($model->stocks) === 1) {
+                        if (is_array($model->stocks) && $model->stocks[0] instanceof \app\models\Stock) {
                             $stockId = $model->stocks[0]->id;
                         }
                         return Html::a('<span class="before-icon">-</span>' . FAS::icon('file-invoice'), [

@@ -24,6 +24,8 @@ use yii\behaviors\TimestampBehavior;
  * @property string $materialName
  * @property string $materialRef
  * @property string $stockAlias
+ * @property array $materialsAutocompleteData
+ * @property array $materialAvailability
  */
 class StockOperation extends \yii\db\ActiveRecord
 {
@@ -47,10 +49,13 @@ class StockOperation extends \yii\db\ActiveRecord
         return [
             [['material_id', 'stock_id', 'operation_type', 'from_to', 'qty'], 'required'],
             [['material_id', 'stock_id', 'operation_type'], 'integer'],
-            [['qty'], 'number'],
+            [['qty'], 'number', 'max' =>
+                $this->operation_type === self::CREDIT_OPERATION && $this->material && $this->stock_id ?
+                    $this->material->getQuantity($this->stock_id) : null
+            ],
             [['comments'], 'string'],
             [['created_at', 'created_by'], 'safe'],
-            [['from_to'], 'string', 'max' => 64],
+            [['from_to'], 'string', 'max' => 64]
         ];
     }
 
@@ -147,11 +152,25 @@ class StockOperation extends \yii\db\ActiveRecord
     /**
      * @return array|\yii\db\ActiveRecord[]
      */
-    public static function getMaterialsData ()
+    public function getMaterialsAutocompleteData ()
     {
         return Material::find()
             ->select(['CONCAT(ref, " ; ", name) as value', 'CONCAT(ref, " ; ", name) as  label','id as id'])
             ->asArray()
             ->all();
+    }
+
+    /**
+     * @return array
+     */
+    public function getMaterialAvailability ()
+    {
+        $availability = [];
+        if (!empty($this->material) && !empty($this->material->stocks)) {
+            foreach ($this->material->stocks as $stock) {
+                $availability[$stock->id] = $this->material->getQuantity($stock->id);
+            }
+        }
+        return $availability;
     }
 }

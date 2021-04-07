@@ -326,11 +326,18 @@ a.desc:after {
     color: #4159a3;
 }
 
-.material-name h2 {
-    margin-right: auto;
+.material-name {
+    margin-bottom: 5px;
+}
+
+.material-name table {
     font-style: italic;
     color: #4159a3;
-    font-size: 1.7rem;
+    font-size: 1.1rem;
+}
+
+.material-name table td {
+    width: 50%;
 }
 
 .action-buttons a, .action-buttons button {
