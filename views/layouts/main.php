@@ -37,7 +37,7 @@ $user = Yii::$app->user->identity;
         <!-- Sidebar -->
         <nav id="sidebar">
             <div class="sidebar-header">
-                <?= Html::a('Server page', Yii::$app->params['startPageUrl'], [
+                <?= Html::a(Yii::t('app', 'Server page'), Yii::$app->params['startPageUrl'], [
                     'class' => 'server-root-link'
                 ]) ?>
             </div>

@@ -17,25 +17,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="action-buttons">
         <h1><?= Html::encode($this->title) ?></h1>
-
-        <?= Html::a('<span class="before-icon">+</span>' . FAS::icon('file-invoice'), ['create-debit'], [
-                'class' => 'btn btn-success',
-                'style' => 'position:relative;',
-                'title' => Yii::t('app', 'Create debit operation')
-        ]) ?>
-
-        <?= Html::a('<span class="before-icon">-</span>' . FAS::icon('file-invoice'), ['create-credit'], [
-                'class' => 'btn btn-success',
-                'style' => 'position:relative;',
-                'title' => Yii::t('app', 'Create credit operation')
-        ]) ?>
-
-        <?= Html::a(FAS::icon('ballot-check'), ['create-correction'], [
-                'class' => 'btn btn-danger',
-                'style' => 'position:relative;',
-                'title' => Yii::t('app', 'Create correction operation')
-        ]) ?>
-
     </div>
 
     <?php Pjax::begin(['id' => 'stock-operations-index-pjax-container']); ?>
@@ -47,9 +28,24 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'material_id',
-            'stock_id',
-            'operation_type',
+            [
+                'attribute' => 'created_at',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    /* @var $model \app\models\StockOperation */
+                    return Html::a($model->created_at, ['/admin/stock-operation/' . $model->id]);
+                }
+            ],
+            'materialRef',
+            'materialName',
+            [
+                'attribute' => 'stockAlias',
+                'filter' => \app\models\Stock::getStocksList()
+            ],
+            [
+                'attribute' => 'operationType',
+                'filter' => $searchModel::getOperationTypes()
+            ],
             'qty',
             //'from_to',
             //'comments:ntext',

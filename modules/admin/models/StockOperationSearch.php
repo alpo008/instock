@@ -12,6 +12,7 @@ use app\models\StockOperation;
  * @property string $materialName
  * @property string $materialRef
  * @property string $stockAlias
+ * @property string $operationType
  *
  */
 class StockOperationSearch extends StockOperation
@@ -19,6 +20,7 @@ class StockOperationSearch extends StockOperation
     public $materialName;
     public $materialRef;
     public $stockAlias;
+    public $operationType;
 
     /**
      * {@inheritdoc}
@@ -28,7 +30,7 @@ class StockOperationSearch extends StockOperation
         return [
             [['id', 'material_id', 'stock_id', 'operation_type', 'created_by'], 'integer'],
             [['qty'], 'number'],
-            [['from_to', 'created_at', 'materialName', 'materialRef', 'stockAlias'], 'safe']
+            [['from_to', 'created_at', 'materialName', 'materialRef', 'stockAlias', 'operationType'], 'safe']
         ];
     }
 
@@ -51,13 +53,35 @@ class StockOperationSearch extends StockOperation
     public function search($params)
     {
         $query = StockOperation::find()
-            ->joinWith('material')
-            ->joinWith('stock');
+            ->joinWith(['material', 'stock']);
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+        ]);
+
+        $dataProvider->setSort([
+            'attributes' => [
+                'created_at',
+                'qty',
+                'operationType' => [
+                    'asc' => ['operation_type' => SORT_ASC],
+                    'desc' => ['operation_type' => SORT_DESC],
+                ],
+                'materialRef' => [
+                    'asc' => ['{{%materials}}.ref' => SORT_ASC],
+                    'desc' => ['{{%materials}}.ref' => SORT_DESC],
+                ],
+                'materialName' => [
+                    'asc' => ['{{%materials}}.name' => SORT_ASC],
+                    'desc' => ['{{%materials}}.name' => SORT_DESC],
+                ],
+                'stockAlias' => [
+                    'asc' => ['{{%stocks}}.alias' => SORT_ASC],
+                    'desc' => ['{{%stocks}}.alias' => SORT_DESC],
+                ]
+            ]
         ]);
 
         $this->load($params);
@@ -70,14 +94,17 @@ class StockOperationSearch extends StockOperation
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
             'material_id' => $this->material_id,
             'stock_id' => $this->stock_id,
-            'operation_type' => $this->operation_type,
+            'operation_type' => $this->operationType,
             'qty' => $this->qty,
-            'created_at' => $this->created_at,
             'created_by' => $this->created_by,
         ]);
+
+        $query->andFilterWhere(['like', '{{%stock_operations}}.created_at', $this->created_at]);
+        $query->andFilterWhere(['like', '{{%materials}}.name', $this->materialName]);
+        $query->andFilterWhere(['like', '{{%materials}}.ref', $this->materialRef]);
+        $query->andFilterWhere(['=', '{{%stocks}}.id', $this->stockAlias]);
 
         $query->andFilterWhere(['like', 'from_to', $this->from_to])
             ->andFilterWhere(['like', 'comments', $this->comments]);

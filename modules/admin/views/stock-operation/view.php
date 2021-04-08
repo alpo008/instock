@@ -15,20 +15,30 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="action-buttons">
         <h1>
-            <?= Html::encode($model->operationType . ' ' .$model->operationTime . ', ' . $model->creatorName) ?>
+            <?= Html::encode($model->operationType . ' ' .$model->operationTime . ', ' . $model->materialName) ?>
         </h1>
     </div>
 
     <?= DetailView::widget([
         'id' => 'stock-operation-detail-view',
         'model' => $model,
+        'options' => ['class' => 'table detail-view'],
         'attributes' => [
             'id',
-            'materialName',
+            'creatorName',
             'stockAlias',
             'operationType',
             'qty',
-            'from_to',
+            [
+                'attribute' => 'from_to',
+                'label' => $model->operation_type === $model::CORRECTION_OPERATION ?
+                    Yii::t('app', 'Correction reason') : (
+                        $model->operation_type === $model::CREDIT_OPERATION ?
+                            Yii::t('app', 'Material destination') :
+                            Yii::t('app', 'Material source')
+                    )
+            ],
+
             'comments:ntext'
             //'created_at',
             //'created_by',

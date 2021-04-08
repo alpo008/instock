@@ -139,6 +139,8 @@ return [
     'Save' => 'Сохранить',
     'Save database value' => 'Сохранить количество из БД',
     'Save file value' => 'Сохранить количество из файла',
+    'Server page' => 'Сервер <br> Уфа-Электрон',
+    'Settings' => 'Настройки',
     'Source and target places can not be the same' => 'Старое и новое место хранения не должны совпадать',
     'Source or destination' => 'Источник / получатель',
     'Start to type ref or name' => 'Начните вводить SAP или наименование',

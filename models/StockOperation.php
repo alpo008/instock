@@ -80,6 +80,7 @@ class StockOperation extends \yii\db\ActiveRecord
             'created_at' => Yii::t('app', 'Created at'),
             'created_by' => Yii::t('app', 'Created by'),
             'materialName' => Yii::t('app', 'Material'),
+            'materialRef' => Yii::t('app', 'Ref'),
             'creatorName' => Yii::t('app', 'Responsible person'),
             'operationType' => Yii::t('app', 'Operation type'),
             'stockAlias' => Yii::t('app', 'Stock place'),
