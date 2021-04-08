@@ -21,11 +21,15 @@ use yii\behaviors\TimestampBehavior;
  *
  * @property Material $material
  * @property Stock $stock
+ * @property User $creator
  * @property string $materialName
  * @property string $materialRef
  * @property string $stockAlias
  * @property array $materialsAutocompleteData
  * @property array $materialAvailability
+ * @property string $creatorName
+ * @property string $operationTime
+ * @property string $operationType
  */
 class StockOperation extends \yii\db\ActiveRecord
 {
@@ -49,8 +53,9 @@ class StockOperation extends \yii\db\ActiveRecord
         return [
             [['material_id', 'stock_id', 'operation_type', 'from_to', 'qty'], 'required'],
             [['material_id', 'stock_id', 'operation_type'], 'integer'],
-            [['qty'], 'number', 'max' =>
-                $this->operation_type === self::CREDIT_OPERATION && $this->material && $this->stock_id ?
+            [['qty'], 'number',
+                'min' => $this->operation_type === self::CORRECTION_OPERATION ? 0 : 1,
+                'max' => $this->operation_type === self::CREDIT_OPERATION && $this->material && $this->stock_id ?
                     $this->material->getQuantity($this->stock_id) : null
             ],
             [['comments'], 'string'],
@@ -74,6 +79,10 @@ class StockOperation extends \yii\db\ActiveRecord
             'comments' => Yii::t('app', 'Comments'),
             'created_at' => Yii::t('app', 'Created at'),
             'created_by' => Yii::t('app', 'Created by'),
+            'materialName' => Yii::t('app', 'Material'),
+            'creatorName' => Yii::t('app', 'Responsible person'),
+            'operationType' => Yii::t('app', 'Operation type'),
+            'stockAlias' => Yii::t('app', 'Stock place'),
         ];
     }
 
@@ -98,6 +107,46 @@ class StockOperation extends \yii\db\ActiveRecord
     }
 
     /**
+     * @inheritDoc
+     */
+    public function beforeSave($insert)
+    {
+        $params = ['material_id' => $this->material_id,'stock_id' => $this->stock_id];
+        if (!$materialStock = MaterialStock::findOne($params)) {
+            $materialStock = new MaterialStock($params);
+        }
+        switch ($this->operation_type) {
+            case self::CREDIT_OPERATION :
+                $materialStock->qty -= $this->qty;
+            break;
+            case self::DEBIT_OPERATION :
+                $materialStock->qty += $this->qty;
+            break;
+            case self::CORRECTION_OPERATION :
+                $materialStock->qty = $this->qty;
+            break;
+        }
+        if ($materialStock->qty < 0) {
+            Yii::$app->session->setFlash('danger', Yii::t('app', 'Can not accept negative quantity'));
+        }
+        $transaction = Yii::$app->db->beginTransaction();
+        $result = parent::beforeSave($insert);
+        try {
+            if (!$materialStock->isNewRecord && $materialStock->qty === '0') {
+                $result &= !!$materialStock->delete();
+            } elseif ($materialStock->qty > 0) {
+                $result &= $materialStock->save();
+            }
+            $transaction->commit();
+        } catch (\Exception | \Throwable $e) {
+            $transaction->rollBack();
+            Yii::$app->session->setFlash('danger', Yii::t('app', 'Quantity update error'));
+            return false;
+        }
+        return $result;
+    }
+
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getMaterial ()
@@ -111,6 +160,24 @@ class StockOperation extends \yii\db\ActiveRecord
     public function getStock ()
     {
         return $this->hasOne(Stock::class, ['id' => 'stock_id']);
+    }
+
+    /**
+     * Operation author
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreator ()
+    {
+        return $this->hasOne(User::class, ['id' => 'created_by']);
+    }
+
+    /**
+     * Operation author name
+     * @return string
+     */
+    public function getCreatorName ()
+    {
+        return $this->creator instanceof User ? $this->creator->fullName : '?';
     }
 
     /**
@@ -135,6 +202,26 @@ class StockOperation extends \yii\db\ActiveRecord
     public function getStockAlias ()
     {
         return $this->stock instanceof Stock ? $this->stock->alias : '';
+    }
+
+    /**
+     * Operation date and time
+     * @return string
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function getOperationTime () {
+        return Yii::$app->formatter->asDate($this->created_at) . ' ' .
+            Yii::$app->formatter->asTime($this->created_at);
+    }
+
+    /**
+     * Operation type
+     * @return string
+     */
+    public function getOperationType ()
+    {
+        return self::getOperationTypes()[$this->operation_type] ?
+            self::getOperationTypes()[$this->operation_type] : '?';
     }
 
     /**

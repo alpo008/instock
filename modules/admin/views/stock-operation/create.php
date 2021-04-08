@@ -48,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $model->material->quantity . ' ' . $model->material->unitName ?>
                     </td>
                 </tr>
-                <?php if (!empty($model->stock) && !empty($available)) : ?>
+                <?php if (!empty($available)) : ?>
                     <tr>
                         <td>
                             <?= Yii::t('app', 'Available at') . ' ' .

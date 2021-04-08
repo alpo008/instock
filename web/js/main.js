@@ -310,11 +310,17 @@ const CreditOperation = {
             let quantities = this.stockQuantitiesContainer.dataset.quantities;
             if (typeof quantities === 'string' && quantities.length) {
                 this.quantities = JSON.parse(quantities);
-                console.log(this.quantities)
-                console.log(this.quantities[2])
-                console.log(this.quantities[5])
             }
             if (typeof this.quantities === 'object' && !$.isEmptyObject(this.quantities)) {
+                if (this.stockAliasContainer.innerText === '') {
+                    let firstChoice = this.stockSelect.querySelector('option:first-child');
+                    if (firstChoice !== null) {
+                        let stockAlias = firstChoice.innerHTML;
+                        let stockId = firstChoice.value;
+                        this.stockAliasContainer.innerText = stockAlias;
+                        this.availableQuantityContainer.innerText = this.quantities[stockId];
+                    }
+                }
                 this.stockSelect.addEventListener('change', (e) => {
                     let stockAlias = e.target.options[e.target.selectedIndex].innerHTML;
                     let stockId = e.target.value;

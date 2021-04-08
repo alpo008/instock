@@ -20,8 +20,8 @@ class Bootstrap implements BootstrapInterface
     /** @var array The rules to be used in URL management. */
 
     public $urlRules = [
-        '<controller:\w+>/<id:\d+>' => '<controller>/view',
-        '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
+        '<controller:\w+-{0,1}\w+>/<id:\d+>' => '<controller>/view',
+        '<controller:\w+-{0,1}\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
         '<controller:\w+>/<action:\w+>/<id:\d+>/<date>' => '<controller>/<action>',
         '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
     ];

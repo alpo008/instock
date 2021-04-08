@@ -91,7 +91,7 @@ switch ($model->operation_type) {
         ])->textInput() ?>
 
     <?= $form->field($model, 'stock_id')->dropdownList($stocksList , [
-        'readonly' => count($stocksList) === 1
+        'readonly' => $model->stock_id !== '0'
     ]) ?>
 
     <?= $form->field($model, 'qty')->textInput(['maxlength' => true]) ?>
