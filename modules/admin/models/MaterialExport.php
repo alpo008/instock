@@ -66,4 +66,26 @@ class MaterialExport extends Material
         }
         return $phpExcel;
     }
+
+    /**
+     * Костыль, конечно TODO
+     * @param string $param
+     * @return array
+     */
+    public function parseSortParam ($param)
+    {
+        if (is_string($param)) {
+            if (strpos($param, '-') !== false) {
+                $direction = SORT_DESC;
+                $param = trim($param, ' -');
+            } else {
+                $direction = SORT_ASC;
+                $param = trim($param);
+            }
+            return [$param => $direction];
+        }
+        else {
+            return [];
+        }
+    }
 }

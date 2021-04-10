@@ -10,7 +10,7 @@ require __DIR__ . '/../vendor/yiisoft/yii2/Yii.php';
 $config = require __DIR__ . '/../config/web.php';
 
 function dump($var) {
-    \yii\helpers\VarDumper::dump($var);
+    \yii\helpers\VarDumper::dump($var, 10, true);
 }
 
 (new yii\web\Application($config))->run();

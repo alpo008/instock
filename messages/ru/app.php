@@ -119,6 +119,7 @@ return [
     'Only excel files are allowed' => 'Только файл в формате Excel',
     'Pairs' => 'Пар',
     'Operations' => 'Операции',
+    'Operation details' => 'Подробности операции',
     'Operation type' => 'Тип операции',
     'Password' => 'Пароль',
     'Pcs' => 'Шт',
@@ -166,5 +167,6 @@ return [
     'Users' => 'Пользователи',
     'User with role {role} will be restored' => 'Пользователь будет восстановлен с ролью {role}',
     'User name' => 'Имя пользователя',
-    'View' => 'Просмотр'
+    'View' => 'Просмотр',
+    'View material' => 'Просмотр материала'
 ];

@@ -187,6 +187,9 @@ class MaterialController extends Controller
         $queryParams = Yii::$app->cache->get('MaterialQueryParams');
         $dataProvider = $searchModel->search($queryParams);
         $dataProvider->setPagination(false);
+        if (!empty($queryParams['sort'])) {
+            $dataProvider->setSort(['defaultOrder' => $exportModel->parseSortParam($queryParams['sort'])]);
+        }
         $phpExcel = $exportModel->makeExcel($dataProvider);
         $path = Yii::getAlias('@app/web/downloads/') . 'materials.xlsx';
         $objWriter = PHPExcel_IOFactory::createWriter($phpExcel, 'Excel2007');

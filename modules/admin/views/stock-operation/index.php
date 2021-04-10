@@ -33,10 +33,21 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'value' => function ($model) {
                     /* @var $model \app\models\StockOperation */
-                    return Html::a($model->created_at, ['/admin/stock-operation/' . $model->id]);
+                    return Html::a($model->created_at, ['/admin/stock-operation/' . $model->id], [
+                        'title' => Yii::t('app', 'Operation details')
+                    ]);
                 }
             ],
-            'materialRef',
+            [
+                'attribute' => 'materialRef',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    /* @var $model \app\models\StockOperation */
+                    return Html::a($model->materialRef, ['/admin/material/' . $model->material_id], [
+                        'title' => Yii::t('app', 'View material')
+                    ]);
+                }
+            ],
             'materialName',
             [
                 'attribute' => 'stockAlias',
