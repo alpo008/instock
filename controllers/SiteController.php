@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\User;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -66,13 +67,25 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-        if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
+        $user = Yii::$app->user->identity;
+        if ($user instanceof User) {
+            if ($user->role === User::ROLE_USER) {
+                return $this->response->redirect(['/']);
+            } elseif ($user->role === User::ROLE_ADMIN) {
+                return $this->response->redirect(['/admin']);
+            }
         }
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            $user = Yii::$app->user->identity;
+            if ($user instanceof User) {
+                if ($user->role === User::ROLE_USER) {
+                    return $this->response->redirect(['/']);
+                } elseif ($user->role === User::ROLE_ADMIN) {
+                    return $this->response->redirect(['/admin']);
+                }
+            }
         }
 
         $model->password = '';

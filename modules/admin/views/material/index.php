@@ -99,7 +99,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'class' => 'cell-editable__input',
                             'type' => 'number',
                             'min' => 0,
-                            'max' => $model->max_qty ? $model->max_qty : 1
                         ]),
                     ]);
                 },
@@ -116,7 +115,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'input' => Html::textInput('Material[max_qty]', $value, [
                             'class' => 'cell-editable__input',
                             'type' => 'number',
-                            'min' => $model->min_qty ? $model->min_qty : 0
+                            'min' => 0
                         ]),
                     ]);
                 },

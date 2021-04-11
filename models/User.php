@@ -92,6 +92,7 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
             'newPassword' => Yii::t('app', 'New password'),
             'password' => Yii::t('app', 'Password'),
             'fullName' => Yii::t('app', 'Full name'),
+            'rememberMe' => Yii::t('app', 'Remember me')
         ];
     }
 
