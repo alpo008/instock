@@ -53,15 +53,37 @@ class StockOperation extends \yii\db\ActiveRecord
         return [
             [['material_id', 'stock_id', 'operation_type', 'from_to', 'qty'], 'required'],
             [['material_id', 'stock_id', 'operation_type'], 'integer'],
-            [['qty'], 'number',
-                'min' => $this->operation_type === self::CORRECTION_OPERATION ? 0 : 1,
-                'max' => $this->operation_type === self::CREDIT_OPERATION && $this->material && $this->stock_id ?
-                    $this->material->getQuantity($this->stock_id) : null
-            ],
+            [['qty'], 'number'],
             [['comments'], 'string'],
             [['created_at', 'created_by'], 'safe'],
-            [['from_to'], 'string', 'max' => 64]
+            [['from_to'], 'string', 'max' => 64],
+            [['qty'], 'qtyValidator']
         ];
+    }
+
+    /**
+     * Quantity validator
+     */
+    public function qtyValidator()
+    {
+        if ($this->material instanceof Material &&
+            !empty($this->qty) && !empty($this->stock_id) &&
+            (int)$this->operation_type === self::CREDIT_OPERATION)
+        {
+            $max = $this->material->getQuantity($this->stock_id);
+            if ($this->qty > $max) {
+                $this->addError('qty',
+                    Yii::t('app', 'The rest is only {max} at stock place', compact('max')) .
+                    ' ' . $this->material->unitName
+                );
+            }
+        }
+        if ((int)$this->operation_type === self::CORRECTION_OPERATION && $this->qty < 0) {
+            $this->addError('qty', Yii::t('app', 'Quantity can not be less than') . ' 0');
+        }
+        if ((int)$this->operation_type !== self::CORRECTION_OPERATION && $this->qty < 1) {
+            $this->addError('qty', Yii::t('app', 'Quantity can not be less than') . ' 1');
+        }
     }
 
     /**

@@ -104,14 +104,6 @@ class SiteController extends Controller
         $model = new StockOperation();
         $model->load(Yii::$app->request->post());
         $model->validate();
-        if ($model->material instanceof Material && !empty($model->qty)) {
-            $max = $model->material->getQuantity($model->stock_id);
-            if ($model->qty > $max) {
-                $model->addError('qty',
-                    Yii::t('app', 'The rest is only {max} at stock place', compact('max'))
-                );
-            }
-        }
         foreach ($model->errors as $attribute => $errors) {
             $result[Html::getInputId($model, $attribute)] = $errors;
         }
