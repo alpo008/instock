@@ -20,6 +20,8 @@ use PHPExcel_IOFactory;
  */
 class MaterialController extends Controller
 {
+    const QUERY_PARAMS_KEY = 'MaterialQueryParams';
+
     /**
      * {@inheritdoc}
      */
@@ -46,7 +48,7 @@ class MaterialController extends Controller
         $searchModel = new MaterialSearch();
         $importModel = new MaterialImport();
         $queryParams = Yii::$app->request->queryParams;
-        Yii::$app->cache->set('MaterialQueryParams', $queryParams);
+        Yii::$app->cache->set($this->getQueryCacheKey(), $queryParams);
         $dataProvider = $searchModel->search($queryParams);
 
         return $this->render('index', compact(
@@ -184,7 +186,7 @@ class MaterialController extends Controller
     {
         $exportModel = new MaterialExport();
         $searchModel = new MaterialSearch();
-        $queryParams = Yii::$app->cache->get('MaterialQueryParams');
+        $queryParams = Yii::$app->cache->get($this->getQueryCacheKey());
         $dataProvider = $searchModel->search($queryParams);
         $dataProvider->setPagination(false);
         if (!empty($queryParams['sort'])) {
@@ -244,5 +246,19 @@ class MaterialController extends Controller
         }
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+    }
+
+    /**
+     * Key to cache query params for further usage in actionExport()
+     * @return string
+     */
+    protected function getQueryCacheKey ()
+    {
+        if ($user = Yii::$app->user->identity) {
+            $prefix = $user->username;
+        } else {
+            $prefix = 'default';
+        }
+        return $prefix . self::QUERY_PARAMS_KEY;
     }
 }
