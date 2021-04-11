@@ -33,11 +33,14 @@ use yii\web\UploadedFile;
  * @property User $editor
  * @property string $photoPath
  * @property array $stockAliases
+ * @property string $shortName
  */
 class Material extends \yii\db\ActiveRecord
 {
     const PHOTOS_PATH = '@app/web/images/materials/';
     const PHOTOS_EXTENSIONS = ['jpg', 'png', 'jpeg'];
+
+    const SHORT_NAME_LENGTH = 37;
 
     public $photo;
 
@@ -251,6 +254,22 @@ class Material extends \yii\db\ActiveRecord
             $aliases = array_column($this->stocks, 'alias', 'id');
         }
         return $aliases;
+    }
+
+    /**
+     * Cut too long material names
+     * @return string|null
+     */
+    public function getShortName ()
+    {
+        $re = '/<[^>]*>/';
+        $shortText = preg_replace($re, ' ', $this->name);
+        if (strlen($shortText) < self::SHORT_NAME_LENGTH) {
+            return $shortText;
+        }
+        $shortText = substr($shortText, 0, self::SHORT_NAME_LENGTH);
+        $end = strlen(strrchr($shortText, ' '));
+        return substr($shortText, 0, -$end);
     }
 
     /**

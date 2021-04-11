@@ -2,8 +2,12 @@
 
 namespace app\controllers;
 
-use app\models\User;
 use Yii;
+use app\models\Material;
+use app\models\searchModels\MaterialSearch;
+use app\models\StockOperation;
+use app\models\User;
+use yii\widgets\ActiveForm;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
@@ -23,18 +27,20 @@ class SiteController extends Controller
                 'only' => ['index', 'logout'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'logout'],
+                        'actions' => ['index', 'logout', 'credit', 'validate-form'],
                         'allow' => true,
                         'roles' => ['@'],
-                    ],
-                ],
+                    ]
+                ]
             ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'logout' => ['post'],
-                ],
-            ],
+                    'validate-form' => ['post'],
+                    'credit' => ['post'],
+                ]
+            ]
         ];
     }
 
@@ -57,11 +63,50 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $material = null;
+        $stockOperation = null;
+        if ($id = Yii::$app->request->post('id')) {
+            $material = Material::findOne($id);
+            $stock_id = Yii::$app->request->post('stock_id');
+            if (empty($stock_id) && !empty($material->stocks[0])) {
+                $stock_id = $material->stocks[0]->id;
+            }
+            $stockOperation = new StockOperation([
+                'operation_type' => StockOperation::CREDIT_OPERATION,
+                'material_id' => $id,
+                'stock_id' => $stock_id
+            ]);
+        }
+        $searchModel = new MaterialSearch();
+        $queryParams = Yii::$app->request->queryParams;
+        $dataProvider = $searchModel->search($queryParams);
+
+        return $this->render('index', compact(
+            'searchModel', 'dataProvider', 'material', 'stockOperation'));
     }
 
     /**
-     * Login action.
+     *
+     */
+    public function actionCredit ()
+    {
+
+    }
+
+    /**
+     * Метод для Ajax-валидации формы
+     * @return array
+     */
+    public function actionValidateForm ()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $model = new StockOperation(['operation_type' => StockOperation::CREDIT_OPERATION]);
+        $model->load(Yii::$app->request->post());
+        return ActiveForm::validate($model);
+    }
+
+    /**
+     * Login action
      *
      * @return Response|string
      */

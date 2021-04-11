@@ -1,53 +1,102 @@
 <?php
 
 /* @var $this yii\web\View */
+/* @var $dataProvider \yii\data\ActiveDataProvider */
+/* @var $searchModel \app\models\searchModels\MaterialSearch */
+/* @var $material \app\models\Material | null */
+/* @var $stockOperation \app\models\StockOperation | null */
+
+use yii\bootstrap4\Html;
+use yii\grid\GridView;
+use yii\widgets\Pjax;
 
 $this->title = Yii::t('app', 'Inspection stock');
+
 ?>
-<div class="site-index">
-
-    <div class="jumbotron">
-        <h1>Congratulations!</h1>
-
-        <p class="lead">You have successfully created your Yii-powered application.</p>
-
-        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
+<div class="material-index" style="padding-top:1rem;">
+    <div class="action-buttons">
+        <h1><?= Html::encode($this->title) ?></h1>
     </div>
+    <?php Pjax::begin(['id' => 'site-index-pjax-container', 'enablePushState' => true]); ?>
 
-    <div class="body-content">
+    <?= GridView::widget([
+        'id' => 'site-index-grid-view',
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'tableOptions' => ['class' => 'table table-bordered'],
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+            [
+                'attribute' => 'ref',
+                'format' => 'raw',
+                'value' => function (\app\models\Material $model) {
+                    return Html::a($model->ref, Yii::$app->request->url, [
+                        'title' => Yii::t('app', 'Take') . ' ' . $model->shortName,
+                        'data' => [
+                            'method' => 'post',
+                            'pjax' => '1',
+                            'params' => ['id' => $model->id]
+                        ]
+                    ]);
+                }
+            ],
+            'name',
+            [
+                'attribute' => 'quantity',
+                'contentOptions' => ['class' => 'cell-quantity']
+            ],
+            'min_qty',
+            'max_qty',
+            [
+                'attribute' => 'unit',
+                'value' => function($model) {
+                    /* @var $model \app\models\Material */
+                    return $model->unitName;
+                },
+                'filter' => $searchModel->unitsList
+            ],
+            [
+                'attribute' => 'stockAliases',
+                'format' => 'raw',
+                'value' => function($model) {
+                    /* @var $model \app\models\Material */
+                    $result = '';
+                    foreach ($model->stockAliases as $id => $alias) {
+                        $quantity = round($model->getQuantity($id), 2);
+                        $result .= Html::a($alias,
+                                Yii::$app->request->url, [
+                            'title' => Yii::t('app', 'Take') . ' ' . $model->shortName .
+                                ' ' . Yii::t('app', 'from cell') . ' ' . $alias .
+                                ' ( ' . Yii::t('app', 'rest') .
+                                $quantity . ' ' . $model->unitName . ' )',
+                            'data' => [
+                                'method' => 'post',
+                                'pjax' => '1',
+                                'params' => ['id' => $model->id, 'stock_id' => $id]
+                            ]
+                        ]) . '<br>';
+                    }
+                    return rtrim($result, ', ');
+                },
+                'filter' => $searchModel->stockAliasesFilter
+            ],
+            'type',
+            'group',
+            //'created_at',
+            //'updated_at',
+            //'created_by',
+            //'updated_by',
+         ],
+        'rowOptions' => function ($model, $index, $widget, $grid){
+            /** @var $model \app\models\Material */
+            return $model->quantity <= $model->min_qty ? ['class' => 'low-quantity'] : [];
+        }
+    ]);
+    ?>
 
-        <div class="row">
-            <div class="col-lg-4">
-                <h2>Heading</h2>
+    <?php if ($material instanceof \app\models\Material) : ?>
+        <?= $this->render('_form', compact('material', 'stockOperation')) ?>
+    <?php endif; ?>
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
-            </div>
-        </div>
-
-    </div>
+    <?php Pjax::end(); ?>
 </div>
