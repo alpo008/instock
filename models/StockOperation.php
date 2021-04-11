@@ -84,6 +84,12 @@ class StockOperation extends \yii\db\ActiveRecord
         if ((int)$this->operation_type !== self::CORRECTION_OPERATION && $this->qty < 1) {
             $this->addError('qty', Yii::t('app', 'Quantity can not be less than') . ' 1');
         }
+
+        $fractional = [Material::UNIT_KG, Material::UNIT_METERS];
+
+        if (is_numeric($this->qty) && floor($this->qty) != $this->qty && !in_array($this->material->unit, $fractional)) {
+            $this->addError('qty', Yii::t('app', 'For this material quantity can be only integer'));
+        }
     }
 
     /**

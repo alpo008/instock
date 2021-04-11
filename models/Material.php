@@ -42,6 +42,12 @@ class Material extends \yii\db\ActiveRecord
 
     const SHORT_NAME_LENGTH = 37;
 
+    const UNIT_UNDEFINED = 0;
+    const UNIT_PCS = 1;
+    const UNIT_METERS = 2;
+    const UNIT_PAIRS = 3;
+    const UNIT_KG = 4;
+
     public $photo;
 
     /**
@@ -183,11 +189,11 @@ class Material extends \yii\db\ActiveRecord
     public function getUnitsList ()
     {
         return [
-            0 => Yii::t('app', '?'),
-            1 => Yii::t('app', 'Pcs'),
-            2 => Yii::t('app', 'Meters'),
-            3 => Yii::t('app', 'Pairs'),
-            4 => Yii::t('app', 'Kg'),
+            self::UNIT_UNDEFINED => Yii::t('app', '?'),
+            self::UNIT_PCS => Yii::t('app', 'Pcs'),
+            self::UNIT_METERS => Yii::t('app', 'Meters'),
+            self::UNIT_PAIRS => Yii::t('app', 'Pairs'),
+            self::UNIT_KG => Yii::t('app', 'Kg'),
         ];
     }
 

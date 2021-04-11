@@ -75,6 +75,7 @@ return [
     'from cell' => 'из ячейки',
     'File' => 'Файл',
     'Fill only if you want to change old one' => 'Заполняется только в случае изменения старого пароля',
+    'For this material quantity can be only integer' => 'Для данного материала дробные количества неприменимы',
     'From where' => 'Откуда',
     'Full name' => 'Полное имя',
     'Greater than max quantity' => 'Больше максимального',
