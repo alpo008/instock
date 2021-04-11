@@ -160,6 +160,7 @@ return [
     'Table' => 'Таблица',
     'Take' => 'Взять',
     'There are no urgent messages' => 'Срочных сообщений нет',
+    'The rest is only {max} at stock place' => 'Из данной ячейки можно взять не более {max} единиц',
     'To where' => 'Куда',
     'Type' => 'Тип',
     'Unit' => 'Единица измерения',

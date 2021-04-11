@@ -42,7 +42,9 @@ $(document).ready(() => {
           <?php $form = ActiveForm::begin([
               'id' => 'stock-operations-modal-form',
               'action' => ['credit'],
-              'enableAjaxValidation'=>true,
+              'enableAjaxValidation'=> true,
+              'validateOnChange' => true,
+              'enableClientValidation'=> false,
               'validationUrl' => ['validate-form'],
               'layout' => 'horizontal',
               'fieldConfig' => [
@@ -57,10 +59,15 @@ $(document).ready(() => {
               ],
           ]); ?>
 
+          <?= $form->field($stockOperation, 'operation_type')->hiddenInput()->label(false) ?>
+
           <?= $form->field($stockOperation, 'material_id')->hiddenInput()->label(false) ?>
 
           <?= $form->field($stockOperation, 'stock_id')->dropdownList($material->stockAliases , [
-              'readonly' => count($material->stockAliases) === 1
+              'readonly' => count($material->stockAliases) === 1,
+              'onchange' => new \yii\web\JsExpression('
+                $("#stockoperation-qty").val(null);
+              ')
           ]) ?>
 
           <?= $form->field($stockOperation, 'qty')->textInput(['maxlength' => true]) ?>

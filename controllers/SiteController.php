@@ -7,7 +7,7 @@ use app\models\Material;
 use app\models\searchModels\MaterialSearch;
 use app\models\StockOperation;
 use app\models\User;
-use yii\widgets\ActiveForm;
+use yii\helpers\Html;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
@@ -100,9 +100,22 @@ class SiteController extends Controller
     public function actionValidateForm ()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $model = new StockOperation(['operation_type' => StockOperation::CREDIT_OPERATION]);
+        $result = [];
+        $model = new StockOperation();
         $model->load(Yii::$app->request->post());
-        return ActiveForm::validate($model);
+        $model->validate();
+        if ($model->material instanceof Material && !empty($model->qty)) {
+            $max = $model->material->getQuantity($model->stock_id);
+            if ($model->qty > $max) {
+                $model->addError('qty',
+                    Yii::t('app', 'The rest is only {max} at stock place', compact('max'))
+                );
+            }
+        }
+        foreach ($model->errors as $attribute => $errors) {
+            $result[Html::getInputId($model, $attribute)] = $errors;
+        }
+        return $result;
     }
 
     /**
