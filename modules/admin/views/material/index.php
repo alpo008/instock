@@ -80,11 +80,12 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]),
                     ]);
                 },
-                'contentOptions' => ['class' => 'cell-editable'],
+                'contentOptions' => ['class' => 'cell-editable']
             ],
             [
                 'attribute' => 'quantity',
-                'filter' => $searchModel->quantityFilter
+                'filter' => $searchModel->quantityFilter,
+                'contentOptions' => ['class' => 'cell-quantity']
             ],
             [
                 'attribute' => 'min_qty',
@@ -247,7 +248,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         'rowOptions' => function ($model, $index, $widget, $grid){
             /** @var $model \app\models\Material */
-            return $model->quantity < $model->min_qty ? ['class' => 'low-quantity'] : [];
+            return $model->quantity <= $model->min_qty ? ['class' => 'low-quantity'] : [];
         }
     ]); ?>
 

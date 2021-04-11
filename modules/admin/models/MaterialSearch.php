@@ -112,13 +112,15 @@ class MaterialSearch extends Material
 
         switch ($this->quantity) {
             case self::LESS_THAN_MIN_QTY:
-                $query->having('COALESCE(SUM({{%materials_stocks}}.qty), 0) < {{%materials}}.min_qty');
+                $query->having('COALESCE(SUM({{%materials_stocks}}.qty), 0) <= COALESCE({{%materials}}.min_qty, 0)');
             break;
             case self::GREATER_THAN_MAX_QTY:
                 $query->having('SUM({{%materials_stocks}}.qty) > {{%materials}}.max_qty');
             break;
             case self::QTY_IN_RANGE:
-                $query->having('COALESCE(SUM({{%materials_stocks}}.qty), 0) BETWEEN {{%materials}}.min_qty AND {{%materials}}.max_qty');
+                $query->having('COALESCE(SUM({{%materials_stocks}}.qty), 0) > COALESCE({{%materials}}.min_qty, 0) 
+                    AND COALESCE(SUM({{%materials_stocks}}.qty), 0) < COALESCE({{%materials}}.max_qty, 1)
+                ');
             break;
         }
 

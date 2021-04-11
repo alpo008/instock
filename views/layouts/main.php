@@ -43,10 +43,10 @@ $user = Yii::$app->user->identity;
             </div>
 
             <ul class="list-unstyled components">
-                <li  class="<?= Url::to(['/']) === $currentUrl ? 'active' : ''?>">
-                    <?= Html::a(mb_strtoupper(Yii::t('app', 'Main')), Yii::$app->homeUrl) ?>
-                </li>
                 <?php if (Yii::$app->user->isGuest) : ?>
+                    <li  class="<?= Url::to(['/']) === $currentUrl ? 'active' : ''?>">
+                        <?= Html::a(mb_strtoupper(Yii::t('app', 'Main')), Yii::$app->homeUrl) ?>
+                    </li>
                     <li class="<?= Url::to(['/login']) === $currentUrl ? 'active' : ''?>">
                         <?= Html::a(Yii::t('app', 'Login'), ['/login'], [
                                 'class' => Url::to(['/login']) === $currentUrl ? 'active' : ''
@@ -54,6 +54,9 @@ $user = Yii::$app->user->identity;
                     </li>
                 <?php else: ?>
                     <?php if ($user->role === \app\models\User::ROLE_ADMIN) : ?>
+                        <li  class="<?= Url::to(['/']) === $currentUrl ? 'active' : ''?>">
+                            <?= Html::a(mb_strtoupper(Yii::t('app', 'Main')), ['/admin']) ?>
+                        </li>
                         <li class="<?= strpos($currentUrl, Url::to(['/admin/user'])) !== false ? 'active' : '' ?>">
                             <?= Html::a(Yii::t('app', 'Users'), ['/admin/user']) ?>
                         </li>

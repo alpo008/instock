@@ -30,6 +30,7 @@ return [
     'Add stock place' => 'Добавить складское место',
     'Add user' => 'Добавить пользователя',
     'Alias' => 'Обозначение',
+    'Admin page' => 'Страница администратора',
     'An internal server error occurred.' => 'Возникла внутренняя ошибка сервера.',
     'Are you sure you want to block this user' => 'Вы уверены, что хотите заблокировать данного пользователя',
     'Are you sure you want to delete this item?' => 'Вы уверены, что хотите удалить этот элемент?',
@@ -154,6 +155,7 @@ return [
     'Sum database and file values' => 'Суммировать количества из БД и из файла',
     'Surname' => 'Фамилия',
     'Table' => 'Таблица',
+    'There are no urgent messages' => 'Срочных сообщений нет',
     'To where' => 'Куда',
     'Type' => 'Тип',
     'Unit' => 'Единица измерения',
@@ -168,5 +170,6 @@ return [
     'User with role {role} will be restored' => 'Пользователь будет восстановлен с ролью {role}',
     'User name' => 'Имя пользователя',
     'View' => 'Просмотр',
-    'View material' => 'Просмотр материала'
+    'View material' => 'Просмотр материала',
+    'View urgent messages' => 'Просмотр срочных сообщений'
 ];

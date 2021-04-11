@@ -416,6 +416,20 @@ a.desc:after {
     left: -10px;
 }
 
+.link-urgent {
+    color: #ab6767;
+}
+
+.link-urgent:hover {
+    color: #ab6767;
+}
+
+/* Admin main page */
+
+.admin-default-index {
+    padding-top: 1rem;
+}
+
 /* JQuery UI components */
 
 .ui-autocomplete-input {
@@ -537,7 +551,7 @@ a.desc:after {
     background-color: transparent;
 }
 
-.material-index tr.low-quantity {
+.material-index tr.low-quantity > .cell-quantity {
     background-color: #ffb6a5;
 }
 

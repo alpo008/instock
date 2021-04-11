@@ -1,12 +1,29 @@
+<?php
+
+use yii\helpers\Html;
+
+
+/* @var $this yii\web\View */
+/* @var $urgent integer | null */
+
+$this->title = Yii::t('app', 'Admin page');
+
+?>
 <div class="admin-default-index">
-    <h1><?= $this->context->action->uniqueId ?></h1>
-    <p>
-        This is the view content for action "<?= $this->context->action->id ?>".
-        The action belongs to the controller "<?= get_class($this->context) ?>"
-        in the "<?= $this->context->module->id ?>" module.
-    </p>
-    <p>
-        You may customize this page by editing the following file:<br>
-        <code><?= __FILE__ ?></code>
-    </p>
+    <div class="action-buttons">
+        <h1><?= Html::encode($this->title) ?></h1>
+    </div>
+    <?php if(!empty($urgent)) : ?>
+        <div class="alert alert-danger" role="alert">
+            <?= Html::a(Yii::t('app', 'View urgent messages') . ' (' . $urgent . ')', [
+                '/admin/material',
+                'MaterialSearch[quantity]' => \app\modules\admin\models\MaterialSearch::LESS_THAN_MIN_QTY,
+                'sort' => '-quantity',
+            ], ['class' => 'link-urgent']) ?>
+        </div>
+    <?php else: ?>
+        <div class="alert alert-success" role="alert">
+            <?= Yii::t('app', 'There are no urgent messages') ?>
+        </div>
+    <?php endif; ?>
 </div>
