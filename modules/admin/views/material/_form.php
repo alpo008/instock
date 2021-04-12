@@ -11,10 +11,6 @@ use rmrevin\yii\fontawesome\FAS;
 
 $photoPath = !empty($model->photoPath) ? $model->photoPath : '@web/icons/solid/no-photo.svg';
 
-/*$this->registerJs(
-    file_get_contents(Yii::getAlias('@admin/views/material/') . '_form.js'),
-    $this::POS_END
-);*/
 ?>
 
 <div class="material-form">

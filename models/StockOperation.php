@@ -81,8 +81,8 @@ class StockOperation extends \yii\db\ActiveRecord
         if ((int)$this->operation_type === self::CORRECTION_OPERATION && $this->qty < 0) {
             $this->addError('qty', Yii::t('app', 'Quantity can not be less than') . ' 0');
         }
-        if ((int)$this->operation_type !== self::CORRECTION_OPERATION && $this->qty < 1) {
-            $this->addError('qty', Yii::t('app', 'Quantity can not be less than') . ' 1');
+        if ((int)$this->operation_type !== self::CORRECTION_OPERATION && $this->qty <= 0) {
+            $this->addError('qty', Yii::t('app', 'Quantity can not be less than') . ' 0');
         }
 
         $fractional = [Material::UNIT_KG, Material::UNIT_METERS];
@@ -161,7 +161,7 @@ class StockOperation extends \yii\db\ActiveRecord
         $transaction = Yii::$app->db->beginTransaction();
         $result = parent::beforeSave($insert);
         try {
-            if (!$materialStock->isNewRecord && $materialStock->qty === '0') {
+            if (!$materialStock->isNewRecord && $materialStock->qty == 0) {
                 $result &= !!$materialStock->delete();
             } elseif ($materialStock->qty > 0) {
                 $result &= $materialStock->save();

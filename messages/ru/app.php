@@ -76,6 +76,8 @@ return [
     'File' => 'Файл',
     'Fill only if you want to change old one' => 'Заполняется только в случае изменения старого пароля',
     'For this material quantity can be only integer' => 'Для данного материала дробные количества неприменимы',
+    'From stock place {stock} were taken {qty} of material {material}' =>
+        'Со складского места {stock} был взят материал "{material}" в количестве {qty}',
     'From where' => 'Откуда',
     'Full name' => 'Полное имя',
     'Greater than max quantity' => 'Больше максимального',
@@ -121,6 +123,8 @@ return [
     'No group' => 'Без группы',
     'Not set' => 'Не задано',
     'Only excel files are allowed' => 'Только файл в формате Excel',
+    'Operation error. Please contact administrator' =>
+        'Ошибка при выполнении операции. Пожалуйста, сообщите об этом администратору',
     'Pairs' => 'Пар',
     'Operations' => 'Операции',
     'Operation details' => 'Подробности операции',

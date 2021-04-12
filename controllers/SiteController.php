@@ -24,7 +24,7 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'logout'],
+                'only' => ['index', 'logout', 'credit', 'validate-form'],
                 'rules' => [
                     [
                         'actions' => ['index', 'logout', 'credit', 'validate-form'],
@@ -86,11 +86,29 @@ class SiteController extends Controller
     }
 
     /**
-     *
+     * @return array
      */
     public function actionCredit ()
     {
-
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $status = 400;
+        $code = 'NOK';
+        $message = Yii::t('app', 'Operation error. Please contact administrator');
+        $model = new StockOperation([
+            'operation_type' => StockOperation::CREDIT_OPERATION,
+        ]);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $status = 200;
+            $code = 'OK';
+            $message = Yii::t('app', 'From stock place {stock} were taken {qty} of material {material}',
+                [
+                    'stock' => $model->stock->alias,
+                    'qty' => $model->qty . ' ' . $model->material->unitName,
+                    'material' => $model->material->name
+                ]
+            );
+        }
+        return compact('status', 'code', 'message');
     }
 
     /**
@@ -101,7 +119,7 @@ class SiteController extends Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $result = [];
-        $model = new StockOperation();
+        $model = new StockOperation(['operation_type' => StockOperation::CREDIT_OPERATION]);
         $model->load(Yii::$app->request->post());
         $model->validate();
         foreach ($model->errors as $attribute => $errors) {

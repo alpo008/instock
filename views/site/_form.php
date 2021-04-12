@@ -8,12 +8,6 @@ use rmrevin\yii\fontawesome\FAS;
 /* @var $material \app\models\Material | null */
 /* @var $stockOperation \app\models\StockOperation | null */
 
-$this->registerJs(/** @lang JavaScript */ '
-$(document).ready(() => {
-    $("#modalMaterialOperationForm").modal("show");
-});
-');
-
 ?>
 <!-- Modal -->
 <div class="modal fade"
@@ -58,8 +52,6 @@ $(document).ready(() => {
                   ],
               ],
           ]); ?>
-
-          <?= $form->field($stockOperation, 'operation_type')->hiddenInput()->label(false) ?>
 
           <?= $form->field($stockOperation, 'material_id')->hiddenInput()->label(false) ?>
 
