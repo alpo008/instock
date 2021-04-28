@@ -189,10 +189,8 @@ class MaterialController extends Controller
         $queryParams = Yii::$app->cache->get($this->getQueryCacheKey());
         $dataProvider = $searchModel->search($queryParams);
         $query = clone $dataProvider->query;
-        //$dataProvider->setPagination(false);
         if (!empty($queryParams['sort'])) {
             $models = $searchModel->getSortedModels($query, $queryParams['sort']);
-            $dataProvider->setSort(['defaultOrder' => $exportModel->parseSortParam($queryParams['sort'])]);
         } else {
             $models = $dataProvider->models;
         }

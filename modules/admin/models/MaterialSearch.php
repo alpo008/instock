@@ -6,7 +6,6 @@ use app\models\Stock;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Material;
-use yii\db\ActiveQuery;
 use yii\db\QueryInterface;
 
 /**
