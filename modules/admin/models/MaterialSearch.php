@@ -6,6 +6,8 @@ use app\models\Stock;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Material;
+use yii\db\ActiveQuery;
+use yii\db\QueryInterface;
 
 /**
  * MaterialSearch represents the model behind the search form of `app\models\Material`.
@@ -76,8 +78,8 @@ class MaterialSearch extends Material
                     'desc' => ['SUM({{%materials_stocks}}.qty)' => SORT_DESC],
                 ],
                 'stockAliases' => [
-                    'asc' => ['SUM({{%stocks}}.alias)' => SORT_DESC],
-                    'desc' => ['SUM({{%stocks}}.alias)' => SORT_ASC],
+                    'asc' => ['COUNT({{%stocks}}.alias)' => SORT_ASC],
+                    'desc' => ['COUNT({{%stocks}}.alias)' => SORT_DESC],
                 ]
             ]
         ]);
@@ -150,5 +152,31 @@ class MaterialSearch extends Material
             $aliasesFilter = array_column($stocks, 'alias', 'alias');
         }
         return $aliasesFilter;
+    }
+
+    /**
+     * @param QueryInterface $query
+     * @param string $sort
+     * @return array|Material[]
+     */
+    public function getSortedModels(QueryInterface $query, string $sort)
+    {
+        if (is_string($sort)) {
+            if (strpos($sort, '-') !== false) {
+                $attribute = trim($sort, ' -');
+                $direction = SORT_DESC;
+            } else {
+                $attribute = trim($sort);
+                $direction = SORT_ASC;
+            }
+            if ($attribute === 'quantity') {
+                return $query->orderBy(['SUM({{%materials_stocks}}.qty)' => $direction])->all();
+            }
+            if ($attribute === 'stockAliases') {
+                return $query->orderBy(['COUNT({{%stocks}}.alias)' => $direction])->all();
+            }
+            return $query->orderBy([$attribute => $direction])-> all();
+        }
+        return [];
     }
 }

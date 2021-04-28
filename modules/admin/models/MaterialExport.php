@@ -27,10 +27,9 @@ class MaterialExport extends Material
      * @return PHPExcel
      * @throws \PHPExcel_Exception
      */
-    public function makeExcel ($dataProvider)
+    public function makeExcel ($materials)
     {
         $attributes = $this->columns();
-        $materials = $dataProvider->models;
         $phpExcel = new PHPExcel();
         $phpExcel->setActiveSheetIndex(0);
         $column = 0;
@@ -65,27 +64,5 @@ class MaterialExport extends Material
             $column = 0;
         }
         return $phpExcel;
-    }
-
-    /**
-     * Костыль, конечно TODO
-     * @param string $param
-     * @return array
-     */
-    public function parseSortParam ($param)
-    {
-        if (is_string($param)) {
-            if (strpos($param, '-') !== false) {
-                $direction = SORT_DESC;
-                $param = trim($param, ' -');
-            } else {
-                $direction = SORT_ASC;
-                $param = trim($param);
-            }
-            return [$param => $direction];
-        }
-        else {
-            return [];
-        }
     }
 }
