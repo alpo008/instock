@@ -52,6 +52,14 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
     }
 
     /**
+     * Primary key
+     */
+    public static function primaryKey()
+    {
+        return ['id'];
+    }
+
+    /**
      * @inheritdoc
      */
     public function rules()
@@ -156,7 +164,7 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
      */
     public function getId()
     {
-        return $this->primaryKey;
+        return $this->id;
     }
 
     /**

@@ -59,10 +59,14 @@ class SiteController extends Controller
     /**
      * Displays homepage.
      *
-     * @return string
+     * @return string|Response
      */
     public function actionIndex()
     {
+        $user = Yii::$app->user->identity;
+        if ($user instanceof User && $user->role === User::ROLE_ADMIN) {
+            return $this->response->redirect(['/admin']);
+        }
         $material = null;
         $stockOperation = null;
         if ($id = Yii::$app->request->post('id')) {
