@@ -6,6 +6,7 @@ use Yii;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\web\UploadedFile;
+use app\custom\FileStorage;
 
 /**
  * This is the model class for table "materials".
@@ -34,11 +35,14 @@ use yii\web\UploadedFile;
  * @property string $photoPath
  * @property array $stockAliases
  * @property string $shortName
+ * @property array $groupsList
  */
 class Material extends \yii\db\ActiveRecord
 {
     const PHOTOS_PATH = '@app/web/images/materials/';
     const PHOTOS_EXTENSIONS = ['jpg', 'png', 'jpeg'];
+
+    const GROUPS_LIST_STORAGE = 'material_groups_list';
 
     const SHORT_NAME_LENGTH = 37;
 
@@ -206,6 +210,15 @@ class Material extends \yii\db\ActiveRecord
         return !empty($this->unitsList[$this->unit]) ?
             $this->unitsList[$this->unit] :
             $this->unitsList[0];
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getGroupsList()
+    {
+        $fileStorage = new FileStorage();
+        return $fileStorage->getContent(self::GROUPS_LIST_STORAGE);
     }
 
     /**

@@ -80,8 +80,9 @@ return [
         'Со складского места {stock} был взят материал "{material}" в количестве {qty}',
     'From where' => 'Откуда',
     'Full name' => 'Полное имя',
+    'General purpose' => 'Общего назначения',
     'Greater than max quantity' => 'Больше максимального',
-    'Group' => 'Группа',
+    'Group' => 'Машина',
     'History' => 'История',
     'How many' => 'Сколько единиц',
     'Ignore first row' => 'Игнорировать первую строку',
@@ -182,5 +183,6 @@ return [
     'User name' => 'Имя пользователя',
     'View' => 'Просмотр',
     'View material' => 'Просмотр материала',
-    'View urgent messages' => 'Просмотр срочных сообщений'
+    'View urgent messages' => 'Просмотр срочных сообщений',
+    'View warning messages' => 'Просмотр предупреждений',
 ];

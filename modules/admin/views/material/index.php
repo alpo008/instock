@@ -83,6 +83,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'contentOptions' => ['class' => 'cell-editable']
             ],
             [
+                'attribute' => 'group',
+                'filter' => $searchModel->groupsList,
+                //'contentOptions' => ['class' => 'cell-quantity']
+            ],
+            [
                 'attribute' => 'quantity',
                 'filter' => $searchModel->quantityFilter,
                 'contentOptions' => ['class' => 'cell-quantity']

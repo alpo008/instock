@@ -21,6 +21,11 @@ class DefaultController extends Controller
             ->joinWith('stocks')
             ->having('COALESCE(SUM({{%materials_stocks}}.qty), 0) <= COALESCE({{%materials}}.min_qty, 0)')
             ->count();
-        return $this->render('index', compact('urgent'));
+        $warning = Material::find()->joinWith(['materialsStocks'])
+            ->groupBy(['materials.ref'])
+            ->joinWith('stocks')
+            ->having('COALESCE(SUM({{%materials_stocks}}.qty), 0) > COALESCE({{%materials}}.max_qty, 0)')
+            ->count();
+        return $this->render('index', compact('urgent', 'warning'));
     }
 }

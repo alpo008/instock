@@ -310,7 +310,7 @@ a.desc:after {
 }
 
 .grid-view td select {
-    width: fit-content;
+    width: 100%;
 }
 
 .action-buttons {
@@ -552,6 +552,7 @@ a.desc:after {
 }
 
 .material-index tr.low-quantity > .cell-quantity {
+    max-width: 60px;
     background-color: #ffb6a5;
 }
 

@@ -5,6 +5,7 @@ use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $urgent integer | null */
+/* @var $warning integer | null */
 
 $this->title = Yii::t('app', 'Admin page');
 
@@ -24,6 +25,15 @@ $this->title = Yii::t('app', 'Admin page');
     <?php else: ?>
         <div class="alert alert-success" role="alert">
             <?= Yii::t('app', 'There are no urgent messages') ?>
+        </div>
+    <?php endif; ?>
+    <?php if(!empty($warning)) : ?>
+        <div class="alert alert-warning" role="alert">
+            <?= Html::a(Yii::t('app', 'View warning messages') . ' (' . $warning . ')', [
+                '/admin/material',
+                'MaterialSearch[quantity]' => \app\modules\admin\models\MaterialSearch::GREATER_THAN_MAX_QTY,
+                'sort' => '-quantity',
+            ], ['class' => 'link-urgent']) ?>
         </div>
     <?php endif; ?>
 </div>

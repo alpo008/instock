@@ -45,7 +45,7 @@ $photoPath = !empty($model->photoPath) ? $model->photoPath : '@web/icons/solid/n
 
     <?= $form->field($model, 'type')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'group')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'group')->dropDownList($model->groupsList) ?>
 
     <?= $form->field($model, 'photo', [ 'options' => ['style' => 'display:none;']])->fileInput() ?>
 

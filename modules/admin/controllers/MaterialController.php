@@ -192,6 +192,7 @@ class MaterialController extends Controller
         if (!empty($queryParams['sort'])) {
             $models = $searchModel->getSortedModels($query, $queryParams['sort']);
         } else {
+            $dataProvider->setPagination(false);
             $models = $dataProvider->models;
         }
         $phpExcel = $exportModel->makeExcel($models);
