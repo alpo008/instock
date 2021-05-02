@@ -297,7 +297,7 @@ a.desc:after {
     background-image: url("../icons/solid/sort-alpha-down-alt.svg");
 }
 
-.grid-view th a, .grid-view td a {
+.grid-view th a, .grid-view td a, .settings-form td > a {
     color: #7386d5;
 }
 
@@ -305,7 +305,7 @@ a.desc:after {
     color: #4159a3;
 }
 
-.grid-view th a:hover, .grid-view td a:hover, .relations-list td > a:hover {
+.grid-view th a:hover, .grid-view td a:hover, .relations-list td > a:hover, .settings-form td > a:hover {
     color: #4159a3;
 }
 
@@ -573,6 +573,11 @@ a.desc:after {
     left: -10px;
 }
 
+/* Settings forms */
+
+.settings-form .form-group {
+    margin-bottom: 0;
+}
 /* Common */
 
 .of-auto {
