@@ -6,6 +6,7 @@ namespace app\widgets;
 
 use app\models\User;
 use Yii;
+use yii\bootstrap4\Html;
 
 /**
  * Class Menu
@@ -38,7 +39,9 @@ class Menu extends \yii\widgets\Menu
             }
 
             $route = ltrim($route, '/');
-
+            if ($route === $this->route) {
+                return true;
+            }
             if ($route === 'login' && $this->route === 'site/login') {
                 return true;
             }
@@ -78,7 +81,19 @@ class Menu extends \yii\widgets\Menu
                 ['label' => Yii::t('app', 'Users'), 'url' => ['/admin/user']],
                 ['label' => Yii::t('app', 'Materials'), 'url' => ['/admin/material']],
                 ['label' => Yii::t('app', 'Stock places'), 'url' => ['/admin/stock']],
-                ['label' => Yii::t('app', 'Operations'), 'url' => ['/admin/stock-operation']]
+                ['label' => Yii::t('app', 'Operations'), 'url' => ['/admin/stock-operation']],
+                [ 'label' => Html::a(Yii::t('app', 'Settings'), '#settingsSubmenu', [
+                    'data-toggle' => 'collapse',
+                    'aria-expanded' => 'false',
+                    'class' => 'dropdown-toggle',
+                ]),
+                    'options' => ['class' => 'dropdown'],
+                    'items' => [
+                        ['label' => Yii::t('app', 'Materials export'), 'url' => ['/admin/settings/material-export-format']],
+                        ['label' => Yii::t('app', 'Groups'), 'url' => ['/admin/settings/material-groups']],
+                    ],
+                    'submenuTemplate' => "\n<ul class='collapse list-unstyled' id='settingsSubmenu'>\n{items}\n</ul>\n"
+                ]
             ];
         }
         return [];

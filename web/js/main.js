@@ -2,15 +2,23 @@
 const SideNav = {
     $sidebar: {},
     $switch: {},
+    $activeSubmenuItem: {},
     init() {
         this.$sidebar = $(document).find('#sidebar');
         this.$switch = $(document).find('#sidebarCollapse');
+        this.$activeSubmenuItem = $(document).find('.dropdown li.active');
         if (typeof this.$sidebar === 'object') {
             this.$switch.on('click',(e) => {
                 e.preventDefault();
                 this.$sidebar.toggleClass('active');
                 this.$switch.toggleClass('navbar-collapsed');
             });
+        }
+        if (this.$activeSubmenuItem.length) {
+            let $submenuSwitch = this.$activeSubmenuItem.closest('.dropdown').find('.dropdown-toggle');
+            if ($submenuSwitch.length) {
+                $submenuSwitch.trigger('click');
+            }
         }
     }
 };

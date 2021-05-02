@@ -29,8 +29,8 @@ $photoPath = !empty($model->photoPath) ? $model->photoPath : '@web/icons/solid/n
                 'wrapper' => 'col-sm-8',
                 'error' => '',
                 'hint' => '',
-            ],
-        ],
+            ]
+        ]
     ]); ?>
 
     <?= $form->field($model, 'ref')->textInput() ?>

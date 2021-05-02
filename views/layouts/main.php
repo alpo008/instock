@@ -8,6 +8,7 @@
 use app\widgets\Alert;
 use app\widgets\Menu;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 
@@ -42,6 +43,7 @@ $user = Yii::$app->user->identity;
 
             <?= Menu::widget([
                 'options' => ['class' => 'list-unstyled components'],
+                'encodeLabels' => false
             ]); ?>
             <?php if (!Yii::$app->user->isGuest) : ?>
                 <ul class="list-unstyled">
