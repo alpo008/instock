@@ -342,14 +342,45 @@ const CreditOperation = {
     }
 }
 
+const PhotoPopup = {
+    $thumbs : {},
+
+    init () {
+        this.$thumbs =  $(document).find('.img-material.in-grid');
+        if (this.$thumbs.length) {
+            this.$thumbs.off('click').on('click', (e) => {
+                let $popup = $(e.currentTarget).siblings('.material-photo-popup');
+                this.hidePopups();
+                if ($popup.length) {
+                    $popup.addClass('show');
+                }
+            });
+            $(window).off('click').on('click', (e) => {
+                if(!($(e.target).hasClass('img-material') && $(e.target).hasClass('in-grid'))) {
+                    this.hidePopups();
+                }
+            });
+        }
+    },
+
+    hidePopups () {
+        let $shownPopups = $(document).find(".material-photo-popup.show");
+        if ($shownPopups.length) {
+            $shownPopups.removeClass('show');
+        }
+    }
+}
+
 $(document).ready(() => {
     SideNav.init();
     FileInput.init();
     CellEditable.init();
     MaterialImport.init();
     CreditOperation.init();
+    PhotoPopup.init();
 });
 
 $(document).on('pjax:complete', (e) => {
     CellEditable.init();
+    PhotoPopup.init();
 })

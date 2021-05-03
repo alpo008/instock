@@ -13,6 +13,7 @@ use rmrevin\yii\fontawesome\FAS;
 
 $this->title = Yii::t('app', 'Materials');
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="material-index">
 
@@ -50,6 +51,21 @@ $this->params['breadcrumbs'][] = $this->title;
         'tableOptions' => ['class' => 'table table-bordered'],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
+            [
+                'label' => Yii::t('app', 'Photo'),
+                'format' => 'raw',
+                'value' => function (\app\models\Material $model) {
+                    if (!empty($model->photoPath)) {
+                        return Html::img($model->photoPath, ['class' => 'img-material in-grid']) .
+                            Html::beginTag('div', ['class' => 'material-photo-popup']) .
+                            Html::img($model->photoPath, /*['width' => 400]*/) .
+                            Html::endTag('div')
+                            ;
+                    } else {
+                        return null;
+                    }
+                }
+            ],
             [
                 'attribute' => 'ref',
                 'format' => 'raw',

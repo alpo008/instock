@@ -416,6 +416,40 @@ a.desc:after {
     left: -10px;
 }
 
+.img-material.in-grid {
+    width: 100px;
+    cursor: zoom-in;
+}
+
+.material-photo-popup {
+    position: absolute;
+    left: 0;
+    padding: 0;
+}
+
+.material-photo-popup img {
+    width: 0;
+}
+
+.material-photo-popup.show {
+    display: block;
+    cursor: zoom-out;
+    padding: 5px 5px 20px 5px;
+    border: 1px solid darkgray;
+    top: 10px;
+    left: calc(50vw - 100px);
+    box-shadow: 2px 2px 2px #7386d5;
+    background-color: #f0f0f0;
+    z-index: 2;
+    transition: left 1s;
+}
+
+.material-photo-popup.show img {
+    box-shadow: inset 3px 3px 3px #000;
+    transition: 1s;
+    width: 400px;
+}
+
 .link-urgent {
     color: #ab6767;
 }
