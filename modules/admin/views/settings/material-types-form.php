@@ -1,32 +1,33 @@
 <?php
 
 /* @var $this yii\web\View */
-/* @var $materialGroups array */
+/* @var $materialTypes array */
 
 use yii\bootstrap4\Html;
 use rmrevin\yii\fontawesome\FAS;
 use yii\widgets\Pjax;
 
-$this->title = Yii::t('app', 'Groups');
+$this->title = Yii::t('app', 'Materials types');
 $this->params['breadcrumbs'][] = Yii::t('app', 'Settings') . ' > ' . $this->title;
 
-Pjax::begin(['id' => 'settings-groups-pjax-container']) ?>
+Pjax::begin(['id' => 'settings-types-pjax-container'])
+?>
 
 <div class="action-buttons">
-    <h1><?= Yii::t('app', 'Materials groups list edition') ?></h1>
+    <h1><?= Yii::t('app', 'Materials types list edition') ?></h1>
 </div>
-<?= Html::beginForm(['settings/material-groups'], 'post', [
-    'id' => 'settings-groups-form',
+<?= Html::beginForm(['settings/material-types'], 'post', [
+    'id' => 'settings-types-form',
     'class' => 'settings-form',
     'data-pjax' => '1'
 ]) ?>
     <table class="table table-borderless">
-        <?php if (!empty($materialGroups) && is_array($materialGroups)) : ?>
-            <?php foreach ($materialGroups as $materialGroup) : ?>
+        <?php if (!empty($materialTypes) && is_array($materialTypes)) : ?>
+            <?php foreach ($materialTypes as $materialType) : ?>
                 <tr>
                     <td>
                         <div class="form-group">
-                            <?= Html::textInput("materialGroups[$materialGroup]", $materialGroup, [
+                            <?= Html::textInput("materialTypes[$materialType]", $materialType, [
                                 'class' => 'form-control',
                                 'maxlength' => 32
                             ]) ?>
@@ -35,17 +36,17 @@ Pjax::begin(['id' => 'settings-groups-pjax-container']) ?>
                     <td>
                         <?= Html::a(
                                 FAS::icon('trash-alt'),
-                                ['settings/material-groups'],
+                                ['settings/material-types'],
                                 [
                                     'data' => [
                                         'pjax' => '1',
                                         'method' => 'post',
                                         'params' => [
                                             'action' => 'delete',
-                                            'group' => $materialGroup
+                                            'group' => $materialType
                                         ]
                                     ],
-                                    'title' => Yii::t('app', 'Delete group')
+                                    'title' => Yii::t('app', 'Delete type')
                                 ]
                             );
                         ?>
@@ -56,9 +57,9 @@ Pjax::begin(['id' => 'settings-groups-pjax-container']) ?>
         <tr>
             <td>
                 <div class="form-group">
-                    <?= Html::textInput("materialGroups[new]", '', [
+                    <?= Html::textInput("materialTypes[new]", '', [
                         'class' => 'form-control',
-                        'placeholder' => Yii::t('app', 'Enter new machine name'),
+                        'placeholder' => Yii::t('app', 'Enter new type name'),
                         'maxlength' => 32
                     ]) ?>
                 </div>

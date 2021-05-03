@@ -36,6 +36,7 @@ use app\custom\FileStorage;
  * @property array $stockAliases
  * @property string $shortName
  * @property array $groupsList
+ * @property array $typesList
  */
 class Material extends \yii\db\ActiveRecord
 {
@@ -43,6 +44,7 @@ class Material extends \yii\db\ActiveRecord
     const PHOTOS_EXTENSIONS = ['jpg', 'png', 'jpeg'];
 
     const GROUPS_LIST_STORAGE = 'material_groups_list';
+    const TYPES_LIST_STORAGE = 'material_types_list';
 
     const SHORT_NAME_LENGTH = 37;
 
@@ -75,7 +77,7 @@ class Material extends \yii\db\ActiveRecord
             ['min_qty', 'compare', 'compareAttribute' => 'max_qty', 'operator' => '<=', 'type' => 'number'],
             [['created_at', 'updated_at'], 'safe'],
             [['name'], 'string', 'max' => 128],
-            [['type', 'group'], 'string', 'max' => 16],
+            [['type', 'group'], 'string', 'max' => 32],
             [['ref'], 'unique'],
             [['photo'], 'file', 'extensions' => implode(',', self::PHOTOS_EXTENSIONS), 'maxSize' => 1024*1024]
         ];
@@ -219,6 +221,15 @@ class Material extends \yii\db\ActiveRecord
     {
         $fileStorage = new FileStorage();
         return $fileStorage->getContent(self::GROUPS_LIST_STORAGE);
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getTypesList()
+    {
+        $fileStorage = new FileStorage();
+        return $fileStorage->getContent(self::TYPES_LIST_STORAGE);
     }
 
     /**

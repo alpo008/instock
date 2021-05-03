@@ -39,22 +39,16 @@ $this->registerJs(
         'tableOptions' => ['class' => 'table table-bordered'],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-/*            [
-                'attribute' => 'ref',
-                'format' => 'raw',
-                'value' => function (\app\models\Material $model) {
-                    return Html::a($model->ref, Yii::$app->request->url, [
-                        'title' => Yii::t('app', 'Take') . ' ' . $model->shortName,
-                        'data' => [
-                            'method' => 'post',
-                            'pjax' => '1',
-                            'params' => ['id' => $model->id]
-                        ]
-                    ]);
-                }
-            ],*/
             'ref',
             'name',
+            [
+                'attribute' => 'type',
+                'filter' => $searchModel->typesList,
+            ],
+            [
+                'attribute' => 'group',
+                'filter' => $searchModel->groupsList,
+            ],
             [
                 'attribute' => 'quantity',
                 'contentOptions' => ['class' => 'cell-quantity']
@@ -93,13 +87,7 @@ $this->registerJs(
                     return rtrim($result, ', ');
                 },
                 'filter' => $searchModel->stockAliasesFilter
-            ],
-            'type',
-            'group',
-            //'created_at',
-            //'updated_at',
-            //'created_by',
-            //'updated_by',
+            ]
          ],
         'rowOptions' => function ($model, $index, $widget, $grid){
             /** @var $model \app\models\Material */

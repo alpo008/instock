@@ -69,6 +69,7 @@ class MaterialSearch extends Material
             'attributes' => [
                 'ref',
                 'name',
+                'type',
                 'group',
                 'min_qty',
                 'max_qty',

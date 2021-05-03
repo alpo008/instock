@@ -64,4 +64,33 @@ class SettingsController extends Controller
 
         return $this->render('material-groups-form', compact('materialGroups'));
     }
+
+    /**
+     * @return string
+     */
+    public function actionMaterialTypes(): string
+    {
+        $fileStorage = new FileStorage();
+        $materialTypes = $fileStorage->getContent(Material::TYPES_LIST_STORAGE);
+        if ($post = \Yii::$app->request->post()) {
+            if (!empty($post['action']) && !empty($post['group']) && $post['action'] === 'delete') {
+                if (array_key_exists($post['group'], $materialTypes)) {
+                    unset($materialTypes[$post['group']]);
+                    $fileStorage->setContent(Material::TYPES_LIST_STORAGE, $materialTypes);
+                }
+            } elseif (!empty($post['materialTypes']) && is_array($post['materialTypes'])) {
+                $updatedMaterialTypes = [];
+                foreach ($post['materialTypes'] as $materialType) {
+                    if (!array_key_exists($materialType, $updatedMaterialTypes) && !empty($materialType)) {
+                        $updatedMaterialTypes[$materialType] = $materialType;
+                    }
+                }
+                ksort($updatedMaterialTypes);
+                $fileStorage->setContent(Material::TYPES_LIST_STORAGE, $updatedMaterialTypes);
+            }
+        }
+        $materialTypes = $fileStorage->getContent(Material::TYPES_LIST_STORAGE);
+
+        return $this->render('material-types-form', compact('materialTypes'));
+    }
 }

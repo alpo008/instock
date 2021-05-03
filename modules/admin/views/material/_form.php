@@ -43,7 +43,7 @@ $photoPath = !empty($model->photoPath) ? $model->photoPath : '@web/icons/solid/n
 
     <?= $form->field($model, 'unit')->dropDownList($model->unitsList) ?>
 
-    <?= $form->field($model, 'type')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'type')->dropDownList($model->typesList) ?>
 
     <?= $form->field($model, 'group')->dropDownList($model->groupsList) ?>
 
