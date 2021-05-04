@@ -159,7 +159,7 @@ class Material extends \yii\db\ActiveRecord
         if ($stockId !== 0) {
             $query->where(['stock_id' => $stockId]);
         }
-        return !is_null($query->scalar()) ? $query->scalar() : 0;
+        return !is_null($query->scalar()) ? $query->scalar() + 0 : 0;
     }
 
     /**

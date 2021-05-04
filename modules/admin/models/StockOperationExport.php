@@ -3,15 +3,14 @@
 
 namespace app\modules\admin\models;
 
-use app\models\Material;
+use app\models\StockOperation;
 use PHPExcel;
 use PHPExcel_Cell_DataType;
-use yii\data\ActiveDataProvider;
 use app\custom\FileStorage;
 
-class MaterialExport extends Material
+class StockOperationExport extends StockOperation
 {
-    const COLUMNS_TEMPLATE_STORAGE = 'material_export_template';
+    const COLUMNS_TEMPLATE_STORAGE = 'stock_operation_export_template';
 
     /**
      * @return array|null
@@ -23,11 +22,11 @@ class MaterialExport extends Material
     }
 
     /**
-     * @param Material[] $materials
+     * @param StockOperation[] $operations
      * @return PHPExcel
      * @throws \PHPExcel_Exception
      */
-    public function makeExcel ($materials)
+    public function makeExcel ($operations)
     {
         $attributes = $this->columns();
         $phpExcel = new PHPExcel();
@@ -43,10 +42,10 @@ class MaterialExport extends Material
 
         $column = 0;
         $row = 2;
-        foreach ($materials as $material) {
+        foreach ($operations as $operation) {
             foreach ($attributes as $attr => $params) {
-                if (!empty($material->$attr) && is_scalar($material->$attr)) {
-                    $value = !empty($params['getter']) ? $material->{$params['getter']}($attr) : $material->{$attr};
+                if (!empty($operation->$attr) && is_scalar($operation->$attr)) {
+                    $value = !empty($params['getter']) ? $operation->{$params['getter']}($attr) : $operation->{$attr};
                 } else {
                     $value = 'not set';
                 }

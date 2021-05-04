@@ -89,7 +89,7 @@ class Menu extends \yii\widgets\Menu
                 ]),
                     'options' => ['class' => 'dropdown'],
                     'items' => [
-                        ['label' => Yii::t('app', 'Materials export'), 'url' => ['/admin/settings/material-export-format']],
+                        //['label' => Yii::t('app', 'Materials export'), 'url' => ['/admin/settings/material-export-format']],
                         ['label' => Yii::t('app', 'Groups'), 'url' => ['/admin/settings/material-groups']],
                         ['label' => Yii::t('app', 'Materials types'), 'url' => ['/admin/settings/material-types']],
                     ],

@@ -106,7 +106,7 @@ class StockOperation extends \yii\db\ActiveRecord
             'from_to' => Yii::t('app', 'Source or destination'),
             'comments' => Yii::t('app', 'Comments'),
             'created_at' => Yii::t('app', 'Created at'),
-            'created_by' => Yii::t('app', 'Created by'),
+            'created_by' => Yii::t('app', 'Responsible person'),
             'materialName' => Yii::t('app', 'Material'),
             'materialRef' => Yii::t('app', 'Ref'),
             'creatorName' => Yii::t('app', 'Responsible person'),
@@ -136,7 +136,7 @@ class StockOperation extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritDoc
+     * return bool
      */
     public function beforeSave($insert)
     {
@@ -157,6 +157,7 @@ class StockOperation extends \yii\db\ActiveRecord
         }
         if ($materialStock->qty < 0) {
             Yii::$app->session->setFlash('danger', Yii::t('app', 'Can not accept negative quantity'));
+            return false;
         }
         $transaction = Yii::$app->db->beginTransaction();
         $result = parent::beforeSave($insert);
@@ -220,7 +221,7 @@ class StockOperation extends \yii\db\ActiveRecord
     /**
      * @return string
      */
-    public function getMaterialRef ()
+    public function getMaterialRef (): string
     {
         return $this->material instanceof Material ? $this->material->ref : '';
     }
@@ -228,7 +229,7 @@ class StockOperation extends \yii\db\ActiveRecord
     /**
      * @return string
      */
-    public function getStockAlias ()
+    public function getStockAlias (): string
     {
         return $this->stock instanceof Stock ? $this->stock->alias : '';
     }
@@ -244,10 +245,20 @@ class StockOperation extends \yii\db\ActiveRecord
     }
 
     /**
+     * @param string $attr
+     * @return float|int
+     */
+    public function getExcelTimestamp($attr)
+    {
+        $timestamp = (int) Yii::$app->formatter->asTimestamp($this->{$attr});
+        return 25569 + (($timestamp + Yii::$app->params['timeZoneShift']) / 86400);
+    }
+
+    /**
      * Operation type
      * @return string
      */
-    public function getOperationType ()
+    public function getOperationType (): string
     {
         return self::getOperationTypes()[$this->operation_type] ?
             self::getOperationTypes()[$this->operation_type] : '?';
@@ -256,7 +267,7 @@ class StockOperation extends \yii\db\ActiveRecord
     /**
      * @return array
      */
-    public static function getOperationTypes ()
+    public static function getOperationTypes (): array
     {
         return [
             self::CREDIT_OPERATION => Yii::t('app', 'Credit'),

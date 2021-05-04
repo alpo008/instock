@@ -17,6 +17,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="action-buttons">
         <h1><?= Html::encode($this->title) ?></h1>
+        <?= Html::a(FAS::icon('file-export'), ['export'], [
+            'class' => 'btn btn-primary',
+            'title' => Yii::t('app', 'Export table to Excel')
+        ]) ?>
     </div>
 
     <?php Pjax::begin(['id' => 'stock-operations-index-pjax-container']); ?>

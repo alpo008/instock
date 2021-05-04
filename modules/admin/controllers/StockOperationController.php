@@ -8,12 +8,16 @@ use app\modules\admin\models\StockOperationSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\modules\admin\models\StockOperationExport;
+use PHPExcel_IOFactory;
 
 /**
  * StockOperationController implements the CRUD actions for StockOperation model.
  */
 class StockOperationController extends Controller
 {
+    const QUERY_PARAMS_KEY = 'StockOperationQueryParams';
+
     /**
      * {@inheritdoc}
      */
@@ -36,7 +40,9 @@ class StockOperationController extends Controller
     public function actionIndex()
     {
         $searchModel = new StockOperationSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $queryParams = Yii::$app->request->queryParams;
+        Yii::$app->cache->set($this->getQueryCacheKey(), $queryParams);
+        $dataProvider = $searchModel->search($queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -121,6 +127,34 @@ class StockOperationController extends Controller
     }
 
     /**
+     * Exports materials table to Excel
+     *
+     * @throws \PHPExcel_Exception
+     * @throws \PHPExcel_Reader_Exception
+     * @throws \PHPExcel_Writer_Exception
+     */
+    public function actionExport()
+    {
+        $exportModel = new StockOperationExport();
+        $searchModel = new StockOperationSearch();
+        $queryParams = Yii::$app->cache->get($this->getQueryCacheKey());
+        $dataProvider = $searchModel->search($queryParams);
+        $query = clone $dataProvider->query;
+        if (!empty($queryParams['sort'])) {
+            $models = $searchModel->getSortedModels($query, $queryParams['sort']);
+        } else {
+            $dataProvider->setPagination(false);
+            $models = $dataProvider->models;
+        }
+        $phpExcel = $exportModel->makeExcel($models);
+        $path = Yii::getAlias('@app/web/downloads/') . 'stock-operations.xlsx';
+        $objWriter = PHPExcel_IOFactory::createWriter($phpExcel, 'Excel2007');
+        $objWriter->save($path);
+        Yii::$app->response->sendFile($path);
+        unlink($path);
+    }
+
+    /**
      * Finds the StockOperation model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
@@ -134,5 +168,19 @@ class StockOperationController extends Controller
         }
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+    }
+
+    /**
+     * Key to cache query params for further usage in actionExport()
+     * @return string
+     */
+    protected function getQueryCacheKey ()
+    {
+        if ($user = Yii::$app->user->identity) {
+            $prefix = $user->username;
+        } else {
+            $prefix = 'default';
+        }
+        return $prefix . self::QUERY_PARAMS_KEY;
     }
 }

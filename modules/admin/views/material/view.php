@@ -92,7 +92,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]) ?>
                     </td>
                     <td>
-                        <?= $model->getQuantity($stock->id) ?>
+                        <?= $model->getQuantity($stock->id) . ' ' . $model->unitName ?>
                     </td>
                     <td class="operations-links">
                         <?= Html::a('<span class="before-icon">+</span>' . FAS::icon('file-invoice'), [

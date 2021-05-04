@@ -5,6 +5,7 @@ namespace app\modules\admin\models;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\StockOperation;
+use yii\db\QueryInterface;
 
 /**
  * StockOperationSearch represents the model behind the search form of `app\models\StockOperation`.
@@ -110,5 +111,37 @@ class StockOperationSearch extends StockOperation
             ->andFilterWhere(['like', 'comments', $this->comments]);
 
         return $dataProvider;
+    }
+
+    /**
+     * @param QueryInterface $query
+     * @param string $sort
+     * @return array|StockOperation[]
+     */
+    public function getSortedModels(QueryInterface $query, string $sort)
+    {
+        if (is_string($sort)) {
+            if (strpos($sort, '-') !== false) {
+                $attribute = trim($sort, ' -');
+                $direction = SORT_DESC;
+            } else {
+                $attribute = trim($sort);
+                $direction = SORT_ASC;
+            }
+            if ($attribute === 'materialRef') {
+                return $query->orderBy(['{{%materials}}.ref' => $direction])->all();
+            }
+            if ($attribute === 'materialName') {
+                return $query->orderBy(['{{%materials}}.name' => $direction])->all();
+            }
+            if ($attribute === 'stockAliases') {
+                return $query->orderBy(['{{%stocks}}.alias' => $direction])->all();
+            }
+            if ($attribute === 'operationType') {
+                return $query->orderBy(['operation_type' => $direction])->all();
+            }
+            return $query->orderBy([$attribute => $direction])-> all();
+        }
+        return [];
     }
 }

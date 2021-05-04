@@ -6,7 +6,6 @@
 /* @var $material \app\models\Material | null */
 /* @var $stockOperation \app\models\StockOperation | null */
 
-use yii\bootstrap4\Alert;
 use yii\bootstrap4\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;

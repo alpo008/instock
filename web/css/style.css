@@ -441,12 +441,12 @@ a.desc:after {
     box-shadow: 2px 2px 2px #7386d5;
     background-color: #f0f0f0;
     z-index: 2;
-    transition: left 1s;
+    transition: left 0.4s;
 }
 
 .material-photo-popup.show img {
     box-shadow: inset 3px 3px 3px #000;
-    transition: 1s;
+    transition: 0.8s;
     width: 400px;
 }
 

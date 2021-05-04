@@ -108,6 +108,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'quantity',
+                'value' => function($model) { /* @var $model \app\models\Material */
+                    return $model->quantity + 0;
+                },
                 'filter' => $searchModel->quantityFilter,
                 'contentOptions' => ['class' => 'cell-quantity']
             ],
@@ -115,7 +118,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'min_qty',
                 'format' => 'raw',
                 'value' => function (\app\models\Material $model) {
-                    $value = $model->min_qty;
+                    $value = $model->min_qty + 0;
                     return $this->render('@app/views/_components/_cell_editable', [
                         'value' => $value,
                         'url' => Url::to(['/admin/material/quick-update/', 'id' =>  $model->id]),
@@ -123,6 +126,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'class' => 'cell-editable__input',
                             'type' => 'number',
                             'min' => 0,
+                            'autocomplete'=> 'off'
                         ]),
                     ]);
                 },
@@ -132,14 +136,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'max_qty',
                 'format' => 'raw',
                 'value' => function (\app\models\Material $model) {
-                    $value = $model->max_qty;
+                    $value = $model->max_qty + 0;
                     return $this->render('@app/views/_components/_cell_editable', [
                         'value' => $value,
                         'url' => Url::to(['/admin/material/quick-update/', 'id' =>  $model->id]),
                         'input' => Html::textInput('Material[max_qty]', $value, [
                             'class' => 'cell-editable__input',
                             'type' => 'number',
-                            'min' => 0
+                            'min' => 0,
+                            'autocomplete'=> 'off'
                         ]),
                     ]);
                 },
