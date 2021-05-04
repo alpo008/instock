@@ -6,7 +6,6 @@ namespace app\modules\admin\models;
 use app\models\Material;
 use PHPExcel;
 use PHPExcel_Cell_DataType;
-use yii\data\ActiveDataProvider;
 use app\custom\FileStorage;
 
 class MaterialExport extends Material

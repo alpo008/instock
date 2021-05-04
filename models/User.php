@@ -4,7 +4,6 @@ namespace app\models;
 
 use Yii;
 use yii\db\ActiveRecord;
-use yii\behaviors\TimestampBehavior;
 use yii\base\NotSupportedException;
 use rmrevin\yii\fontawesome\component\Icon;
 use rmrevin\yii\fontawesome\FAS;

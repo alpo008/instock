@@ -24,20 +24,25 @@ DIRECTORY STRUCTURE
       commands/           contains console commands (controllers)
       config/             contains application configurations
       controllers/        contains Web controller classes
+      custom/             contains custom classes 
       mail/               contains view files for e-mails
+      messages/           contains translation files
       models/             contains model classes
+      modules/            contains application modules 
       runtime/            contains files generated during runtime
+      storage/            contains files storing user settings
       tests/              contains various tests for the basic application
       vendor/             contains dependent 3rd-party packages
       views/              contains view files for the Web application
       web/                contains the entry script and Web resources
+      widgets/            contains custom widgets
 
 
 
 REQUIREMENTS
 ------------
 
-The minimum requirement by this project template that your Web server supports PHP 5.6.0.
+The minimum requirement by this project template that your Web server supports PHP 7.2
 
 
 INSTALLATION
