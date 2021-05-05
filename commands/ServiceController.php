@@ -7,6 +7,7 @@
 
 namespace app\commands;
 
+use app\migrations\RcMigration;
 use yii\console\Controller;
 use yii\console\ExitCode;
 
@@ -18,7 +19,7 @@ use yii\console\ExitCode;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class HelloController extends Controller
+class ServiceController extends Controller
 {
     /**
      * This command echoes what you have entered as the message.
@@ -29,6 +30,16 @@ class HelloController extends Controller
     {
         echo $message . "\n";
 
+        return ExitCode::OK;
+    }
+
+    /**
+     * Database backup command
+     * @return int Exit code
+     */
+    public function actionBackup ()
+    {
+        RcMigration::BackupDB();
         return ExitCode::OK;
     }
 }

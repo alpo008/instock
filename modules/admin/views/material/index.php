@@ -58,7 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     if (!empty($model->photoPath)) {
                         return Html::img($model->photoPath, ['class' => 'img-material in-grid']) .
                             Html::beginTag('div', ['class' => 'material-photo-popup']) .
-                            Html::img($model->photoPath, /*['width' => 400]*/) .
+                            Html::img($model->photoPath) .
                             Html::endTag('div')
                             ;
                     } else {

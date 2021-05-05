@@ -39,13 +39,17 @@ abstract class RcMigration extends \yii\db\Migration {
      * с сохранением дампа в runtime
      * @param string $message сообщение
      */
-    public static function BackupDB($message = "Выполняем резервное копирование БД\n"){
+    public static function BackupDB($message = "Выполняем резервное копирование БД INSTOCK\n"){
         echo $message;
-        $command = 'mysqldump -u'.\Yii::$app->db->username.' -p'.\Yii::$app->db->password.
-            ' '.self::GetDsnAttribute('dbname', \Yii::$app->db->dsn).' > '.
-            \Yii::getAlias('@app/runtime/').'db_backup_'.date("Ymd_His").".sql\n";
-        echo $command;
-        exec($command);
+        $backupDir = date("Ymd_His");
+        $backupsPath = Yii::getAlias('@app/runtime/backups/');
+        exec('find ' . $backupsPath . ' -maxdepth 1 -type d -mtime +10 -exec rm -rf {} \;');
+        if (mkdir($backupsPath . $backupDir, 0777, true)) {
+            $command = 'mysqldump -u'.\Yii::$app->db->username.' -p'.\Yii::$app->db->password.
+                ' '.self::GetDsnAttribute('dbname', \Yii::$app->db->dsn).' > '.
+                \Yii::getAlias('@app/runtime/backups/' . $backupDir . '/').'db_backup_'.date("Ymd_His").".sql\n";
+            exec($command);
+        }
     }
 
     /**
