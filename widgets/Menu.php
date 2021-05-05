@@ -92,6 +92,7 @@ class Menu extends \yii\widgets\Menu
                         //['label' => Yii::t('app', 'Materials export'), 'url' => ['/admin/settings/material-export-format']],
                         ['label' => Yii::t('app', 'Groups'), 'url' => ['/admin/settings/material-groups']],
                         ['label' => Yii::t('app', 'Materials types'), 'url' => ['/admin/settings/material-types']],
+                        ['label' => Yii::t('app', 'Backups'), 'url' => ['/admin/settings/backup']],
                     ],
                     'submenuTemplate' => "\n<ul class='collapse list-unstyled' id='settingsSubmenu'>\n{items}\n</ul>\n"
                 ]

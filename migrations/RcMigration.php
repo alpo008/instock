@@ -25,7 +25,7 @@ abstract class RcMigration extends \yii\db\Migration {
      * @param string $dsn
      * @return mixed|null
      */
-    public static function GetDsnAttribute($name, $dsn)
+    public static function getDsnAttribute($name, $dsn)
     {
         if (preg_match('/' . $name . '=([^;]*)/', $dsn, $match)) {
             return $match[1];
@@ -45,9 +45,10 @@ abstract class RcMigration extends \yii\db\Migration {
         $backupsPath = Yii::getAlias('@app/runtime/backups/');
         exec('find ' . $backupsPath . ' -maxdepth 1 -type d -mtime +10 -exec rm -rf {} \;');
         if (mkdir($backupsPath . $backupDir, 0777, true)) {
-            $command = 'mysqldump -u'.\Yii::$app->db->username.' -p'.\Yii::$app->db->password.
-                ' '.self::GetDsnAttribute('dbname', \Yii::$app->db->dsn).' > '.
-                \Yii::getAlias('@app/runtime/backups/' . $backupDir . '/').'db_backup_'.date("Ymd_His").".sql\n";
+            $command = 'mysqldump -u'. Yii::$app->db->username.' -p'. Yii::$app->db->password.
+                ' '.self::getDsnAttribute('dbname', Yii::$app->db->dsn).' > '.
+                Yii::getAlias('@app/runtime/backups/' . $backupDir . '/') .
+                'instock_db_backup_' . date("Ymd_His") .".sql\n";
             exec($command);
         }
     }

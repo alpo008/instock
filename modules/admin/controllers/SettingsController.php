@@ -4,6 +4,7 @@
 namespace app\modules\admin\controllers;
 
 
+use Yii;
 use app\custom\FileStorage;
 use app\models\Material;
 use app\modules\admin\models\MaterialExport;
@@ -92,5 +93,55 @@ class SettingsController extends Controller
         $materialTypes = $fileStorage->getContent(Material::TYPES_LIST_STORAGE);
 
         return $this->render('material-types-form', compact('materialTypes'));
+    }
+
+    /**
+     * @return string
+     */
+    public function actionBackup ()
+    {
+        $backupsPath = Yii::getAlias('@app/runtime/backups/');
+        $dirs = scandir($backupsPath);
+        $files = [];
+        if (!empty($dirs) && is_array($dirs)) {
+            foreach ($dirs as $dir) {
+                if ($dir === '.' || $dir === '..') {
+                    continue;
+                }
+                $dirContent = scandir($backupsPath . DIRECTORY_SEPARATOR . $dir);
+                if (!empty($dirContent) && is_array($dirContent)) {
+                    foreach ($dirContent as $entry) {
+                        if ($entry === '.' || $entry === '..') {
+                            continue;
+                        }
+                        if (!$fileName = $this->getDate($entry)) {
+                            continue;
+                        }
+                        $files[$fileName] = $entry;
+                    }
+                }
+            }
+        }
+        if ($fileName = Yii::$app->request->post('file')) {
+            $path = $backupsPath . str_replace(['instock_db_backup_', '.sql'], '', $fileName) .
+                DIRECTORY_SEPARATOR . $fileName;
+            if (is_file($path)) {
+                Yii::$app->response->sendFile($path);
+            }
+        }
+        return $this->render('backups', compact('files'));
+    }
+
+    /**
+     * @param string $filename
+     * @return string
+     */
+    private function getDate (string $filename) :string
+    {
+        $rawDate = str_replace(['instock_db_backup_', '.sql'], '', $filename);
+        if ($dateTime = \DateTime::createFromFormat('Ymd_His', $rawDate)) {
+            return  $dateTime->format('d.m.Y H:i:s');
+        }
+        return '';
     }
 }
