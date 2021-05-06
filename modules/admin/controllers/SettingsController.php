@@ -16,7 +16,7 @@ class SettingsController extends Controller
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
             'verbs' => [
@@ -114,10 +114,10 @@ class SettingsController extends Controller
                         if ($entry === '.' || $entry === '..') {
                             continue;
                         }
-                        if (!$fileName = $this->getDate($entry)) {
+                        if (!$fileDate = $this->getDate($entry)) {
                             continue;
                         }
-                        $files[$fileName] = $entry;
+                        $files[$fileDate] = $entry;
                     }
                 }
             }
@@ -140,7 +140,8 @@ class SettingsController extends Controller
     {
         $rawDate = str_replace(['instock_db_backup_', '.sql'], '', $filename);
         if ($dateTime = \DateTime::createFromFormat('Ymd_His', $rawDate)) {
-            return  $dateTime->format('d.m.Y H:i:s');
+            $tzSeconds = Yii::$app->params['timeZoneShift'] ?? 0;
+            return  $dateTime->modify('+ ' . $tzSeconds . 'second')->format('d.m.Y H:i:s');
         }
         return '';
     }
