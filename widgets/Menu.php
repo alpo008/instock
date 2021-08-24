@@ -78,10 +78,9 @@ class Menu extends \yii\widgets\Menu
         } elseif (Yii::$app->user->identity->role === User::ROLE_ADMIN) {
             return [
                 ['label' => mb_strtoupper(Yii::t('app', 'Main')), 'url' => ['/admin']],
-                ['label' => Yii::t('app', 'Users'), 'url' => ['/admin/user']],
                 ['label' => Yii::t('app', 'Materials'), 'url' => ['/admin/material']],
+                ['label' => Yii::t('app', 'Operations'), 'url' => ['/admin/stock-operation']],  
                 ['label' => Yii::t('app', 'Stock places'), 'url' => ['/admin/stock']],
-                ['label' => Yii::t('app', 'Operations'), 'url' => ['/admin/stock-operation']],
                 [ 'label' => Html::a(Yii::t('app', 'Settings'), '#settingsSubmenu', [
                     'data-toggle' => 'collapse',
                     'aria-expanded' => 'false',
@@ -92,6 +91,7 @@ class Menu extends \yii\widgets\Menu
                         //['label' => Yii::t('app', 'Materials export'), 'url' => ['/admin/settings/material-export-format']],
                         ['label' => Yii::t('app', 'Groups'), 'url' => ['/admin/settings/material-groups']],
                         ['label' => Yii::t('app', 'Materials types'), 'url' => ['/admin/settings/material-types']],
+                        ['label' => Yii::t('app', 'Users'), 'url' => ['/admin/user']],
                         ['label' => Yii::t('app', 'Backups'), 'url' => ['/admin/settings/backup']],
                     ],
                     'submenuTemplate' => "\n<ul class='collapse list-unstyled' id='settingsSubmenu'>\n{items}\n</ul>\n"

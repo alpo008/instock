@@ -1,6 +1,9 @@
 # phpstorm project files
 .idea
 
+# sublime text config files
+sftp-config.json
+
 # netbeans project files
 nbproject
 

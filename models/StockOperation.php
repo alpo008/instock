@@ -130,7 +130,7 @@ class StockOperation extends \yii\db\ActiveRecord
             [
                 'class' => BlameableBehavior::class,
                 'createdByAttribute' => 'created_by',
-                'updatedByAttribute' => false,
+                'updatedByAttribute' => false
             ]
         ];
     }
@@ -299,5 +299,30 @@ class StockOperation extends \yii\db\ActiveRecord
             }
         }
         return $availability;
+    }
+
+    public static function checkQty ($materialId)
+    {
+        $startDate = self::find()
+            ->select('MAX(created_at)')
+            ->where(['AND',
+                ['=', 'operation_type', self::CORRECTION_OPERATION],
+                ['=', 'material_id', $materialId]
+            ])->scalar() ?? self::find()->select('MIN(created_at)')->scalar();
+        $debitsSum = self::find()
+            ->select('SUM(qty)')
+            ->where(['AND',
+                ['in', 'operation_type', [self::CORRECTION_OPERATION, self::DEBIT_OPERATION]],
+                ['=', 'material_id', $materialId],
+                ['>=', 'created_at', $startDate],
+            ])->scalar() + 0;
+        $creditsSum = self::find()
+            ->select('SUM(qty)')
+            ->where(['AND',
+                ['=', 'operation_type', self::CREDIT_OPERATION],
+                ['=', 'material_id', $materialId],
+                ['>=', 'created_at', $startDate],
+            ])->scalar() + 0;
+        return compact('startDate', 'debitsSum', 'creditsSum');
     }
 }

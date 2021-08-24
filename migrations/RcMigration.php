@@ -41,9 +41,36 @@ abstract class RcMigration extends \yii\db\Migration {
      */
     public static function BackupDB($message = "Выполняем резервное копирование БД INSTOCK\n"){
         echo $message;
+        $now = time();
+        $lifetime = 10 * 24 * 60 * 60;
         $backupDir = date("Ymd_His");
         $backupsPath = Yii::getAlias('@app/runtime/backups/');
-        exec('find ' . $backupsPath . ' -maxdepth 1 -type d -mtime +10 -exec rm -rf {} \;');
+        $dirs = scandir($backupsPath);
+        if (!empty($dirs) && is_array($dirs)) {
+            foreach ($dirs as $dir) {
+                if ($dir === '.' || $dir === '..') {
+                    continue;
+                }
+                $dirContent = scandir($backupsPath . DIRECTORY_SEPARATOR . $dir);
+                if (!empty($dirContent) && is_array($dirContent)) {
+                    foreach ($dirContent as $entry) {
+                        if ($entry === '.' || $entry === '..') {
+                            continue;
+                        }
+                        $file = $backupsPath . DIRECTORY_SEPARATOR . $dir . DIRECTORY_SEPARATOR . $entry;
+                        if (is_file($file)) {
+                            $age = $now - filemtime($file);
+                            if ($age > $lifetime) {
+                                if (unlink($file)) {
+                                    rmdir($backupsPath . DIRECTORY_SEPARATOR . $dir);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        //exec('find ' . $backupsPath . ' -maxdepth 1 -type d -mtime +10 -exec rm -rf {} \;');
         if (mkdir($backupsPath . $backupDir, 0777, true)) {
             $command = 'mysqldump -u'. Yii::$app->db->username.' -p'. Yii::$app->db->password.
                 ' '.self::getDsnAttribute('dbname', Yii::$app->db->dsn).' > '.

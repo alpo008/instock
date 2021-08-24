@@ -589,9 +589,18 @@ a.desc:after {
     background-color: transparent;
 }
 
+.material-index {
+    width: fit-content;
+}
+
 .material-index tr.low-quantity > .cell-quantity {
     max-width: 60px;
     background-color: #ffb6a5;
+}
+
+.material-index tr.extra-quantity > .cell-quantity {
+    max-width: 60px;
+    background-color: #ffeeba;
 }
 
 /* Operations links */
@@ -620,6 +629,7 @@ a.desc:after {
 
 .of-auto {
     overflow: auto;
+    min-width: 97%;
 }
 
 .before-icon {
