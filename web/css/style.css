@@ -80,7 +80,8 @@ a.desc:after {
 }
 
 .grid-view th {
-    white-space: nowrap;
+    white-space: normal;
+    vertical-align: top !important;
 }
 
 .hint-block {
@@ -629,6 +630,9 @@ a.desc:after {
 
 .of-auto {
     overflow: auto;
+}
+
+.of-auto.material {
     min-width: 97%;
 }
 

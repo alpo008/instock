@@ -62,7 +62,7 @@ $user = Yii::$app->user->identity;
             <?= \rmrevin\yii\fontawesome\FAS::icon('bars') ?>
         </a>
 
-        <div class="container of-auto">
+        <div class="container of-auto <?= Yii::$app->controller->id ?? '' ?>">
             <?= Breadcrumbs::widget([
                 'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
                 'itemTemplate' => "<li>{link}&nbsp;>&nbsp;</li>\n"

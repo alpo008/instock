@@ -60,6 +60,9 @@ class StockOperationSearch extends StockOperation
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+/*            'pagination' => [
+                'pageSize' => 10,
+            ]*/
         ]);
 
         $dataProvider->setSort([
