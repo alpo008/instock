@@ -4,6 +4,7 @@
 /* @var $content string */
 /* @var $currentUrl string */
 /* @var $user \app\models\User */
+/* @var $viewId string */
 
 use app\widgets\Alert;
 use app\widgets\Menu;
@@ -15,6 +16,12 @@ AppAsset::register($this);
 
 $currentUrl = Yii::$app->request->url;
 $user = Yii::$app->user->identity;
+
+$viewId = Yii::$app->controller->id ?? '';
+$viewId .= '-' . (Yii::$app->controller->action->id ?? '');
+if ($viewId === '-') {
+    $viewId = '';
+}
 
 ?>
 <?php $this->beginPage() ?>
@@ -62,7 +69,7 @@ $user = Yii::$app->user->identity;
             <?= \rmrevin\yii\fontawesome\FAS::icon('bars') ?>
         </a>
 
-        <div class="container of-auto <?= Yii::$app->controller->id ?? '' ?>">
+        <div class="container of-auto <?= $viewId ?? '' ?>">
             <?= Breadcrumbs::widget([
                 'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
                 'itemTemplate' => "<li>{link}&nbsp;>&nbsp;</li>\n"
