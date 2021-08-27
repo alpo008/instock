@@ -98,7 +98,28 @@ class MaterialSearch extends Material
             'max_qty' => $this->max_qty,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name])
+        $re1 = '/(\d+)(\,{1})(\d+)/';
+        $re2 = '/(\d+)(\.{1})(\d+)/';
+        $repl1 = '$1.$3';
+        $repl2 = '$1,$3';
+        $name = '';
+        $name1 = '';
+        $name2 = '';
+
+        if (!empty($this->name) && is_string($this->name)) {
+            $name1 = preg_replace($re1, $repl1, $this->name);
+            $name2 = preg_replace($re2, $repl2, $this->name);
+            $name = str_replace(' ', '', $this->name);
+            $name1 = str_replace(' ', '', $name1);
+            $name2 = str_replace(' ', '', $name2);
+        }
+
+        $query->andFilterWhere(['OR', 
+                ['like', "REPLACE(name, ' ', '')", $this->name],
+                ['like', "REPLACE(name, ' ', '')", $name1],
+                ['like', "REPLACE(name, ' ', '')", $name2]
+            ]
+        )
             ->andFilterWhere(['like', 'ref', $this->ref])
             ->andFilterWhere(['like', 'type', $this->type])
             ->andFilterWhere(['like', 'group', $this->group]);
