@@ -115,7 +115,7 @@ class MaterialSearch extends Material
         }
 
         $query->andFilterWhere(['OR', 
-                ['like', "REPLACE(name, ' ', '')", $this->name],
+                ['like', "REPLACE(name, ' ', '')", $name],
                 ['like', "REPLACE(name, ' ', '')", $name1],
                 ['like', "REPLACE(name, ' ', '')", $name2]
             ]
