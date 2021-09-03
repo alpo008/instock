@@ -276,7 +276,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         'rowOptions' => function ($model, $index, $widget, $grid){
             /** @var $model \app\models\Material */
-            if ($model->quantity <= $model->min_qty) {
+            if ($model->quantity < $model->min_qty) {
                 return ['class' => 'low-quantity'];
             } elseif ($model->quantity > $model->max_qty) {
                 return ['class' => 'extra-quantity'];

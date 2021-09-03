@@ -19,7 +19,7 @@ class DefaultController extends Controller
         $urgent = Material::find()->joinWith(['materialsStocks'])
             ->groupBy(['materials.ref'])
             ->joinWith('stocks')
-            ->having('COALESCE(SUM({{%materials_stocks}}.qty), 0) <= COALESCE({{%materials}}.min_qty, 0)')
+            ->having('COALESCE(SUM({{%materials_stocks}}.qty), 0) < COALESCE({{%materials}}.min_qty, 0)')
             ->count();
         $warning = Material::find()->joinWith(['materialsStocks'])
             ->groupBy(['materials.ref'])

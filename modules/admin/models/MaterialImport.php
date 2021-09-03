@@ -131,7 +131,7 @@ class MaterialImport extends Material
                 );
             } catch (\Exception $e) {
                 $error = Yii::t('app', 'Excel reading error');
-                //$error = $e->getMessage();
+                $error = $e->getMessage();
             }
         } else {
             $phpExcel = Yii::$app->cache->get(self::PHP_EXCEL_CACHE_KEY);
@@ -161,14 +161,14 @@ class MaterialImport extends Material
                     if (!$material = $this::findOne(['ref' => $materialAttributes['ref']])) {
                         $material = new Material();
                     }
-                    foreach ($materialAttributes as $attribute => $value) {
+                    foreach ($materialAttributes as $attribute => $v) {
                         if ($material->isNewRecord) {
-                            $material->{$attribute} = is_null($value) ? $defaultAttributes[$attribute] : $value;
+                            $material->{$attribute} = is_null($v) ? $defaultAttributes[$attribute] : $v;
                         } else {
-                            if (is_null($value) && empty($material->{$attribute})) {
-                                $material->{$attribute} = $defaultAttributes[$attribute] !== false ? $defaultAttributes[$attribute] : $value;
-                            } elseif (!is_null($value) && empty($material->{$attribute})) {
-                                $material->{$attribute} = $value;
+                            if (is_null($v) && empty($material->{$attribute})) {
+                                $material->{$attribute} = $defaultAttributes[$attribute] !== false ? $defaultAttributes[$attribute] : $v;
+                            } elseif (!is_null($v)/* && empty($material->{$attribute})*/) {
+                                $material->{$attribute} = $v;
                             }
                         }
                     }
