@@ -156,7 +156,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     /* @var $model \app\models\Material */
                     return $model->unitName;
                 },
-                'filter' => $searchModel->unitsList
+                'filter' => $searchModel->unitsList,
+/*                'contentOptions'=>['style'=>'max-width: auto;'],
+                'headerOptions'=>['style'=>'max-width: auto;'],*/
             ],
             [
                 'attribute' => 'stockAliases',

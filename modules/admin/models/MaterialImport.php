@@ -131,7 +131,7 @@ class MaterialImport extends Material
                 );
             } catch (\Exception $e) {
                 $error = Yii::t('app', 'Excel reading error');
-                $error = $e->getMessage();
+                //$error = $e->getMessage();
             }
         } else {
             $phpExcel = Yii::$app->cache->get(self::PHP_EXCEL_CACHE_KEY);
