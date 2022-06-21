@@ -55,7 +55,7 @@ class MaterialSearch extends Material
             ->joinWith(['materialsStocks'])
             ->groupBy(['materials.ref'])
             ->joinWith('stocks')
-            ->having('SUM({{%materials_stocks}}.qty) > 0');
+            ->having('SUM({{%materials_stocks}}.qty) >= 0');
 
         // add conditions that should always apply here
 
